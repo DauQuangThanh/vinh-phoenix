@@ -368,6 +368,7 @@ Both scripts output JSON with:
 Before finalizing tasks.md, validate for AI implementation:
 
 **Format Validation:**
+
 - [ ] All tasks follow checklist format with checkboxes (`- [ ]`)
 - [ ] All tasks have sequential IDs (T001, T002, T003...)
 - [ ] User story tasks have [US#] labels
@@ -375,6 +376,7 @@ Before finalizing tasks.md, validate for AI implementation:
 - [ ] Format matches template structure
 
 **AI Implementation Readiness:**
+
 - [ ] Every task starts with clear action verb (Create, Implement, Add, Update, etc.)
 - [ ] Every task specifies exact component (class name, function name, endpoint path)
 - [ ] File paths are precise and unambiguous (full path from project root)
@@ -383,6 +385,7 @@ Before finalizing tasks.md, validate for AI implementation:
 - [ ] Each task is independently verifiable (can check if done)
 
 **Structure Validation:**
+
 - [ ] Dependencies section shows story completion order
 - [ ] Each user story phase is independently testable
 - [ ] Parallel execution examples provided per story

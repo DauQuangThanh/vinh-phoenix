@@ -18,6 +18,7 @@
 ```
 
 **Components:**
+
 - **TaskID**: Sequential identifier (T001, T002, T003...)
 - **[P]**: Parallelizable task (different files, no dependencies)
 - **[Story]**: User story label ([US1], [US2], etc.) - only for user story phases
@@ -26,6 +27,7 @@
 - **Precise path**: Full relative path from project root
 
 **AI Implementation Guidelines:**
+
 - Use clear action verbs that indicate exactly what to do
 - Specify exact components (class names, function names, endpoints)
 - Include full file paths from project root (e.g., `src/models/user.py`)
@@ -99,7 +101,7 @@
 ### Services/Business Logic
 
 - [ ] T015 [US1] Implement [SERVICE_1] class with [METHOD_LIST] in [FILE_PATH]
-- [ ] T016 [P] [US1] Add [HELPER_FUNCTION_NAME]() utility function in [FILE_PATH]
+- [ ] T016 [P] [US1] Add HELPER_FUNCTION_NAME() utility function in [FILE_PATH]
 - [ ] T017 [US1] Implement [BUSINESS_LOGIC_NAME] validation in [SERVICE].validate() method
 
 ### Endpoints/UI
