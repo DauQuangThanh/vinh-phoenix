@@ -137,10 +137,10 @@ Create tasks.md following this structure:
 
 #### Task Format (CRITICAL)
 
-Every task MUST follow this exact format:
+Every task MUST follow this exact format for AI implementation:
 
 ```
-- [ ] [TaskID] [P?] [Story?] Description with file path
+- [ ] [TaskID] [P?] [Story?] Action verb + specific component + in precise/file/path.ext
 ```
 
 **Format Components:**
@@ -154,16 +154,26 @@ Every task MUST follow this exact format:
    - Foundational phase: NO story label
    - User Story phases: MUST have story label
    - Polish phase: NO story label
-5. **Description**: Clear action with exact file path
+5. **Description**: Use action verbs + specific details + precise paths
 
-**Examples:**
+**AI Implementation Requirements:**
 
-- ✅ `- [ ] T001 Create project structure per implementation plan`
-- ✅ `- [ ] T005 [P] Implement authentication middleware in src/middleware/auth.py`
-- ✅ `- [ ] T012 [P] [US1] Create User model in src/models/user.py`
-- ✅ `- [ ] T014 [US1] Implement UserService in src/services/user_service.py`
-- ❌ `- [ ] Create User model` (missing ID and Story label)
-- ❌ `T001 [US1] Create model` (missing checkbox)
+- **Action Verbs**: Use clear verbs: Create, Implement, Add, Update, Configure, Write, Build
+- **Specific Components**: Name exact classes, functions, endpoints (e.g., "UserModel class", "login() function", "/api/auth endpoint")
+- **Precise Paths**: Full relative paths from project root (e.g., `src/models/user.py`, not just "models")
+- **Context**: Include what the component does or implements
+- **Dependencies**: Reference design artifacts (e.g., "per design.md", "from data-model.md")
+
+**AI-Optimized Examples:**
+
+- ✅ `- [ ] T001 Create project directory structure with src/, tests/, docs/ folders per design.md`
+- ✅ `- [ ] T005 [P] Implement authenticate() middleware function in src/middleware/auth.py`
+- ✅ `- [ ] T012 [P] [US1] Create User model class with email/password fields in src/models/user.py`
+- ✅ `- [ ] T014 [US1] Implement UserService.register() method in src/services/user_service.py`
+- ✅ `- [ ] T018 [US1] Add POST /api/users endpoint with request validation in src/api/users.py`
+- ❌ `- [ ] Create User model` (missing ID, Story label, path, specifics)
+- ❌ `T001 [US1] Create model` (missing checkbox, not specific)
+- ❌ `- [ ] T012 [US1] User model` (not an action, unclear what to do)
 
 ### Step 4: Use the Template
 
@@ -179,11 +189,15 @@ Use `templates/tasks-template.md` as the structure. Fill in:
 ### Step 5: Generate and Commit
 
 1. Write tasks.md to the feature directory
-2. Validate format:
-   - ALL tasks have checkboxes
-   - ALL tasks have sequential IDs
+2. Validate AI implementation readiness:
+   - ALL tasks have checkboxes (`- [ ]`)
+   - ALL tasks have sequential IDs (T001, T002, T003...)
    - User story tasks have [US#] labels
-   - All tasks include file paths
+   - ALL tasks start with action verbs (Create, Implement, Add, etc.)
+   - ALL tasks include precise file paths from project root
+   - ALL tasks specify exact components/functions/classes to create
+   - ALL tasks are unambiguous and actionable by AI
+   - Dependencies between tasks are clear from ordering
 3. Generate commit message: `docs: add implementation tasks for [feature-name]`
 4. Commit the tasks.md file
 
@@ -351,13 +365,25 @@ Both scripts output JSON with:
 
 ## Validation
 
-Before finalizing tasks.md, validate:
+Before finalizing tasks.md, validate for AI implementation:
 
-- [ ] All tasks follow checklist format with checkboxes
+**Format Validation:**
+- [ ] All tasks follow checklist format with checkboxes (`- [ ]`)
 - [ ] All tasks have sequential IDs (T001, T002, T003...)
 - [ ] User story tasks have [US#] labels
-- [ ] All tasks include specific file paths
-- [ ] Dependencies section is complete
+- [ ] All tasks include specific file paths from project root
+- [ ] Format matches template structure
+
+**AI Implementation Readiness:**
+- [ ] Every task starts with clear action verb (Create, Implement, Add, Update, etc.)
+- [ ] Every task specifies exact component (class name, function name, endpoint path)
+- [ ] File paths are precise and unambiguous (full path from project root)
+- [ ] Tasks reference design artifacts for context ("per design.md", "from spec.md")
+- [ ] Dependencies between tasks are clear from sequential ordering
+- [ ] Each task is independently verifiable (can check if done)
+
+**Structure Validation:**
+- [ ] Dependencies section shows story completion order
 - [ ] Each user story phase is independently testable
 - [ ] Parallel execution examples provided per story
-- [ ] Format matches template structure
+- [ ] Independent test criteria are verifiable and specific
