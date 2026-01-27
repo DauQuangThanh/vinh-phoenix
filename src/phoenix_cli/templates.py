@@ -295,18 +295,19 @@ def download_and_extract_template(
                 elif verbose and is_first_agent:
                     console.print(f"[cyan]Extracted {len(extracted_items)} items to temp location[/cyan]")
 
-                # Handle nested directory structure (should contain skills/)
-                source_dir = temp_path
-                if len(extracted_items) == 1 and extracted_items[0].is_dir():
-                    source_dir = extracted_items[0]
-                    if tracker and is_first_agent:
-                        tracker.add("flatten", "Flatten nested directory")
-                        tracker.complete("flatten")
-                    elif verbose and is_first_agent:
-                        console.print(f"[cyan]Found nested directory structure[/cyan]")
-
                 # Find skills directory in extracted content
-                skills_source = source_dir / "skills"
+                # Check if we have skills/ directly at the root
+                skills_source = temp_path / "skills"
+                if not skills_source.exists():
+                    # Check if there's a single wrapper directory containing skills/
+                    if len(extracted_items) == 1 and extracted_items[0].is_dir():
+                        skills_source = extracted_items[0] / "skills"
+                        if tracker and is_first_agent:
+                            tracker.add("flatten", "Flatten nested directory")
+                            tracker.complete("flatten")
+                        elif verbose and is_first_agent:
+                            console.print(f"[cyan]Found nested directory structure[/cyan]")
+
                 if not skills_source.exists():
                     raise FileNotFoundError(f"Skills directory not found in archive")
 
