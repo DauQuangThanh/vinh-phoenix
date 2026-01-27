@@ -166,6 +166,9 @@ def download_and_extract_template(
     """Download the latest release and extract it to create a new project.
     Returns project_path. Uses tracker if provided (with keys: fetch, download, extract, cleanup)
     If local_templates is True, copies from local template_path instead of downloading.
+    
+    The unified phoenix-skills zip is downloaded once (on first agent) and skills are copied 
+    to the appropriate AI-specific folder for each agent.
     """
     current_dir = Path.cwd()
 
@@ -193,33 +196,70 @@ def download_and_extract_template(
         # Build the template by creating a structure similar to the release package
         return copy_local_template(project_path, source_path, ai_assistant, is_current_dir, verbose, tracker, is_first_agent)
 
-    # Original GitHub download logic
-    if tracker:
-        tracker.start(f"fetch-{ai_assistant}", "contacting GitHub API")
-    try:
-        zip_path, meta = download_template_from_github(
-            ai_assistant,
-            current_dir,
-            verbose=verbose and tracker is None,
-            show_progress=(tracker is None),
-            client=client,
-            debug=debug,
-            github_token=github_token
-        )
+    # Download logic - only download zip file once for the first agent
+    zip_path = None
+    if is_first_agent:
+        # Original GitHub download logic - download the unified skills zip
         if tracker:
-            tracker.complete(f"fetch-{ai_assistant}", f"release {meta['release']} ({meta['size']:,} bytes)")
-            tracker.add(f"download-{ai_assistant}", "Download template")
-            tracker.complete(f"download-{ai_assistant}", meta['filename'])
-    except Exception as e:
-        if tracker:
-            tracker.error(f"fetch-{ai_assistant}", str(e))
+            tracker.start(f"fetch-{ai_assistant}", "contacting GitHub API")
+        try:
+            zip_path, meta = download_template_from_github(
+                ai_assistant,
+                current_dir,
+                verbose=verbose and tracker is None,
+                show_progress=(tracker is None),
+                client=client,
+                debug=debug,
+                github_token=github_token
+            )
+            if tracker:
+                tracker.complete(f"fetch-{ai_assistant}", f"release {meta['release']} ({meta['size']:,} bytes)")
+                tracker.add(f"download-{ai_assistant}", "Download template")
+                tracker.complete(f"download-{ai_assistant}", meta['filename'])
+        except Exception as e:
+            if tracker:
+                tracker.error(f"fetch-{ai_assistant}", str(e))
+            else:
+                if verbose:
+                    console.print(f"[red]Error downloading template:[/red] {e}")
+            raise
+    else:
+        # For subsequent agents, reuse the already downloaded zip
+        # Look for phoenix-skills-*.zip in current directory
+        zip_files = list(current_dir.glob("phoenix-skills-*.zip"))
+        if zip_files:
+            zip_path = zip_files[0]
+            if tracker:
+                tracker.start(f"fetch-{ai_assistant}")
+                tracker.complete(f"fetch-{ai_assistant}", "using cached zip")
         else:
-            if verbose:
-                console.print(f"[red]Error downloading template:[/red] {e}")
-        raise
+            # If not found, download it (shouldn't happen in normal flow)
+            if tracker:
+                tracker.start(f"fetch-{ai_assistant}", "contacting GitHub API")
+            try:
+                zip_path, meta = download_template_from_github(
+                    ai_assistant,
+                    current_dir,
+                    verbose=verbose and tracker is None,
+                    show_progress=(tracker is None),
+                    client=client,
+                    debug=debug,
+                    github_token=github_token
+                )
+                if tracker:
+                    tracker.complete(f"fetch-{ai_assistant}", f"release {meta['release']} ({meta['size']:,} bytes)")
+                    tracker.add(f"download-{ai_assistant}", "Download template")
+                    tracker.complete(f"download-{ai_assistant}", meta['filename'])
+            except Exception as e:
+                if tracker:
+                    tracker.error(f"fetch-{ai_assistant}", str(e))
+                else:
+                    if verbose:
+                        console.print(f"[red]Error downloading template:[/red] {e}")
+                raise
 
     if tracker:
-        tracker.add(f"extract-{ai_assistant}", "Extract template")
+        tracker.add(f"extract-{ai_assistant}", "Extract and copy skills")
         tracker.start(f"extract-{ai_assistant}")
     elif verbose:
         console.print("Extracting template...")
@@ -228,92 +268,60 @@ def download_and_extract_template(
         if not is_current_dir:
             project_path.mkdir(parents=True, exist_ok=True)
 
+        # Get agent-specific configuration
+        agent_config = AGENT_CONFIG.get(ai_assistant)
+        if not agent_config:
+            raise ValueError(f"Unknown AI assistant: {ai_assistant}")
+
+        skills_folder = agent_config["skills_folder"]
+
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_contents = zip_ref.namelist()
-            if tracker:
+            if tracker and is_first_agent:
                 tracker.start("zip-list")
                 tracker.complete("zip-list", f"{len(zip_contents)} entries")
-            elif verbose:
+            elif verbose and is_first_agent:
                 console.print(f"[cyan]ZIP contains {len(zip_contents)} items[/cyan]")
 
-            if is_current_dir:
-                with tempfile.TemporaryDirectory() as temp_dir:
-                    temp_path = Path(temp_dir)
-                    zip_ref.extractall(temp_path)
+            # Extract to temp directory and then copy skills to agent-specific folder
+            with tempfile.TemporaryDirectory() as temp_dir:
+                temp_path = Path(temp_dir)
+                zip_ref.extractall(temp_path)
 
-                    extracted_items = list(temp_path.iterdir())
-                    if tracker:
-                        tracker.start("extracted-summary")
-                        tracker.complete("extracted-summary", f"temp {len(extracted_items)} items")
-                    elif verbose:
-                        console.print(f"[cyan]Extracted {len(extracted_items)} items to temp location[/cyan]")
+                extracted_items = list(temp_path.iterdir())
+                if tracker and is_first_agent:
+                    tracker.start("extracted-summary")
+                    tracker.complete("extracted-summary", f"temp {len(extracted_items)} items")
+                elif verbose and is_first_agent:
+                    console.print(f"[cyan]Extracted {len(extracted_items)} items to temp location[/cyan]")
 
-                    source_dir = temp_path
-                    if len(extracted_items) == 1 and extracted_items[0].is_dir():
-                        source_dir = extracted_items[0]
-                        if tracker:
-                            tracker.add("flatten", "Flatten nested directory")
-                            tracker.complete("flatten")
-                        elif verbose:
-                            console.print(f"[cyan]Found nested directory structure[/cyan]")
+                # Handle nested directory structure (should contain skills/)
+                source_dir = temp_path
+                if len(extracted_items) == 1 and extracted_items[0].is_dir():
+                    source_dir = extracted_items[0]
+                    if tracker and is_first_agent:
+                        tracker.add("flatten", "Flatten nested directory")
+                        tracker.complete("flatten")
+                    elif verbose and is_first_agent:
+                        console.print(f"[cyan]Found nested directory structure[/cyan]")
 
-                    for item in source_dir.iterdir():
-                        dest_path = project_path / item.name
-                        if item.is_dir():
-                            if dest_path.exists():
-                                if verbose and not tracker:
-                                    console.print(f"[yellow]Merging directory:[/yellow] {item.name}")
-                                for sub_item in item.rglob('*'):
-                                    if sub_item.is_file():
-                                        rel_path = sub_item.relative_to(item)
-                                        dest_file = dest_path / rel_path
-                                        dest_file.parent.mkdir(parents=True, exist_ok=True)
-                                        # Special handling for .vscode/settings.json - merge instead of overwrite
-                                        if dest_file.name == "settings.json" and dest_file.parent.name == ".vscode":
-                                            handle_vscode_settings(sub_item, dest_file, rel_path, verbose, tracker)
-                                        else:
-                                            shutil.copy2(sub_item, dest_file)
-                            else:
-                                shutil.copytree(item, dest_path)
-                        else:
-                            if dest_path.exists() and verbose and not tracker:
-                                console.print(f"[yellow]Overwriting file:[/yellow] {item.name}")
-                            shutil.copy2(item, dest_path)
-                    if verbose and not tracker:
-                        console.print(f"[cyan]Template files merged into current directory[/cyan]")
-            else:
-                # Extract to temp directory first so we can selectively copy
-                with tempfile.TemporaryDirectory() as temp_dir:
-                    temp_path = Path(temp_dir)
-                    zip_ref.extractall(temp_path)
+                # Find skills directory in extracted content
+                skills_source = source_dir / "skills"
+                if not skills_source.exists():
+                    raise FileNotFoundError(f"Skills directory not found in archive")
 
-                    extracted_items = list(temp_path.iterdir())
-                    if tracker:
-                        tracker.start("extracted-summary")
-                        tracker.complete("extracted-summary", f"temp {len(extracted_items)} items")
-                    elif verbose:
-                        console.print(f"[cyan]Extracted {len(extracted_items)} items to temp:[/cyan]")
+                # Copy skills to agent-specific target folder
+                skills_target = project_path / skills_folder
+                skills_target.mkdir(parents=True, exist_ok=True)
 
-                    # Handle nested directory structure
-                    source_dir = temp_path
-                    if len(extracted_items) == 1 and extracted_items[0].is_dir():
-                        source_dir = extracted_items[0]
-                        if tracker:
-                            tracker.add("flatten", "Flatten nested directory")
-                            tracker.complete("flatten")
-                        elif verbose:
-                            console.print(f"[cyan]Found nested directory structure[/cyan]")
+                # Copy all skill subdirectories to the target location
+                for skill_item in skills_source.iterdir():
+                    if skill_item.is_dir():
+                        dest_skill = skills_target / skill_item.name
+                        shutil.copytree(skill_item, dest_skill, dirs_exist_ok=True)
 
-                    # Copy items from temp to project_path
-                    for item in source_dir.iterdir():
-                        dest_path = project_path / item.name
-                        if item.is_dir():
-                            shutil.copytree(item, dest_path, dirs_exist_ok=True)
-                        else:
-                            shutil.copy2(item, dest_path)
-
-                    if verbose and not tracker:
-                        console.print(f"[cyan]Template files copied to {project_path}[/cyan]")
+                if verbose and not tracker:
+                    console.print(f"[cyan]Skills copied to {skills_folder}[/cyan]")
 
     except Exception as e:
         if tracker:
@@ -332,15 +340,5 @@ def download_and_extract_template(
     else:
         if tracker:
             tracker.complete(f"extract-{ai_assistant}")
-    finally:
-        if tracker:
-            tracker.add("cleanup", "Remove temporary archive")
-
-        if zip_path.exists():
-            zip_path.unlink()
-            if tracker:
-                tracker.complete("cleanup")
-            elif verbose:
-                console.print(f"Cleaned up: {zip_path.name}")
 
     return project_path

@@ -455,6 +455,16 @@ def init(
                     is_first_agent=is_first
                 )
 
+            # Cleanup downloaded zip file after all agents have been processed
+            if not local_templates:
+                current_dir = Path.cwd()
+                zip_files = list(current_dir.glob("phoenix-skills-*.zip"))
+                for zip_file in zip_files:
+                    if zip_file.exists():
+                        zip_file.unlink()
+                        if tracker:
+                            tracker.complete("cleanup", "removed archive")
+
             ensure_executable_scripts(project_path, tracker=tracker)
 
             if not no_git:
