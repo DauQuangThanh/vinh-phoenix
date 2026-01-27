@@ -35,10 +35,11 @@ build_skills_package() {
     echo "Copied all skills -> $base_dir/skills"
   else
     echo "Warning: skills directory not found"
+    exit 1
   fi
   
-  # Create the zip file
-  ( cd "$base_dir" && zip -r "../phoenix-skills-${NEW_VERSION}.zip" . )
+  # Create the zip file with skills/ at the root
+  ( cd "$base_dir" && zip -r "../phoenix-skills-${NEW_VERSION}.zip" skills )
   echo "Created $GENRELEASES_DIR/phoenix-skills-${NEW_VERSION}.zip"
 }
 
