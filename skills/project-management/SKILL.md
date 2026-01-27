@@ -4,7 +4,7 @@ description: Generates actionable, dependency-ordered tasks.md files from design
 metadata:
   author: Dau Quang Thanh
   version: "1.0"
-  last-updated: "2026-01-26"
+  last-updated: "2026-01-27"
 license: MIT
 ---
 
@@ -38,6 +38,44 @@ This skill generates comprehensive implementation task lists (`tasks.md`) from d
 - **Tools**: bash (Unix/Linux/macOS) or PowerShell (Windows) for running prerequisite checks
 
 ## Instructions
+
+### Step 0: Technical Design and Specification Verification
+
+**⚠️ IMPORTANT: Always verify technical design and specifications exist before creating task breakdown.**
+
+1. **Request technical design documents:**
+   - Ask the user to confirm that technical design is complete
+   - Verify the location of `design.md` in the feature directory
+   - Verify the location of `spec.md` with user stories and priorities
+   - Ask if the design has been reviewed and approved
+
+2. **Check for required design artifacts:**
+   - Confirm `design.md` exists with:
+     - Technology stack and libraries
+     - Project structure and code organization
+     - Architectural decisions and patterns
+   - Confirm `spec.md` exists with:
+     - User stories with clear priorities (P1, P2, P3...)
+     - Acceptance criteria for each story
+     - Clear requirements and constraints
+
+3. **Verify supporting documentation:**
+   - Check if `data-model.md` exists (for data-driven features)
+   - Check if `contracts/` directory exists (for API implementations)
+   - Check if `docs/architecture.md` exists (for architectural alignment)
+   - Note what's available to inform task generation
+
+4. **Review and confirm scope:**
+   - Summarize the feature to be implemented
+   - Review user story priorities and dependencies
+   - Clarify the expected task breakdown structure
+   - Ask about any specific implementation preferences or constraints
+
+5. **Only proceed to Step 1 after:**
+   - Technical design document (`design.md`) exists and is reviewed
+   - Specification document (`spec.md`) with user stories exists and is reviewed
+   - Design and specifications are confirmed as complete and approved
+   - User confirms readiness to generate task breakdown
 
 ### Step 1: Check Prerequisites and Get Feature Directory
 
@@ -390,3 +428,18 @@ Before finalizing tasks.md, validate for AI implementation:
 - [ ] Each user story phase is independently testable
 - [ ] Parallel execution examples provided per story
 - [ ] Independent test criteria are verifiable and specific
+
+## Related Skills
+
+**After creating the task breakdown:**
+
+- Use `coding` skill to execute the implementation tasks
+- Use `project-consistency-analysis` skill to validate consistency across all project documents and ensure the task breakdown aligns with architecture, specifications, and design decisions
+- Use `code-review` skill after implementation to validate code quality
+
+**Before creating tasks:**
+
+- Ensure `requirements-specification` skill has been used to create feature specs
+- Ensure `technical-design` skill has been used to create implementation design
+- **Recommended:** Use `coding-standards` skill to establish code conventions (if not yet created)
+- Consider `architecture-design` skill for product-level architecture (if not yet created)
