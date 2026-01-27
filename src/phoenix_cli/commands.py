@@ -568,10 +568,10 @@ def init(
     steps_lines.append("")
     steps_lines.append("   [bold cyan]Core Workflow:[/bold cyan]")
     steps_lines.append("   • \"Establish project governance and development principles\"")
-    steps_lines.append("   • \"Create specifications for [feature name]\"")
-    steps_lines.append("   • \"Design system architecture\" [dim](optional, product-level)[/dim]")
-    steps_lines.append("   • \"Establish coding conventions and standards\" [dim](optional, product-level)[/dim]")
-    steps_lines.append("   • \"Plan technical implementation with [tech stack]\"")
+    steps_lines.append("   • \"Create specifications for (feature name)\"")
+    steps_lines.append("   • \"Design system architecture\" [dim](product-level)[/dim]")
+    steps_lines.append("   • \"Establish coding conventions and standards\" [dim](product-level)[/dim]")
+    steps_lines.append("   • \"Plan technical implementation with (tech stack)\"")
     steps_lines.append("   • \"Break this down into actionable tasks\"")
     steps_lines.append("   • \"Implement all the tasks\"")
 
@@ -582,11 +582,11 @@ def init(
     enhancement_lines = [
         "Skills auto-activate when needed [bright_black](AI determines usage)[/bright_black]",
         "",
-        "○ Requirements clarification - identifies ambiguities before planning",
-        "○ Consistency analysis - detects gaps after tasks, before coding",
-        "○ Design validation - checks completeness and quality after design",
-        "○ E2E test design - creates comprehensive test specifications (product-level)",
-        "○ Context assessment - analyzes existing codebase patterns (brownfield projects)"
+        "○ Clarify requirements - identifies ambiguities before planning",
+        "○ Analyze project consistency - detects gaps after tasks, before coding",
+        "○ Validate technical design - checks completeness and quality after design",
+        "○ Design E2E tests - creates comprehensive test specifications (product-level)",
+        "○ Assess codebase context - analyzes existing patterns (brownfield projects)"
     ]
     enhancements_panel = Panel("\n".join(enhancement_lines), title="Skills That Auto-Activate", border_style="cyan", padding=(1,2))
     console.print()
