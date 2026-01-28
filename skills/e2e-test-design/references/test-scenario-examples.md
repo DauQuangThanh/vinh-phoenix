@@ -7,6 +7,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### E-commerce Application
 
 **Guest User Purchase Journey**
+
 1. User lands on homepage
 2. Browses product catalog (filters by category, price)
 3. Views product details
@@ -20,6 +21,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 11. Receives order confirmation (email sent)
 
 **Registered User Journey**
+
 1. User logs in with email/password
 2. Dashboard displays personalized recommendations
 3. Browses products (filters, search)
@@ -31,6 +33,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 9. Logs out
 
 **Admin User Journey**
+
 1. Admin logs in with admin credentials
 2. Accesses admin dashboard
 3. Views sales analytics and reports
@@ -43,6 +46,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### SaaS Application
 
 **Free Trial Signup Journey**
+
 1. User visits pricing page
 2. Clicks "Start Free Trial"
 3. Fills registration form (name, email, password)
@@ -55,6 +59,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 10. Views usage statistics
 
 **Subscription Upgrade Journey**
+
 1. User logs in
 2. Navigates to account settings
 3. Views current plan and usage
@@ -66,6 +71,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 9. Tests premium feature (e.g., advanced analytics)
 
 **Collaboration Journey**
+
 1. Team owner creates a workspace
 2. Invites team members (sends email invitations)
 3. Team member receives email and joins workspace
@@ -78,6 +84,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Social Media Application
 
 **User Onboarding Journey**
+
 1. New user signs up with email/Google/Facebook
 2. Fills out profile information (name, bio, avatar)
 3. Connects accounts (import contacts from email)
@@ -88,6 +95,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 8. Explores feed (scrolls, likes, shares)
 
 **Content Creation Journey**
+
 1. User logs in
 2. Clicks "Create Post"
 3. Writes post content (text, hashtags)
@@ -103,6 +111,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Authentication
 
 **Login Scenarios**
+
 - **Happy Path**: Valid email and password → Redirects to dashboard
 - **Invalid Email**: Non-existent email → Shows "User not found" error
 - **Invalid Password**: Correct email, wrong password → Shows "Invalid password" error
@@ -113,6 +122,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 - **Social Login**: Login with Google/Facebook → Authenticates via OAuth, redirects to dashboard
 
 **Registration Scenarios**
+
 - **Happy Path**: Valid details → Creates account, sends verification email
 - **Duplicate Email**: Already registered email → Shows "Email already in use" error
 - **Weak Password**: Password "123" → Shows "Password too weak" error
@@ -121,6 +131,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 - **Resend Verification**: Request new verification email → Email sent again
 
 **Password Reset Scenarios**
+
 - **Request Reset**: Enter email → Sends reset link via email
 - **Reset with Valid Token**: Click link, enter new password → Password updated
 - **Reset with Expired Token**: Use old link → Shows "Token expired" error
@@ -129,6 +140,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### E-commerce Checkout
 
 **Cart Management Scenarios**
+
 - **Add to Cart**: Click "Add to Cart" → Product added, cart count updates
 - **Update Quantity**: Change quantity to 3 → Cart updates, total recalculated
 - **Remove Item**: Click "Remove" → Item removed from cart
@@ -136,6 +148,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 - **Cart Persistence**: Add items, close browser, reopen → Cart items persist (for logged-in users)
 
 **Checkout Scenarios**
+
 - **Happy Path**: Complete all steps → Order placed, confirmation email sent
 - **Invalid Shipping Address**: Enter invalid zip code → Shows validation error
 - **Expired Credit Card**: Enter expired card → Payment fails, shows error
@@ -148,6 +161,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Form Submissions
 
 **Contact Form Scenarios**
+
 - **Happy Path**: Fill all required fields → Form submitted, confirmation message
 - **Missing Required Fields**: Leave name empty → Shows "Name is required" error
 - **Invalid Email Format**: Enter "notanemail" → Shows "Invalid email" error
@@ -159,6 +173,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Search and Filtering
 
 **Search Scenarios**
+
 - **Keyword Search**: Search "laptop" → Returns relevant results
 - **No Results**: Search "xyz123" → Shows "No results found" message
 - **Autocomplete**: Type "lap" → Suggests "laptop", "lap desk"
@@ -171,6 +186,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### User Profile
 
 **Profile Management Scenarios**
+
 - **View Profile**: Click "Profile" → Displays user information
 - **Edit Profile**: Update name, bio → Changes saved, confirmation message
 - **Upload Avatar**: Upload new profile picture → Image updated
@@ -185,6 +201,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### User Data
 
 **Valid User**
+
 ```json
 {
   "email": "john.doe@example.com",
@@ -203,6 +220,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ```
 
 **Invalid User (Missing Fields)**
+
 ```json
 {
   "email": "invalid-user",
@@ -211,6 +229,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ```
 
 **Malicious Input (XSS Attempt)**
+
 ```json
 {
   "name": "<script>alert('XSS')</script>",
@@ -221,6 +240,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Product Data
 
 **Valid Product**
+
 ```json
 {
   "id": "prod-001",
@@ -242,6 +262,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Order Data
 
 **Valid Order**
+
 ```json
 {
   "orderId": "ORD-2023-001",
@@ -273,6 +294,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Successful Response
 
 **GET /api/products**
+
 ```json
 {
   "status": "success",
@@ -296,6 +318,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Error Response
 
 **POST /api/orders (Invalid Data)**
+
 ```json
 {
   "status": "error",
@@ -316,6 +339,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ### Authentication Error
 
 **GET /api/profile (Unauthorized)**
+
 ```json
 {
   "status": "error",
@@ -327,27 +351,32 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 ## Edge Cases and Negative Scenarios
 
 ### Concurrency Issues
+
 - **Simultaneous Purchase**: Two users buy the last item → Only one succeeds, other sees "Out of stock"
 - **Double Click Submit**: User clicks "Submit" twice rapidly → Only one form submission processes
 - **Session Expiry During Action**: Session expires while filling form → Redirect to login, preserve form data
 
 ### Network Issues
+
 - **Slow Connection**: Simulate 3G connection → Page loads gracefully, shows loading indicators
 - **Connection Loss**: Disconnect network mid-action → Shows "Connection lost" message, retries when reconnected
 - **API Timeout**: API takes >30s to respond → Shows timeout error, option to retry
 
 ### Browser Compatibility
+
 - **Old Browser**: Test in IE11 (if supported) → Polyfills work, core functionality available
 - **Disabled JavaScript**: Turn off JS → Shows message "JavaScript required" or graceful degradation
 - **Disabled Cookies**: Block cookies → Authentication fails, shows warning
 
 ### Security Testing
+
 - **XSS Attack**: Enter `<script>alert('XSS')</script>` → Input sanitized, script not executed
 - **SQL Injection**: Enter `' OR '1'='1' --` → Input sanitized, no database breach
 - **CSRF Token**: Submit form without CSRF token → Request rejected
 - **Brute Force**: 100 rapid login attempts → Account locked, IP blocked
 
 ### Data Integrity
+
 - **Duplicate Submission**: Submit same form twice → Only one record created
 - **Transaction Rollback**: Payment fails mid-checkout → Cart restored, no partial order created
 - **Data Consistency**: Update user profile → Changes reflected across all pages immediately
@@ -357,6 +386,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 **Pattern**: `should_{expected_outcome}_when_{condition}`
 
 **Examples:**
+
 - `should_display_dashboard_when_user_logs_in_successfully`
 - `should_show_error_message_when_login_with_invalid_credentials`
 - `should_add_product_to_cart_when_user_clicks_add_to_cart_button`
@@ -366,6 +396,7 @@ This document provides comprehensive examples of E2E test scenarios and user jou
 - `should_redirect_to_login_when_accessing_protected_route_unauthorized`
 
 **Descriptive Names (Alternative):**
+
 - `test_successful_user_registration_with_email_verification`
 - `test_cart_quantity_update_and_total_recalculation`
 - `test_checkout_with_saved_payment_method`

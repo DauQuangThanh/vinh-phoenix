@@ -25,6 +25,7 @@ This skill executes feature implementations by processing structured task lists 
 - User mentions: "implement tasks", "execute implementation", "code feature", "follow task breakdown", "implement from tasks.md"
 
 **Related Skills:**
+
 - **Before coding**: Use `technical-design` and `project-management` skills for planning
 - **After coding**: Use `code-review` skill for quality validation
 - **During coding**: Use `bug-analysis` skill if issues discovered
@@ -124,6 +125,7 @@ Parse the output to extract:
 If `FEATURE_DIR/checklists/` exists, validate all checklists before proceeding. See [references/implementation-patterns.md](references/implementation-patterns.md#checklist-validation-process) for detailed validation process.
 
 **Quick Summary:**
+
 - Scan all checklist files and count completed vs incomplete items
 - Create status table showing pass/fail for each checklist
 - If all pass → proceed automatically
@@ -307,6 +309,7 @@ Provide concise summary including:
 After completing the implementation, it's highly recommended to run additional validation. See [references/implementation-patterns.md](references/implementation-patterns.md#next-steps-recommendations) for detailed next steps.
 
 **Recommended:**
+
 1. **Run `code-review` skill** to validate code quality, error handling, test coverage, and security
 2. **Address findings** from review before creating PR/MR
 3. **Consider `e2e-test-design` skill** if E2E tests needed

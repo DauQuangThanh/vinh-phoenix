@@ -47,10 +47,12 @@ Phase: User Story 1
 - Create ignore files
 
 **Standards Application:**
+
 - Follow file and directory naming conventions from standards.md
 - Apply project structure standards
 
 **Architecture Application:**
+
 - Verify directory structure matches code organization from architecture.md
 - Ensure deployment configuration aligns with deployment architecture
 
@@ -62,6 +64,7 @@ Phase: User Story 1
 - Establish database connections
 
 **Standards Application:**
+
 - Apply code naming conventions
 - Follow architectural patterns from architecture.md
 - Use database naming conventions
@@ -163,6 +166,7 @@ Detect project technology and create/verify ignore files:
 ### Technology-Specific Patterns
 
 **Node.js/JavaScript/TypeScript**:
+
 ```
 node_modules/
 dist/
@@ -173,6 +177,7 @@ coverage/
 ```
 
 **Python**:
+
 ```
 __pycache__/
 *.pyc
@@ -184,6 +189,7 @@ dist/
 ```
 
 **Java**:
+
 ```
 target/
 *.class
@@ -194,6 +200,7 @@ build/
 ```
 
 **C#/.NET**:
+
 ```
 bin/
 obj/
@@ -204,6 +211,7 @@ packages/
 ```
 
 **Go**:
+
 ```
 *.exe
 *.test
@@ -213,6 +221,7 @@ go.work
 ```
 
 **Ruby**:
+
 ```
 .bundle/
 log/
@@ -222,6 +231,7 @@ vendor/bundle/
 ```
 
 **PHP**:
+
 ```
 vendor/
 *.log
@@ -231,6 +241,7 @@ composer.phar
 ```
 
 **Rust**:
+
 ```
 target/
 *.rs.bk
@@ -240,6 +251,7 @@ target/
 ```
 
 **Universal** (all projects):
+
 ```
 .DS_Store
 Thumbs.db
@@ -255,6 +267,7 @@ Thumbs.db
 ### 1. Scan All Checklist Files
 
 Count for each checklist:
+
 - Total items: Lines matching `- [ ]` or `- [X]` or `- [x]`
 - Completed: Lines matching `- [X]` or `- [x]`
 - Incomplete: Lines matching `- [ ]`

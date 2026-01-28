@@ -184,6 +184,7 @@ Design deployment topology, CI/CD pipeline, and disaster recovery. See [referenc
 **Prerequisites**: Phase 2 complete
 
 Document ADRs for major architectural choices and map quality strategies to requirements. See [references/c4-and-adr-guide.md](references/c4-and-adr-guide.md) for:
+
 - Detailed ADR template and examples
 - When to create ADRs
 - Quality attribute strategies (performance, scalability, availability, security, maintainability)
@@ -272,6 +273,7 @@ git commit -m "docs: add system architecture documentation"
 3. **If issues found**, update the architecture and repeat validation
 
 **Next Steps:**
+
 - If review passes, proceed to create feature specifications using `requirements-specification` skill
 - Use `coding-standards` skill to establish code conventions
 - Use `technical-design` skill for individual feature implementation planning
@@ -333,6 +335,7 @@ git commit -m "docs: add system architecture documentation"
 See [references/c4-and-adr-guide.md](references/c4-and-adr-guide.md) for detailed ADR template with complete example.
 
 Each ADR should include:
+
 - **Status**, **Date**, **Deciders**
 - **Context**: Issue prompting decision
 - **Decision**: Chosen approach

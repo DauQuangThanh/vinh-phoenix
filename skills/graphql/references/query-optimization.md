@@ -9,6 +9,7 @@ This guide covers strategies for optimizing GraphQL query performance and preven
 **Problem:** Fetching a list of items and then making separate queries for each item's related data.
 
 **Example:**
+
 ```graphql
 query GetPosts {
   posts {
@@ -22,6 +23,7 @@ query GetPosts {
 ```
 
 **Without optimization:**
+
 ```
 1 query: SELECT * FROM posts;
 N queries: SELECT * FROM users WHERE id = ?; (for each post)
@@ -63,6 +65,7 @@ const resolvers = {
 ```
 
 **Result:**
+
 ```
 1 query: SELECT * FROM posts;
 1 query: SELECT * FROM users WHERE id IN (1, 2, 3, ...);
@@ -74,6 +77,7 @@ Total: 2 queries
 **Problem:** Selecting all columns when only some are needed.
 
 **Bad:**
+
 ```typescript
 // Resolver fetches all user data
 const resolvers = {
@@ -86,6 +90,7 @@ const resolvers = {
 ```
 
 **Good: Use Field Selection**
+
 ```typescript
 import { GraphQLResolveInfo } from 'graphql';
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
@@ -118,6 +123,7 @@ function getFieldNames(info: GraphQLResolveInfo): string[] {
 **Problem:** Queries can nest infinitely, causing exponential resource usage.
 
 **Dangerous Query:**
+
 ```graphql
 query DeepQuery {
   user(id: "1") {
@@ -171,6 +177,7 @@ const server = new ApolloServer({
 **Problem:** Returning thousands of items without pagination.
 
 **Bad:**
+
 ```graphql
 type Query {
   allPosts: [Post!]!  # Could return 100,000 posts!
@@ -194,6 +201,7 @@ type PostConnection {
 ```
 
 **Resolver with efficient pagination:**
+
 ```typescript
 const resolvers = {
   Query: {
@@ -265,6 +273,7 @@ const complexityRule = createComplexityLimitRule(1000, {
 Cache expensive computations.
 
 **Using Apollo Server:**
+
 ```typescript
 import { ApolloServer } from '@apollo/server';
 import responseCachePlugin from '@apollo/server-plugin-response-cache';
@@ -291,6 +300,7 @@ const typeDefs = `
 ```
 
 **Custom caching in resolvers:**
+
 ```typescript
 import Redis from 'ioredis';
 
@@ -324,6 +334,7 @@ const resolvers = {
 Reduce payload size and improve performance.
 
 **Client:**
+
 ```typescript
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
@@ -332,6 +343,7 @@ const link = createPersistedQueryLink({ sha256 });
 ```
 
 **Server:**
+
 ```typescript
 import { ApolloServer } from '@apollo/server';
 
@@ -345,6 +357,7 @@ const server = new ApolloServer({
 ```
 
 **Benefits:**
+
 - Smaller network payload (just send hash)
 - Automatic query whitelisting
 - Better CDN caching
@@ -354,6 +367,7 @@ const server = new ApolloServer({
 Combine multiple queries into one request.
 
 **Client:**
+
 ```typescript
 import { ApolloClient, HttpLink } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
@@ -373,6 +387,7 @@ const client = new ApolloClient({
 ### Strategy 5: Automatic Persisted Queries (APQ)
 
 **Enable on server:**
+
 ```typescript
 import { ApolloServer } from '@apollo/server';
 
@@ -386,6 +401,7 @@ const server = new ApolloServer({
 ```
 
 **Client automatically uses APQ:**
+
 ```typescript
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
@@ -529,6 +545,7 @@ if (process.env.NODE_ENV === 'development') {
 ## Performance Benchmarks
 
 Target response times:
+
 - Simple queries: < 100ms
 - Complex queries: < 500ms
 - Paginated lists: < 200ms

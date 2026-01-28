@@ -27,6 +27,7 @@ Implement JWT-based authentication for the API.
 ```
 
 **Parsing Strategy:**
+
 1. Extract heading text as title
 2. Parse metadata from **bold** labels
 3. Extract description from paragraph after metadata
@@ -49,6 +50,7 @@ Implement JWT-based authentication for the API.
 ```
 
 **Parsing Strategy:**
+
 1. Extract number and title from list item
 2. Parse inline metadata from parentheses
 3. Extract acceptance criteria from sub-bullets
@@ -64,6 +66,7 @@ Implement JWT-based authentication for the API.
 ```
 
 **Parsing Strategy:**
+
 1. Parse table rows
 2. Extract each column by header
 3. Map dependencies using ID column
@@ -71,15 +74,18 @@ Implement JWT-based authentication for the API.
 ### Dependency Formats
 
 **Explicit References:**
+
 - "Dependencies: Task 1, Task 3"
 - "Depends on: T001, T003"
 - "Blocked by: Implement Authentication"
 
 **Implicit References:**
+
 - "After user authentication is complete..."
 - "Requires database schema from Task 2"
 
 **Dependency Resolution:**
+
 1. Extract all explicit dependency declarations
 2. Map task names/IDs to task objects
 3. Build dependency graph (adjacency list)
@@ -130,16 +136,19 @@ _This issue was automatically created from tasks.md on [date]_
 ### Label Mapping Rules
 
 **Priority Labels:**
+
 - `priority: high` ← Priority: High
 - `priority: medium` ← Priority: Medium (default)
 - `priority: low` ← Priority: Low
 
 **Effort Labels:**
+
 - `effort: small` ← 1-3 hours
 - `effort: medium` ← 4-8 hours
 - `effort: large` ← >8 hours or multiple days
 
 **Category Labels:**
+
 - `task` ← Always applied
 - `feature` ← If part of feature development
 - `backend` ← If mentions API, server, database
@@ -149,6 +158,7 @@ _This issue was automatically created from tasks.md on [date]_
 - `devops` ← If mentions deployment, CI/CD, infrastructure
 
 **Custom Labels:**
+
 - Extract from task metadata
 - Validate against existing repo labels
 - Create if doesn't exist (if permissions allow)
@@ -279,6 +289,7 @@ await mcp.github.add_issue_comment({
 **Purpose**: Enable future synchronization and updates
 
 **Key Fields:**
+
 - `task_id`: Original task identifier from tasks.md
 - `issue_number`: GitHub issue number
 - `issue_url`: Direct link to issue
@@ -286,6 +297,7 @@ await mcp.github.add_issue_comment({
 - `dependents`: Array of task IDs that depend on this task
 
 **Use Cases:**
+
 1. **Status Sync**: Check if tasks.md changes require issue updates
 2. **Duplicate Prevention**: Avoid creating duplicate issues
 3. **Dependency Updates**: Update issue dependencies if tasks.md changes
@@ -296,6 +308,7 @@ await mcp.github.add_issue_comment({
 ### Rate Limit Handling
 
 **Detection:**
+
 ```typescript
 if (error.status === 403 && error.headers['x-ratelimit-remaining'] === '0') {
   // Rate limit exceeded
@@ -306,22 +319,26 @@ if (error.status === 403 && error.headers['x-ratelimit-remaining'] === '0') {
 ```
 
 **Strategy:**
+
 1. Check rate limit headers before bulk operations
 2. If close to limit, pause between requests
 3. If exceeded, wait for reset time
 4. Implement exponential backoff for retries
 
 **Limits:**
+
 - Authenticated: 5000 requests/hour
 - Unauthenticated: 60 requests/hour
 
 ### Authentication Errors
 
 **Detection:**
+
 - Status 401: Invalid credentials
 - Status 403: Insufficient permissions
 
 **Actions:**
+
 1. Verify GitHub MCP server configuration
 2. Check token scopes include `repo` and `issues:write`
 3. Confirm repository access permissions
@@ -332,6 +349,7 @@ if (error.status === 403 && error.headers['x-ratelimit-remaining'] === '0') {
 **Scenario:** 3 out of 10 issues fail to create
 
 **Strategy:**
+
 1. Continue creating remaining issues
 2. Log all failures with task details
 3. Do NOT commit tracking metadata (incomplete state)
@@ -339,6 +357,7 @@ if (error.status === 403 && error.headers['x-ratelimit-remaining'] === '0') {
 5. Provide manual remediation steps
 
 **Recovery Report:**
+
 ```markdown
 ## Partial Failure Report
 
@@ -363,12 +382,14 @@ if (error.status === 403 && error.headers['x-ratelimit-remaining'] === '0') {
 ### Circular Dependency Detection
 
 **Algorithm:**
+
 1. Build directed graph of task dependencies
 2. Perform depth-first search (DFS)
 3. Track visited nodes and recursion stack
 4. If node already in recursion stack, cycle detected
 
 **Error Message:**
+
 ```
 Error: Circular dependency detected
 
@@ -396,6 +417,7 @@ chore: sync tasks to GitHub issues
 ### Examples
 
 **Success (All Created):**
+
 ```
 chore: sync tasks to GitHub issues
 
@@ -406,6 +428,7 @@ chore: sync tasks to GitHub issues
 ```
 
 **Partial Success:**
+
 ```
 chore: sync tasks to GitHub issues (partial)
 
@@ -417,6 +440,7 @@ chore: sync tasks to GitHub issues (partial)
 ```
 
 **Update (Re-sync):**
+
 ```
 chore: update GitHub issues from tasks.md
 
@@ -467,6 +491,7 @@ chore: update GitHub issues from tasks.md
 **Detection:** Check `.github/issue-tracking.json` for existing mapping
 
 **Options:**
+
 1. Skip sync (issues already exist)
 2. Update existing issues with new data
 3. Force re-create (will create duplicates)
@@ -478,6 +503,7 @@ chore: update GitHub issues from tasks.md
 **Cause:** Custom label doesn't exist in repository
 
 **Solutions:**
+
 1. Create label manually in GitHub repo
 2. Remove label from task metadata
 3. Enable label creation (if permissions allow)
@@ -488,6 +514,7 @@ chore: update GitHub issues from tasks.md
 **Cause:** Task references non-existent task ID
 
 **Solutions:**
+
 1. Fix tasks.md to reference correct task
 2. Remove invalid dependency
 3. Add missing task to tasks.md
@@ -497,6 +524,7 @@ chore: update GitHub issues from tasks.md
 **Cause:** GitHub token expired or invalid
 
 **Solutions:**
+
 1. Refresh GitHub authentication token
 2. Re-configure GitHub MCP server
 3. Verify token has required scopes

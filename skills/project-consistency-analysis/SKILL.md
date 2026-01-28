@@ -179,6 +179,7 @@ Assign severity levels to prioritize findings. See [references/analysis-patterns
 Create structured report using `templates/analysis-report.md`. See [references/analysis-patterns.md](references/analysis-patterns.md) for detailed report templates and formatting.
 
 **Report Sections**:
+
 1. **Executive Summary**: Status, total findings by severity, coverage %, key metrics
 2. **Findings Table**: ID, Category, Severity, Location(s), Summary, Recommendation
 3. **Coverage Summary**: Requirements with/without tasks, orphan tasks

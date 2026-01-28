@@ -7,6 +7,7 @@ This reference provides proven patterns for designing scalable, maintainable Gra
 ### 1. Design Around Your Domain, Not Your Database
 
 **❌ Bad: Database-Driven Design**
+
 ```graphql
 type user_accounts {
   user_id: Int!
@@ -17,6 +18,7 @@ type user_accounts {
 ```
 
 **✅ Good: Domain-Driven Design**
+
 ```graphql
 type User {
   id: ID!
@@ -38,6 +40,7 @@ type User {
 ### 3. Make Illegal States Unrepresentable
 
 **❌ Bad: Nullable Fields That Should Always Exist**
+
 ```graphql
 type User {
   id: ID
@@ -46,6 +49,7 @@ type User {
 ```
 
 **✅ Good: Required Fields Are Non-Null**
+
 ```graphql
 type User {
   id: ID!
@@ -96,6 +100,7 @@ type Post {
 ```
 
 **Usage:**
+
 ```graphql
 query GetPosts {
   posts(first: 10) {
@@ -158,6 +163,7 @@ type Query {
 ```
 
 **Usage:**
+
 ```graphql
 query GetAnyObject {
   node(id: "dXNlcjoxMjM=") {
@@ -207,6 +213,7 @@ type Mutation {
 ```
 
 **Benefits:**
+
 - Easy to add new fields without breaking API
 - Clear grouping of related inputs
 - Consistent mutation signature pattern
@@ -240,6 +247,7 @@ type Mutation {
 ```
 
 **Usage:**
+
 ```graphql
 mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
@@ -294,6 +302,7 @@ type Query {
 ```
 
 **Usage:**
+
 ```graphql
 query GetFeed {
   feed {
@@ -354,6 +363,7 @@ type Query {
 ```
 
 **Usage:**
+
 ```graphql
 query GetRecentPublished {
   posts(
@@ -421,6 +431,7 @@ type Subscription {
 ```
 
 **Usage:**
+
 ```graphql
 subscription WatchNewPosts($authorId: ID!) {
   postCreatedByAuthor(authorId: $authorId) {
@@ -445,6 +456,7 @@ type user_table {
 ```
 
 **Fix:** Use domain language:
+
 ```graphql
 type User {
   id: ID!
@@ -463,6 +475,7 @@ type User {
 ```
 
 **Fix:** Be explicit:
+
 ```graphql
 type User {
   friends: [User!]!  # Non-null array of non-null users
@@ -481,6 +494,7 @@ type Query {
 ```
 
 **Fix:** Use enums for clarity:
+
 ```graphql
 enum PostStatus {
   PUBLISHED
@@ -503,6 +517,7 @@ type Mutation {
 ```
 
 **Fix:** Return payload type:
+
 ```graphql
 type DeletePostPayload {
   success: Boolean!
@@ -525,6 +540,7 @@ type User {
 ```
 
 **Fix:** Add pagination and depth limits:
+
 ```graphql
 type User {
   friends(first: Int = 10, after: String): UserConnection!
@@ -559,6 +575,7 @@ type User {
 ### Strategy 3: Separate Schemas (Last Resort)
 
 Only when breaking changes are absolutely necessary:
+
 - `/graphql/v1/`
 - `/graphql/v2/`
 

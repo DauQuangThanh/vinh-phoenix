@@ -39,6 +39,7 @@ This skill provides comprehensive guidance for GraphQL API development, includin
 ### Recommended Packages
 
 **Node.js/TypeScript:**
+
 - `graphql` - GraphQL.js reference implementation
 - `@apollo/server` or `graphql-yoga` - GraphQL server frameworks
 - `@graphql-tools/schema` - Schema building utilities
@@ -46,6 +47,7 @@ This skill provides comprehensive guidance for GraphQL API development, includin
 - `@graphql-codegen/cli` - Code generation
 
 **Python:**
+
 - `graphene` - GraphQL framework for Python
 - `ariadne` - Schema-first GraphQL library
 - `strawberry-graphql` - Code-first GraphQL library
@@ -57,17 +59,20 @@ This skill provides comprehensive guidance for GraphQL API development, includin
 Follow schema-first or code-first approach based on project needs.
 
 **Schema-First Approach:**
+
 1. Define types in SDL (Schema Definition Language)
 2. Define queries, mutations, and subscriptions
 3. Document using descriptions
 4. Validate schema structure
 
 **Code-First Approach:**
+
 1. Define types using decorators or classes
 2. Generate SDL automatically from code
 3. Ensure type safety with TypeScript/Python types
 
 **Best Practices:**
+
 - Use meaningful, consistent naming (PascalCase for types, camelCase for fields)
 - Design around business domain, not database structure
 - Keep types focused and cohesive
@@ -82,6 +87,7 @@ See `references/schema-design-patterns.md` for detailed patterns.
 Create efficient resolvers with proper data loading and error handling.
 
 **Key Principles:**
+
 - Implement DataLoader to prevent N+1 queries
 - Use context for shared resources (database, auth)
 - Validate inputs and check authorization in mutations
@@ -89,6 +95,7 @@ Create efficient resolvers with proper data loading and error handling.
 - Return meaningful error messages
 
 **Basic Pattern:**
+
 ```typescript
 const resolvers = {
   Query: { user: (parent, { id }, ctx) => ctx.loaders.user.load(id) },
@@ -107,6 +114,7 @@ See `references/resolver-implementation.md` for complete patterns, DataLoader se
 Prevent performance issues through proper query optimization.
 
 **Common Optimizations:**
+
 1. **Use DataLoader for batching:**
    - Batch multiple requests into single query
    - Cache within single request lifecycle
@@ -137,6 +145,7 @@ Secure GraphQL APIs with proper auth patterns.
 **Authorization:** Check permissions in resolvers or use directives
 
 **Quick Example:**
+
 ```typescript
 context: async ({ req }) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -155,6 +164,7 @@ See `references/resolver-implementation.md` for directive-based auth and field-l
 Create efficient, maintainable queries.
 
 **Query Best Practices:**
+
 - Request only needed fields
 - Use fragments for reusable field sets
 - Implement proper error handling
@@ -162,6 +172,7 @@ Create efficient, maintainable queries.
 - Name all operations
 
 **Testing:**
+
 - Test resolvers in isolation
 - Test complete queries end-to-end
 - Test error scenarios
@@ -175,6 +186,7 @@ Use `scripts/test-query.py` for automated query testing.
 Maintain comprehensive API documentation.
 
 **Documentation Strategies:**
+
 - Add descriptions to all types and fields
 - Document expected input formats
 - Explain error scenarios
@@ -182,6 +194,7 @@ Maintain comprehensive API documentation.
 - Keep schema and docs in sync
 
 **Tools:**
+
 - GraphQL Playground / GraphiQL for interactive docs
 - GraphQL Voyager for schema visualization
 - Custom documentation generators
@@ -191,6 +204,7 @@ Maintain comprehensive API documentation.
 Implement observability for production GraphQL APIs.
 
 **Monitoring:**
+
 - Track query execution time
 - Monitor resolver performance
 - Log slow queries
@@ -198,6 +212,7 @@ Implement observability for production GraphQL APIs.
 - Monitor cache hit rates
 
 **Debugging:**
+
 - Use Apollo Studio or similar tools
 - Enable detailed error messages in development
 - Sanitize errors in production
@@ -336,22 +351,27 @@ See `references/resolver-implementation.md` for complete DataLoader patterns.
 ## Edge Cases
 
 ### Circular References
+
 - GraphQL handles circular types naturally
 - Implement query depth limiting (5-7 levels) to prevent abuse
 
 ### Large Result Sets
+
 - Always implement pagination with reasonable defaults (10-100)
 - Use cursor-based pagination for consistency
 
 ### N+1 Query Problem
+
 - Use DataLoader for all relationship fields
 - Monitor query counts in development
 
 ### Schema Evolution
+
 - Use `@deprecated` directive instead of removing fields
 - Add new fields rather than changing existing ones
 
 ### Complex Validation
+
 - Use input validation libraries (Zod, Yup)
 - Return detailed error messages with field-level feedback
 
@@ -434,5 +454,5 @@ python scripts/generate-docs.py --schema schema.graphql --output docs/api.md
 - See `references/query-optimization.md` for performance best practices
 - See `references/graphql-best-practices.md` for comprehensive guidelines
 - See `templates/` for starter schemas and queries
-- Official GraphQL documentation: https://graphql.org/learn/
-- Apollo Server documentation: https://www.apollographql.com/docs/apollo-server/
+- Official GraphQL documentation: <https://graphql.org/learn/>
+- Apollo Server documentation: <https://www.apollographql.com/docs/apollo-server/>

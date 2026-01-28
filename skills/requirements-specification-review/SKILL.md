@@ -76,6 +76,7 @@ Scan the specification using a comprehensive 12-category taxonomy. For each cate
 **Categories**: Functional Scope & Behavior, Domain & Data Model, Interaction & UX Flow, Non-Functional Quality Attributes, Integration & External Dependencies, Edge Cases & Failure Handling, Constraints & Tradeoffs, Architecture Alignment, Standards Compliance, Terminology & Consistency, Completion Signals, Placeholders & Ambiguities
 
 **Create internal coverage map**:
+
 - List each category with status
 - Note specific gaps/ambiguities
 - Calculate priority: Impact × Uncertainty
@@ -83,6 +84,7 @@ Scan the specification using a comprehensive 12-category taxonomy. For each cate
 ### Step 3: Generate Prioritized Question Queue
 
 Based on coverage scan, generate internal prioritized queue. See [references/review-guide.md](references/review-guide.md) for:
+
 - Detailed prioritization matrix (Impact × Uncertainty)
 - Question formulation guidelines
 - Integration strategies by answer type
@@ -319,15 +321,19 @@ See [references/review-guide.md](references/review-guide.md) for detailed covera
 See [references/review-guide.md](references/review-guide.md) for detailed error recovery strategies.
 
 ### Error: Spec File Not Readable
+
 **Action**: Report error, check permissions/encoding, suggest fix, exit with error
 
 ### Error: Invalid Markdown Structure
+
 **Action**: Report error, identify problematic section, suggest fix, proceed with best-effort parsing
 
 ### Error: Git Commit Fails
+
 **Action**: Ensure file saved (priority), report error, suggest manual commit, continue with completion report
 
 ### Error: Integration Conflict
+
 **Action**: Save in Clarifications only, report manual integration needed, continue with next question
 
 ## Guidelines

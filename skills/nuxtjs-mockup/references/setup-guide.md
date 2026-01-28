@@ -354,16 +354,19 @@ pnpm preview
 ### Deployment Options
 
 **Deploy to Vercel:**
+
 ```bash
 vercel deploy
 ```
 
 **Deploy to Netlify:**
+
 ```bash
 netlify deploy
 ```
 
 **Static Export:**
+
 ```bash
 nuxt generate
 ```

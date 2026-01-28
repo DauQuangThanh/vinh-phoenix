@@ -7,6 +7,7 @@
 **Purpose**: Identify redundant requirements that should be consolidated
 
 **Detection Algorithm**:
+
 1. Extract all functional/non-functional requirements
 2. Compute textual similarity (TF-IDF or Levenshtein distance)
 3. Flag pairs with >70% similarity
@@ -14,6 +15,7 @@
 5. Identify consolidation candidates
 
 **Patterns to Detect**:
+
 - **Exact Duplicates**: Same requirement in multiple sections
 - **Near-Duplicates**: Same intent, different wording
 - **Overlapping Requirements**: Partial overlap suggesting merge
@@ -21,16 +23,19 @@
 **Examples**:
 
 **Exact Duplicate**:
+
 - spec.md:L45: "User can upload files"
 - spec.md:L120: "User can upload files"
 - **Action**: Remove duplicate, keep one
 
 **Near-Duplicate**:
+
 - spec.md:L50: "API response time must be fast"
 - spec.md:L200: "System must respond quickly to API calls"
 - **Action**: Merge into single measurable requirement
 
 **Overlapping**:
+
 - spec.md:L60: "User can create account"
 - spec.md:L75: "User can register with email and password"
 - **Action**: Consolidate registration flow
@@ -40,6 +45,7 @@
 **Purpose**: Flag vague or unmeasurable requirements
 
 **Vague Adjectives to Flag**:
+
 - Performance: "fast", "quick", "slow", "efficient", "optimal"
 - Scalability: "scalable", "large-scale", "massive"
 - Security: "secure", "safe", "protected"
@@ -48,11 +54,13 @@
 - Appearance: "nice", "clean", "modern", "professional"
 
 **Placeholder Patterns**:
+
 - TODO, TBD, TKTK, ???
 - <placeholder>, [to be determined], [fill in]
 - "See later", "details coming", "TBD"
 
 **Subjective Measures**:
+
 - "Users will like it"
 - "Should be acceptable"
 - "Reasonably fast"
@@ -61,14 +69,17 @@
 **Examples**:
 
 **Vague Performance**:
+
 - ❌ "API must be fast"
 - ✅ "API response time: p95 < 200ms, p99 < 500ms"
 
 **Vague Security**:
+
 - ❌ "System must be secure"
 - ✅ "Data encrypted at rest (AES-256), in transit (TLS 1.3)"
 
 **Placeholder**:
+
 - ❌ "Performance target: TBD"
 - ✅ "Performance target: 10,000 requests/second"
 
@@ -79,21 +90,25 @@
 **Patterns to Check**:
 
 **Missing Objects**:
+
 - "System must handle..." (handle what?)
 - "User can create..." (create what?)
 - "API should return..." (return what?)
 
 **Missing Outcomes**:
+
 - "User logs in" (what happens after?)
 - "System processes data" (what's the result?)
 - "API validates input" (then what?)
 
 **Missing Acceptance Criteria**:
+
 - User story without testable criteria
 - Requirement without verification method
 - Feature without measurable outcomes
 
 **Missing Error Handling**:
+
 - "Upload file" (what if fails?)
 - "Call external API" (what if timeout?)
 - "Process payment" (what if declined?)
@@ -101,14 +116,17 @@
 **Examples**:
 
 **Missing Object**:
-- ❌ "User can upload" 
+
+- ❌ "User can upload"
 - ✅ "User can upload images (JPG, PNG, max 10MB)"
 
 **Missing Outcome**:
+
 - ❌ "User logs in"
 - ✅ "User logs in → redirected to dashboard, session created"
 
 **Missing Criteria**:
+
 - ❌ User Story: "As a user, I want to search"
 - ✅ User Story: "As a user, I want to search" + Criteria: "Results in <1s, ranked by relevance"
 
@@ -119,21 +137,25 @@
 **Validation Checks**:
 
 **MUST Principles**:
+
 - Extract all "MUST" statements from ground-rules
 - Check if any requirement/design violates them
 - **All violations are CRITICAL**
 
 **SHOULD Principles**:
+
 - Extract all "SHOULD" statements
 - Check for deviations
 - **Violations are HIGH severity** (may have justification)
 
 **Prohibited Practices**:
+
 - Check if design uses forbidden technologies
 - Check if tasks violate process requirements
 - **Violations are CRITICAL**
 
 **Quality Gates**:
+
 - Verify required checkpoints present
 - Check if artifacts meet quality standards
 - **Missing gates are HIGH severity**
@@ -141,18 +163,21 @@
 **Examples**:
 
 **Technology Violation**:
+
 - Ground-rule: "MUST use TypeScript"
 - design.md: "Implementation in JavaScript"
 - **Severity**: CRITICAL
 - **Action**: Change to TypeScript or update ground-rule
 
 **Process Violation**:
+
 - Ground-rule: "MUST have E2E tests before deployment"
 - tasks.md: No E2E test tasks
 - **Severity**: CRITICAL
 - **Action**: Add E2E test tasks
 
 **Style Violation**:
+
 - Ground-rule: "SHOULD use functional components"
 - design.md: "Use class components"
 - **Severity**: HIGH
@@ -163,6 +188,7 @@
 **Purpose**: Ensure all requirements have tasks
 
 **Coverage Algorithm**:
+
 1. Extract all requirements (functional + non-functional)
 2. Extract all tasks with descriptions
 3. Map tasks to requirements using:
@@ -175,32 +201,38 @@
 **Mapping Strategies**:
 
 **Explicit References**:
+
 - Task mentions requirement ID: "Implement REQ-AUTH-001"
 - Task quotes requirement: "User can reset password"
 
 **Keyword Matching**:
+
 - Requirement: "User authentication"
 - Task: "Create login page", "Implement JWT auth"
 
 **Entity Matching**:
+
 - Requirement mentions "Order entity"
 - Task: "Create Order model", "Add order database table"
 
 **Examples**:
 
 **Uncovered Requirement**:
+
 - spec.md: "Data must be encrypted at rest"
 - tasks.md: No tasks mentioning encryption
 - **Severity**: CRITICAL (security requirement)
 - **Action**: Add encryption tasks
 
 **Orphan Task**:
+
 - tasks.md: "T050: Refactor UserService"
 - No requirement about refactoring
 - **Severity**: MEDIUM
 - **Action**: Either add requirement or justify task
 
 **Partial Coverage**:
+
 - spec.md: "User can upload, view, delete files"
 - tasks.md: Upload and view tasks only
 - **Severity**: HIGH
@@ -211,24 +243,28 @@
 **Purpose**: Find contradictions and misalignments
 
 **Terminology Drift**:
+
 - Same concept, different names across files
 - Example: "User" (spec) vs "Account" (design) vs "Profile" (tasks)
 - **Detection**: Build term frequency map, identify synonyms
 - **Severity**: MEDIUM to HIGH depending on impact
 
 **Data Entity Mismatches**:
+
 - Entity in spec not in design (or vice versa)
 - Entity fields differ between spec and design
 - **Detection**: Extract entity definitions, compare schemas
 - **Severity**: HIGH
 
 **Technology Conflicts**:
+
 - spec requires Next.js, design uses Vue.js
 - spec says PostgreSQL, design says MongoDB
 - **Detection**: Extract technology mentions, check alignment
 - **Severity**: CRITICAL
 
 **Task Ordering Issues**:
+
 - Integration test before unit tests
 - Database migration before schema design
 - Deployment before testing
@@ -236,12 +272,14 @@
 - **Severity**: MEDIUM (if workarounds exist)
 
 **Architecture Misalignment**:
+
 - Design uses REST, architecture.md mandates GraphQL
 - Design uses microservices, architecture.md describes monolith
 - **Detection**: Compare design against architecture.md
 - **Severity**: CRITICAL
 
 **Standards Violations**:
+
 - File names not following standards.md conventions
 - Code structure deviating from standards.md
 - API endpoints not matching standards.md patterns
@@ -253,6 +291,7 @@
 ### CRITICAL Severity
 
 **When to Assign**:
+
 - Violates ground-rules MUST requirement
 - Core spec artifact missing (spec.md, design.md, tasks.md)
 - Zero coverage for baseline functionality requirement
@@ -265,6 +304,7 @@
 **Impact**: Cannot proceed with implementation safely
 
 **Examples**:
+
 - Ground-rule "MUST use TypeScript" violated
 - "User authentication" requirement has no tasks
 - spec.md says PostgreSQL, design.md says MongoDB
@@ -273,6 +313,7 @@
 ### HIGH Severity
 
 **When to Assign**:
+
 - Duplicate requirements causing confusion
 - Ambiguous security/performance requirements
 - Untestable acceptance criteria
@@ -284,6 +325,7 @@
 **Impact**: Should fix before implementation, workarounds risky
 
 **Examples**:
+
 - "API must be fast" (no metrics)
 - Two conflicting user stories
 - Performance requirement with no measurable target
@@ -292,6 +334,7 @@
 ### MEDIUM Severity
 
 **When to Assign**:
+
 - Terminology drift not affecting understanding
 - Underspecified edge cases
 - Coverage gaps in optional features
@@ -302,6 +345,7 @@
 **Impact**: Can proceed but recommend fixes
 
 **Examples**:
+
 - "User" vs "Account" used interchangeably
 - No error handling specified for optional feature
 - Task "T050: Setup CI" could logically come earlier
@@ -310,6 +354,7 @@
 ### LOW Severity
 
 **When to Assign**:
+
 - Style/wording improvements
 - Minor redundancy not affecting execution
 - Optional documentation gaps
@@ -319,6 +364,7 @@
 **Impact**: Optional improvements, can defer
 
 **Examples**:
+
 - Requirement could be worded more clearly
 - Optional logging detail missing
 - Minor formatting inconsistency
@@ -512,15 +558,20 @@ When user requests remediation suggestions, provide structured guidance:
 
 **Current Text**:
 ```
+
 System must be fast
+
 ```
 
 **Suggested Change**:
 ```
+
 API response time targets:
+
 - p95 latency: < 200ms
 - p99 latency: < 500ms
 - Throughput: 1000 requests/second
+
 ```
 
 **Rationale**: Provides measurable, testable performance criteria that can be validated
@@ -564,6 +615,7 @@ Keep L45, remove L120 (consolidate)
 ```
 
 **Rationale**: Security requirement must have implementation tasks
+
 ```
 
 ## Common Patterns and Heuristics

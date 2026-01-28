@@ -5,6 +5,7 @@ This document provides detailed UI naming patterns and examples for frontend pro
 ## Component/Widget Naming Conventions
 
 ### Component Names Format
+
 - **React/TypeScript**: PascalCase
   - Examples: `UserProfile.tsx`, `NavigationMenu.tsx`, `PaymentForm.tsx`
 - **Vue**: kebab-case
@@ -13,6 +14,7 @@ This document provides detailed UI naming patterns and examples for frontend pro
   - Examples: `UserProfileComponent`, `NavigationMenuComponent`
 
 ### Props/Attributes Naming
+
 - Format: camelCase
 - Examples:
   - `userName`, `userId`, `isVisible`, `isActive`
@@ -22,6 +24,7 @@ This document provides detailed UI naming patterns and examples for frontend pro
   - `isLoading`, `hasError`, `shouldShow`, `canEdit`
 
 ### Event Handler Naming
+
 - Patterns: `handle*` or `on*`
 - Examples:
   - `handleSubmit`, `handleClick`, `handleInputChange`
@@ -29,6 +32,7 @@ This document provides detailed UI naming patterns and examples for frontend pro
 - Avoid: Generic names like `handle`, `onClick1`, `handler`
 
 ### State Variable Naming
+
 - Descriptive names with context
 - Boolean states: Use prefixes
   - `isLoading`, `isError`, `hasPermission`, `canDelete`
@@ -40,6 +44,7 @@ This document provides detailed UI naming patterns and examples for frontend pro
 ## CSS/Styling Naming Conventions
 
 ### BEM Methodology
+
 ```css
 /* Block */
 .user-profile { }
@@ -55,13 +60,16 @@ This document provides detailed UI naming patterns and examples for frontend pro
 ```
 
 ### Utility-First (Tailwind-style)
+
 ```html
 <div class="flex items-center justify-between p-4 bg-blue-500 text-white">
 ```
+
 - Use semantic utility classes
 - Avoid: custom classes when utilities exist
 
 ### Semantic CSS
+
 ```css
 .header-navigation { }
 .primary-button { }
@@ -70,6 +78,7 @@ This document provides detailed UI naming patterns and examples for frontend pro
 ```
 
 ### CSS-in-JS Naming
+
 ```typescript
 // styled-components
 const UserCard = styled.div`...`;
@@ -80,6 +89,7 @@ const buttonStyles = css`...`;
 ```
 
 ### Style File Naming
+
 - CSS Modules: `ComponentName.module.css`
 - Styled Components: `ComponentName.styles.ts`
 - SCSS: `component-name.scss`
@@ -87,6 +97,7 @@ const buttonStyles = css`...`;
 ## File Naming for UI Components
 
 ### React/TypeScript
+
 ```
 src/components/
   UserProfile/
@@ -98,6 +109,7 @@ src/components/
 ```
 
 ### Vue
+
 ```
 src/components/
   UserProfile/
@@ -107,6 +119,7 @@ src/components/
 ```
 
 ### Angular
+
 ```
 src/app/components/
   user-profile/
@@ -119,6 +132,7 @@ src/app/components/
 ## Directory Structure for UI Code
 
 ### Feature-Based Structure
+
 ```
 src/
   features/
@@ -141,6 +155,7 @@ src/
 ```
 
 ### Layer-Based Structure
+
 ```
 src/
   components/
@@ -162,6 +177,7 @@ src/
 ```
 
 ### Asset Organization
+
 ```
 public/
   images/
@@ -178,6 +194,7 @@ public/
 ## Accessibility Naming Conventions
 
 ### ARIA Attributes
+
 ```html
 <button 
   aria-label="Close dialog"
@@ -187,6 +204,7 @@ public/
 ```
 
 ### Roles
+
 ```html
 <nav role="navigation" aria-label="Main navigation">
 <main role="main">
@@ -194,12 +212,14 @@ public/
 ```
 
 ### Label Associations
+
 ```html
 <label htmlFor="email">Email</label>
 <input id="email" type="email" />
 ```
 
 ### Landmark Naming
+
 ```html
 <nav aria-label="Primary">...</nav>
 <main>...</main>
@@ -210,7 +230,9 @@ public/
 ## Framework-Specific Conventions
 
 ### React
+
 **Hooks**: Always prefix with `use`
+
 ```typescript
 useUser()
 useAuth()
@@ -219,6 +241,7 @@ useLocalStorage()
 ```
 
 **Context**: Suffix with `Context`
+
 ```typescript
 UserContext
 ThemeContext
@@ -226,6 +249,7 @@ AuthContext
 ```
 
 **Higher-Order Components**: Prefix with `with`
+
 ```typescript
 withAuth(Component)
 withLayout(Component)
@@ -233,6 +257,7 @@ withErrorBoundary(Component)
 ```
 
 **Custom Hooks**: Descriptive verb + noun
+
 ```typescript
 useFetchUser()
 useDebounce()
@@ -241,7 +266,9 @@ useMediaQuery()
 ```
 
 ### Vue 3 Composition API
+
 **Composables**: Prefix with `use`
+
 ```typescript
 useCounter()
 useUser()
@@ -250,6 +277,7 @@ useEventListener()
 ```
 
 **Directives**: Prefix with `v-`
+
 ```typescript
 v-focus
 v-click-outside
@@ -257,6 +285,7 @@ v-tooltip
 ```
 
 **Plugins**: Descriptive name
+
 ```typescript
 myPlugin
 routerPlugin
@@ -264,7 +293,9 @@ i18nPlugin
 ```
 
 ### Angular
+
 **Services**: Suffix with `Service`
+
 ```typescript
 UserService
 AuthService
@@ -272,6 +303,7 @@ DataService
 ```
 
 **Directives**: Suffix with `Directive`
+
 ```typescript
 HighlightDirective
 TooltipDirective
@@ -279,6 +311,7 @@ ClickOutsideDirective
 ```
 
 **Pipes**: Suffix with `Pipe`
+
 ```typescript
 DatePipe
 CurrencyPipe
@@ -286,13 +319,16 @@ FilterPipe
 ```
 
 **Guards**: Suffix with `Guard`
+
 ```typescript
 AuthGuard
 RoleGuard
 ```
 
 ### Native Mobile (iOS/Android)
+
 **View Controllers (iOS)**:
+
 ```swift
 UserProfileViewController
 LoginViewController
@@ -300,6 +336,7 @@ SettingsViewController
 ```
 
 **Activities (Android)**:
+
 ```kotlin
 MainActivity
 UserProfileActivity
@@ -307,6 +344,7 @@ LoginActivity
 ```
 
 **Views**:
+
 ```swift
 // iOS
 UserProfileView
@@ -320,6 +358,7 @@ custom_button.xml
 ## Do's and Don'ts
 
 ### ✅ DO
+
 ```typescript
 // Clear, descriptive component names
 <UserProfile userId={123} />
@@ -344,6 +383,7 @@ hasPermission
 ```
 
 ### ❌ DON'T
+
 ```typescript
 // Cryptic abbreviations
 <UP uid={123} />

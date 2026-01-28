@@ -5,9 +5,11 @@ This document provides detailed patterns for file structure, API design, and dat
 ## File Naming Conventions
 
 ### Source Code Files
+
 **Match class/module name with appropriate extension**
 
 **Java**:
+
 ```
 UserService.java
 PaymentProcessor.java
@@ -15,6 +17,7 @@ DataValidator.java
 ```
 
 **Python**:
+
 ```
 user_service.py
 payment_processor.py
@@ -22,6 +25,7 @@ data_validator.py
 ```
 
 **TypeScript**:
+
 ```
 user-service.ts
 UserService.ts
@@ -29,6 +33,7 @@ payment-processor.ts
 ```
 
 **Go**:
+
 ```
 user_service.go
 payment_processor.go
@@ -36,9 +41,11 @@ data_validator.go
 ```
 
 ### Test Files
+
 **Suffix or prefix convention**
 
 **Jest/TypeScript**:
+
 ```
 UserService.test.ts
 UserService.spec.ts
@@ -46,24 +53,28 @@ user-service.test.ts
 ```
 
 **Python (pytest)**:
+
 ```
 test_user_service.py
 user_service_test.py
 ```
 
 **Java (JUnit)**:
+
 ```
 UserServiceTest.java
 PaymentProcessorTest.java
 ```
 
 **Go**:
+
 ```
 user_service_test.go
 payment_processor_test.go
 ```
 
 ### Configuration Files
+
 **Lowercase, descriptive**
 
 ```
@@ -79,6 +90,7 @@ go.mod
 ```
 
 ### Documentation Files
+
 **Uppercase or capitalized**
 
 ```
@@ -93,6 +105,7 @@ ARCHITECTURE.md
 ## Directory Structure Standards
 
 ### Feature-Based Organization
+
 ```
 src/
   features/
@@ -125,6 +138,7 @@ src/
 ```
 
 ### Layer-Based Organization
+
 ```
 src/
   controllers/
@@ -158,6 +172,7 @@ src/
 ```
 
 ### Monorepo Structure
+
 ```
 packages/
   @myorg/ui/
@@ -185,6 +200,7 @@ apps/
 ## REST API Design Standards
 
 ### Endpoint Naming
+
 **Plural nouns, lowercase, hyphens**
 
 ```
@@ -207,6 +223,7 @@ POST   /orders/{id}/items
 ### HTTP Methods Usage
 
 **GET**: Retrieve resources (idempotent, no side effects)
+
 ```
 GET /users           # List all users
 GET /users/{id}      # Get specific user
@@ -214,28 +231,33 @@ GET /users?page=1&limit=20
 ```
 
 **POST**: Create new resources (not idempotent)
+
 ```
 POST /users          # Create new user
 POST /orders/{id}/items  # Add item to order
 ```
 
 **PUT**: Full replacement (idempotent)
+
 ```
 PUT /users/{id}      # Replace entire user
 ```
 
 **PATCH**: Partial update (may not be idempotent)
+
 ```
 PATCH /users/{id}    # Update specific fields
 ```
 
 **DELETE**: Remove resource (idempotent)
+
 ```
 DELETE /users/{id}   # Delete user
 DELETE /orders/{id}/items/{itemId}
 ```
 
 ### Query Parameters
+
 **camelCase or snake_case**
 
 ```
@@ -249,6 +271,7 @@ GET /orders?status=pending&createdAfter=2024-01-01
 ### Request/Response Body Structure
 
 **Request Body (JSON)**:
+
 ```json
 {
   "firstName": "John",
@@ -264,6 +287,7 @@ GET /orders?status=pending&createdAfter=2024-01-01
 ```
 
 **Response Body (Success)**:
+
 ```json
 {
   "id": "user_123",
@@ -276,6 +300,7 @@ GET /orders?status=pending&createdAfter=2024-01-01
 ```
 
 **Response Body (List)**:
+
 ```json
 {
   "data": [
@@ -292,6 +317,7 @@ GET /orders?status=pending&createdAfter=2024-01-01
 ```
 
 ### Error Response Format
+
 **Consistent structure**
 
 ```json
@@ -334,7 +360,9 @@ GET /orders?status=pending&createdAfter=2024-01-01
 ```
 
 ### API Versioning
+
 **URL path versioning**
+
 ```
 /v1/users
 /v1/orders
@@ -342,12 +370,14 @@ GET /orders?status=pending&createdAfter=2024-01-01
 ```
 
 **Header-based versioning**
+
 ```
 GET /users
 Accept: application/vnd.myapi.v1+json
 ```
 
 **Query parameter versioning**
+
 ```
 GET /users?version=1
 ```
@@ -355,6 +385,7 @@ GET /users?version=1
 ## GraphQL Design Standards
 
 ### Type Naming
+
 **PascalCase**
 
 ```graphql
@@ -384,6 +415,7 @@ enum OrderStatus {
 ```
 
 ### Field Naming
+
 **camelCase**
 
 ```graphql
@@ -398,6 +430,7 @@ type User {
 ```
 
 ### Query Naming
+
 **Descriptive, verb-based**
 
 ```graphql
@@ -412,6 +445,7 @@ type Query {
 ```
 
 ### Mutation Naming
+
 **Verb + Object**
 
 ```graphql
@@ -427,6 +461,7 @@ type Mutation {
 ```
 
 ### Input Type Naming
+
 **{Type}Input**
 
 ```graphql
@@ -451,6 +486,7 @@ input OrderItemInput {
 ## Database Naming Conventions
 
 ### Table Names
+
 **Plural, snake_case or lowercase**
 
 ```sql
@@ -469,6 +505,7 @@ paymentMethods
 ```
 
 ### Column Names
+
 **Singular, snake_case or camelCase**
 
 ```sql
@@ -492,6 +529,7 @@ updatedAt
 ```
 
 ### Primary Key Naming
+
 **`id` or `{table}_id`**
 
 ```sql
@@ -509,6 +547,7 @@ CREATE TABLE users (
 ```
 
 ### Foreign Key Naming
+
 **`{referenced_table}_id`**
 
 ```sql
@@ -521,6 +560,7 @@ CREATE TABLE orders (
 ```
 
 ### Index Naming
+
 **`idx_{table}_{columns}`**
 
 ```sql
@@ -531,6 +571,7 @@ CREATE INDEX idx_orders_user_id_status ON orders(user_id, status);
 ```
 
 ### Constraint Naming
+
 **`{type}_{table}_{columns}`**
 
 ```sql
@@ -546,6 +587,7 @@ ALTER TABLE orders ADD CONSTRAINT fk_orders_user_id
 ```
 
 ### View Naming
+
 **`v_{descriptive_name}` or `{descriptive_name}_view`**
 
 ```sql
@@ -555,6 +597,7 @@ CREATE VIEW monthly_sales_report AS ...;
 ```
 
 ### Stored Procedure Naming
+
 **`sp_{verb}_{object}` or `{verb}_{object}`**
 
 ```sql
@@ -568,6 +611,7 @@ CREATE PROCEDURE calculate_order_total(...) ...;
 ```
 
 ### MongoDB Collection Naming
+
 **camelCase or snake_case, plural**
 
 ```javascript
@@ -587,12 +631,14 @@ db.order_items
 ### Monorepo vs Multi-Repo
 
 **Use Monorepo when:**
+
 - Shared code between projects
 - Coordinated releases
 - Consistent tooling and dependencies
 - Strong team collaboration
 
 **Use Multi-Repo when:**
+
 - Independent deployment schedules
 - Different technology stacks
 - Clear ownership boundaries

@@ -7,11 +7,13 @@
 **Purpose**: Show how your system fits into the wider world
 
 **Elements**:
+
 - **System**: The software system you're building (single box)
 - **People**: User types who interact with the system
 - **External Systems**: Other systems your system interacts with
 
 **Mermaid Example**:
+
 ```mermaid
 graph TB
     Users[End Users] --> System[E-Commerce Platform]
@@ -24,6 +26,7 @@ graph TB
 **When to Create**: Always - this is the starting point for all architecture
 
 **Questions to Answer**:
+
 - Who uses the system?
 - What are their goals?
 - What external systems does your system depend on?
@@ -34,6 +37,7 @@ graph TB
 **Purpose**: Show the high-level technical building blocks
 
 **Elements** (Containers are separately deployable/runnable units):
+
 - Web Applications (React SPA, Angular app)
 - Server Applications (Node.js API, Spring Boot API)
 - Databases (PostgreSQL, MongoDB, Redis)
@@ -41,6 +45,7 @@ graph TB
 - File Storage (S3, Azure Blob)
 
 **Mermaid Example**:
+
 ```mermaid
 graph TB
     Users -->|HTTPS| WebApp[Web App<br/>React SPA]
@@ -56,6 +61,7 @@ graph TB
 **When to Create**: Always - essential for understanding technology choices
 
 **Technology Stack Decisions**:
+
 - Frontend: React, Vue, Angular, Svelte
 - Backend: Node.js, Python, Java, Go, .NET
 - Database: PostgreSQL, MySQL, MongoDB, Cassandra
@@ -67,6 +73,7 @@ graph TB
 **Purpose**: Decompose containers into logical components
 
 **Elements** (Components are groupings of related functionality):
+
 - Controllers/Handlers (HTTP request handling)
 - Services (business logic)
 - Repositories (data access)
@@ -74,6 +81,7 @@ graph TB
 - Middleware/Interceptors
 
 **Mermaid Example**:
+
 ```mermaid
 graph TB
     HTTP[HTTP Request] --> AuthMW[Auth Middleware]
@@ -88,6 +96,7 @@ graph TB
 **When to Create**: For critical or complex containers only
 
 **Component Patterns**:
+
 - Layered: Controller → Service → Repository
 - Event-Driven: Producer → Event Bus → Consumer
 - Pipeline: Handler → Validator → Processor → Formatter
@@ -97,6 +106,7 @@ graph TB
 **Purpose**: Show how components are implemented in code
 
 **Elements**:
+
 - Classes, interfaces, functions
 - Design patterns used
 - Directory structure
@@ -104,6 +114,7 @@ graph TB
 **When to Create**: Rarely - usually too detailed for architecture docs
 
 **Better Alternatives**:
+
 - Document directory structure in text
 - Reference coding standards document
 - Link to API documentation
@@ -113,6 +124,7 @@ graph TB
 ### When to Create an ADR
 
 Create an ADR for decisions that:
+
 - **Structural Impact**: Affect overall system structure
 - **Significant Cost**: Expensive to change later
 - **Quality Attributes**: Impact performance, security, scalability
@@ -120,6 +132,7 @@ Create an ADR for decisions that:
 - **Integration Patterns**: How systems communicate
 
 **Examples of ADR-worthy decisions**:
+
 - Microservices vs Monolith
 - SQL vs NoSQL database
 - REST vs GraphQL vs gRPC
@@ -130,6 +143,7 @@ Create an ADR for decisions that:
 - Deployment strategy
 
 **Not ADR-worthy**:
+
 - Code style preferences (use coding standards doc)
 - Minor library choices
 - Temporary workarounds
@@ -264,6 +278,7 @@ graph TB
 ```
 
 **Components**:
+
 - CDN: CloudFront, Cloudflare, Fastly
 - Load Balancer: ALB, NGINX, HAProxy
 - Compute: ECS, Kubernetes, VMs
@@ -283,6 +298,7 @@ graph TB
 ```
 
 **Replication Strategy**:
+
 - Database: Cross-region read replicas
 - Storage: S3 cross-region replication
 - Cache: Separate, rebuilt on failover
@@ -303,6 +319,7 @@ graph TB
 ```
 
 **Challenges**:
+
 - Data consistency (eventual consistency accepted)
 - Conflict resolution strategies
 - Higher operational complexity
@@ -313,11 +330,13 @@ graph TB
 ### Performance
 
 **Targets**:
+
 - API response time: p95 < 200ms, p99 < 500ms
 - Page load time: < 2 seconds (LCP)
 - Database query time: p95 < 50ms
 
 **Strategies**:
+
 - **Caching**: Redis for session data, query results
 - **CDN**: Static assets, API responses (when appropriate)
 - **Database Optimization**: Indexes, query optimization, connection pooling
@@ -329,11 +348,13 @@ graph TB
 ### Scalability
 
 **Targets**:
+
 - Support 10,000 concurrent users
 - Handle 1,000 requests/second
 - Scale to 100M records in database
 
 **Strategies**:
+
 - **Horizontal Scaling**: Add more instances (auto-scaling)
 - **Database Sharding**: Partition data by tenant, region, or hash
 - **Read Replicas**: Offload read traffic from primary DB
@@ -344,11 +365,13 @@ graph TB
 ### Availability
 
 **Targets**:
+
 - 99.9% uptime (8.76 hours downtime/year)
 - Zero-downtime deployments
 - Recovery time: < 5 minutes
 
 **Strategies**:
+
 - **Multi-AZ Deployment**: Redundancy across availability zones
 - **Load Balancing**: Distribute traffic, health checks
 - **Circuit Breakers**: Fail fast, prevent cascade failures
@@ -360,11 +383,13 @@ graph TB
 ### Security
 
 **Targets**:
+
 - Zero customer data breaches
 - Pass SOC 2 Type II audit
 - PCI DSS compliance for payment data
 
 **Strategies**:
+
 - **Authentication**: OAuth2/OIDC, MFA for admins
 - **Authorization**: RBAC, attribute-based access control
 - **Encryption in Transit**: TLS 1.3 for all communications
@@ -378,11 +403,13 @@ graph TB
 ### Maintainability
 
 **Targets**:
+
 - 80% code coverage for unit tests
 - Deploy to production 10+ times per day
 - Onboard new developer in 1 day
 
 **Strategies**:
+
 - **Automated Testing**: Unit, integration, E2E tests in CI/CD
 - **Observability**: Structured logging, distributed tracing, metrics
 - **Documentation**: Architecture docs, API docs, runbooks
@@ -396,16 +423,19 @@ graph TB
 ### Event-Driven Architecture
 
 **When to Use**:
+
 - Need to decouple services
 - Async processing is acceptable
 - Multiple services need to react to same event
 
 **Components**:
+
 - Event Producers (services that publish events)
 - Event Bus (Kafka, RabbitMQ, AWS EventBridge)
 - Event Consumers (services that subscribe to events)
 
 **Example Events**:
+
 - `UserRegistered`: Trigger welcome email, create profile, analytics
 - `OrderPlaced`: Update inventory, charge payment, send notification
 - `PaymentFailed`: Retry payment, notify user, alert operations
@@ -413,11 +443,13 @@ graph TB
 ### API Gateway Pattern
 
 **When to Use**:
+
 - Multiple backend services
 - Need centralized auth, rate limiting, logging
 - Different clients (web, mobile, partners)
 
 **Features**:
+
 - Routing to backend services
 - Authentication & authorization
 - Rate limiting & throttling
@@ -430,16 +462,19 @@ graph TB
 ### Database Per Service
 
 **When to Use**:
+
 - Microservices architecture
 - Need service independence
 - Different data models per service
 
 **Challenges**:
+
 - Data consistency across services
 - Joins across databases not possible
 - Data duplication
 
 **Solutions**:
+
 - Event-driven data synchronization
 - API calls for cross-service data
 - CQRS (separate read/write models)
@@ -448,16 +483,19 @@ graph TB
 ### CQRS (Command Query Responsibility Segregation)
 
 **When to Use**:
+
 - Read and write patterns very different
 - Need to scale reads independently
 - Complex reporting requirements
 
 **Pattern**:
+
 - Command Model: Optimized for writes (normalized)
 - Query Model: Optimized for reads (denormalized)
 - Event Bus: Syncs data between models
 
 **Example**:
+
 - Write: Save order to PostgreSQL (normalized)
 - Event: OrderCreated event published
 - Read: Update ElasticSearch index for order search
@@ -465,16 +503,19 @@ graph TB
 ### Strangler Fig Pattern
 
 **When to Use**:
+
 - Migrating from legacy system
 - Can't do big-bang rewrite
 - Need to maintain business continuity
 
 **Strategy**:
+
 1. Route new features to new system
 2. Gradually migrate existing features
 3. Eventually retire legacy system
 
 **Example**:
+
 - API Gateway routes new endpoints to microservices
 - Legacy monolith handles old endpoints
 - Migrate endpoint by endpoint over time

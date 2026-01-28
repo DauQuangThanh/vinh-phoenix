@@ -121,6 +121,7 @@ skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.sh --j
 ### Phase 2: Issue Creation
 
 **Goal**: Create GitHub issues for each task in dependency order. See [references/workflow-details.md](references/workflow-details.md) for:
+
 - Issue body template generation
 - Label mapping rules
 - Dependency linking strategy

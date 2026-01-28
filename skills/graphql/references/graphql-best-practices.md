@@ -7,6 +7,7 @@ Comprehensive guidelines for building production-ready GraphQL APIs.
 ### 1. Use Descriptive Names
 
 **Good:**
+
 ```graphql
 type User {
   id: ID!
@@ -16,6 +17,7 @@ type User {
 ```
 
 **Bad:**
+
 ```graphql
 type User {
   id: ID!
@@ -55,6 +57,7 @@ type User {
 ### 3. Use Appropriate Scalar Types
 
 **Built-in Scalars:**
+
 - `ID` - Unique identifiers (serialized as String)
 - `String` - UTF-8 character sequences
 - `Int` - Signed 32-bit integers
@@ -62,6 +65,7 @@ type User {
 - `Boolean` - true or false
 
 **Custom Scalars:**
+
 ```graphql
 scalar DateTime
 scalar Email
@@ -73,6 +77,7 @@ scalar Upload
 ### 4. Make Nullable vs Non-Null Explicit
 
 **Rules:**
+
 - Use `!` for guaranteed fields
 - Omit `!` for optional fields
 - Lists: `[Type!]!` usually most appropriate
@@ -100,6 +105,7 @@ type User {
 ### 1. Implement Pagination
 
 **Always paginate lists:**
+
 ```graphql
 type Query {
   # Good
@@ -222,6 +228,7 @@ type Mutation {
 ```
 
 **Benefits:**
+
 - Can return related objects
 - Provides error details
 - Extensible (add new fields without breaking changes)
@@ -677,6 +684,7 @@ Create a new blog post.
 
 Example:
 ```
+
 mutation {
   createPost(input: {
     title: "My First Post"
@@ -689,6 +697,7 @@ mutation {
     }
   }
 }
+
 ```
 """
 createPost(input: CreatePostInput!): CreatePostPayload!

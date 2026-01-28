@@ -263,16 +263,16 @@ Document these comprehensive standards:
 
 1. **Generate enforcement configs** - `.editorconfig`, Linter configs (`.eslintrc.js`, `.pylintrc`, etc.), Formatter configs (`.prettierrc`, `pyproject.toml`), Pre-commit hooks (Husky, pre-commit)
 
-       ```python
-       # Standard library
-       import os
-       import sys
-       
-       # Third-party
-       import requests
-       import pandas as pd
-       
-       # Local
+```python
+# Standard library
+import os
+import sys
+
+# Third-party
+import requests
+import pandas as pd
+
+# Local
        from .models import User
        from .services import UserService
        ```

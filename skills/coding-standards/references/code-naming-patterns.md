@@ -5,9 +5,11 @@ This document provides detailed code naming patterns for variables, functions, c
 ## Variable Naming Conventions
 
 ### Local Variables
+
 **Format**: Language-dependent (camelCase or snake_case)
 
 **JavaScript/TypeScript (camelCase)**:
+
 ```typescript
 const userName = "John Doe";
 const isValid = true;
@@ -16,6 +18,7 @@ const itemCount = 5;
 ```
 
 **Python (snake_case)**:
+
 ```python
 user_name = "John Doe"
 is_valid = True
@@ -24,6 +27,7 @@ item_count = 5
 ```
 
 **Java (camelCase)**:
+
 ```java
 String userName = "John Doe";
 boolean isValid = true;
@@ -32,6 +36,7 @@ int itemCount = 5;
 ```
 
 ### Constants
+
 **Format**: SCREAMING_SNAKE_CASE (all languages)
 
 ```typescript
@@ -49,9 +54,11 @@ PAGE_SIZE = 20
 ```
 
 ### Class/Instance Variables
+
 **Format**: Language-specific conventions
 
 **JavaScript/TypeScript**:
+
 ```typescript
 class User {
   private _id: string;           // Private with underscore
@@ -65,6 +72,7 @@ class User {
 ```
 
 **Python**:
+
 ```python
 class User:
     def __init__(self, name):
@@ -74,6 +82,7 @@ class User:
 ```
 
 **Java**:
+
 ```java
 public class User {
     private String id;
@@ -85,9 +94,11 @@ public class User {
 ## Function/Method Naming Conventions
 
 ### General Functions
+
 **Format**: Verb-based, descriptive, camelCase or snake_case
 
 **JavaScript/TypeScript**:
+
 ```typescript
 function getUserData(userId: string) { }
 function calculateTotal(items: Item[]) { }
@@ -96,6 +107,7 @@ function formatDate(date: Date): string { }
 ```
 
 **Python**:
+
 ```python
 def get_user_data(user_id: str): pass
 def calculate_total(items: list): pass
@@ -104,7 +116,9 @@ def format_date(date: datetime) -> str: pass
 ```
 
 ### Getter/Setter Methods
+
 **JavaScript/TypeScript**:
+
 ```typescript
 class User {
   private _name: string;
@@ -129,6 +143,7 @@ class User {
 ```
 
 **Python**:
+
 ```python
 class User:
     @property
@@ -141,6 +156,7 @@ class User:
 ```
 
 **Java**:
+
 ```java
 public class User {
     private String name;
@@ -156,6 +172,7 @@ public class User {
 ```
 
 ### Boolean Functions
+
 **Prefixes**: `is`, `has`, `should`, `can`, `will`
 
 ```typescript
@@ -175,6 +192,7 @@ def will_expire(date: datetime) -> bool: pass
 ```
 
 ### Constructor Naming
+
 **Format**: Matches class name (language-dependent)
 
 ```typescript
@@ -199,6 +217,7 @@ public class UserProfile {
 ## Class/Type Naming Conventions
 
 ### Class Names
+
 **Format**: PascalCase, noun-based
 
 ```typescript
@@ -227,9 +246,11 @@ public class DataValidator { }
 ```
 
 ### Interface Names
+
 **Format**: PascalCase, with or without 'I' prefix
 
 **TypeScript (no prefix)**:
+
 ```typescript
 interface UserRepository {
   getUser(id: string): Promise<User>;
@@ -242,6 +263,7 @@ interface Drawable {
 ```
 
 **C# (with 'I' prefix)**:
+
 ```csharp
 interface IUserRepository {
   Task<User> GetUser(string id);
@@ -254,6 +276,7 @@ interface IDrawable {
 ```
 
 ### Enum Names
+
 **Format**: PascalCase, singular or plural
 
 ```typescript
@@ -295,6 +318,7 @@ class HttpMethod(Enum):
 ```
 
 ### Type Alias Names
+
 **Format**: PascalCase
 
 ```typescript
@@ -317,6 +341,7 @@ Coordinates: TypeAlias = tuple[float, float]
 ```
 
 ### Generic Type Parameters
+
 **Format**: Single letter or descriptive PascalCase
 
 ```typescript
@@ -356,9 +381,11 @@ class Map(Generic[TKey, TValue]):
 ## Module/Package Naming Conventions
 
 ### Module Names
+
 **Format**: Language-dependent
 
 **JavaScript/TypeScript (kebab-case or camelCase)**:
+
 ```
 user-service.ts
 payment-processor.ts
@@ -367,6 +394,7 @@ emailService.ts
 ```
 
 **Python (snake_case)**:
+
 ```
 user_service.py
 payment_processor.py
@@ -375,6 +403,7 @@ email_service.py
 ```
 
 **Java (lowercase, no separators)**:
+
 ```
 userservice
 paymentprocessor
@@ -383,7 +412,9 @@ emailservice
 ```
 
 ### Package Names
+
 **Java (reverse domain notation)**:
+
 ```
 com.example.user
 com.example.payment
@@ -391,6 +422,7 @@ com.example.data.validator
 ```
 
 **Python (flat or hierarchical)**:
+
 ```
 user/
   __init__.py
@@ -404,6 +436,7 @@ payment/
 ```
 
 **Node.js (npm package names)**:
+
 ```
 @myorg/user-service
 @myorg/payment-processor
@@ -411,9 +444,11 @@ payment/
 ```
 
 ### Import Alias Conventions
+
 **Format**: Meaningful abbreviations
 
 **Python**:
+
 ```python
 import numpy as np
 import pandas as pd
@@ -422,13 +457,16 @@ from datetime import datetime as dt
 ```
 
 **TypeScript**:
+
 ```typescript
 import { UserService as US } from './user-service';
 import * as UserUtils from './user-utils';
 ```
 
 ### Namespace Conventions
+
 **TypeScript**:
+
 ```typescript
 namespace UserManagement {
   export class UserService { }
@@ -437,6 +475,7 @@ namespace UserManagement {
 ```
 
 **C#**:
+
 ```csharp
 namespace MyApp.UserManagement
 {
@@ -448,6 +487,7 @@ namespace MyApp.UserManagement
 ## Do's and Don'ts
 
 ### ✅ DO
+
 ```typescript
 // Clear, descriptive names
 const userData = fetchUserData();
@@ -469,6 +509,7 @@ function saveUserData(user: User): void { }
 ```
 
 ### ❌ DON'T
+
 ```typescript
 // Cryptic abbreviations
 const usr = fetchUsr();
@@ -492,6 +533,7 @@ function data(user: User): void { }
 ## Language-Specific Patterns
 
 ### JavaScript/TypeScript
+
 ```typescript
 // Variables and functions: camelCase
 const userName = "John";
@@ -512,6 +554,7 @@ class User {
 ```
 
 ### Python
+
 ```python
 # Variables and functions: snake_case
 user_name = "John"
@@ -533,6 +576,7 @@ class User:
 ```
 
 ### Java
+
 ```java
 // Variables and methods: camelCase
 String userName = "John";
@@ -550,6 +594,7 @@ package com.example.user;
 ```
 
 ### Go
+
 ```go
 // Exported (public): PascalCase
 type UserService struct { }
@@ -565,6 +610,7 @@ const defaultTimeout = 5000
 ```
 
 ### Rust
+
 ```rust
 // Variables and functions: snake_case
 let user_name = "John";

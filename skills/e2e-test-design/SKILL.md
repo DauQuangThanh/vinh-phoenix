@@ -148,7 +148,8 @@ scripts/check-e2e-prerequisites.sh --json
 **Prerequisites:** Phase 1 complete
 
 **Goal**: Design test data management and environment configuration strategies.
-   - **Fixtures**: Static JSON/YAML files for predictable data
+
+- **Fixtures**: Static JSON/YAML files for predictable data
 
      ```javascript
      // fixtures/users.json
@@ -161,7 +162,7 @@ scripts/check-e2e-prerequisites.sh --json
      }
      ```
 
-   - **Factories**: Dynamic data generation with libraries
+- **Factories**: Dynamic data generation with libraries
 
      ```javascript
      // Factory pattern
@@ -171,32 +172,34 @@ scripts/check-e2e-prerequisites.sh --json
      })
      ```
 
-   - **Database Seeding**: SQL scripts or ORM seeders
+- **Database Seeding**: SQL scripts or ORM seeders
 
      ```sql
      INSERT INTO users (email, role, created_at)
      VALUES ('test@example.com', 'customer', NOW());
      ```
 
-   - **API-based Generation**: Create data through API calls
+- **API-based Generation**: Create data through API calls
 
      ```javascript
      await api.post('/users', userData)
      ```
 
    **Plan data cleanup and isolation**:
-   - **Test Isolation Strategies**:
-     - Separate test database per test run
-     - Database transactions (rollback after each test)
-     - Unique identifiers per test (UUIDs, timestamps)
-     - Cleanup scripts (delete test data after run)
 
-   - **Parallel Execution Support**:
-     - Non-overlapping test data ranges
-     - Namespace/prefix per test suite
-     - Isolated database schemas
+- **Test Isolation Strategies**:
+  - Separate test database per test run
+  - Database transactions (rollback after each test)
+  - Unique identifiers per test (UUIDs, timestamps)
+  - Cleanup scripts (delete test data after run)
+
+- **Parallel Execution Support**:
+  - Non-overlapping test data ranges
+  - Namespace/prefix per test suite
+  - Isolated database schemas
 
    **Document sensitive data handling**:
+
 1. **Design test data management** - Identify required test data types (user accounts, business entities, reference data), define generation approach (static fixtures, factory functions, mocked APIs, seeded databases), plan data cleanup and isolation (per-test isolation, setup/teardown, database transactions), manage sensitive data (environment variables, data masking, test-specific credentials)
 
 2. **Define test environments** - Configure environments (Local/Docker, CI/CD/ephemeral, Staging/production-like, Pre-production), define infrastructure requirements (database, cache, message queue, storage, monitoring), establish service mocking strategy (HTTP mocking, service virtualization, contract testing), design database seeding and reset procedures
@@ -233,19 +236,22 @@ scripts/check-e2e-prerequisites.sh --json
 **Prerequisites:** Phase 3 complete
 
 **Goal**: Create test execution plan, reporting strategy, and maintenance guidelines.
-   - **Custom Dashboard**: Grafana + InfluxDB for metrics
+
+- **Custom Dashboard**: Grafana + InfluxDB for metrics
 
    **Failure Notification:**
-   - Slack: Post to #qa-alerts channel on failure
-   - Email: Send summary to team on regression failure
-   - GitHub: Comment on PR with test results
+
+- Slack: Post to #qa-alerts channel on failure
+- Email: Send summary to team on regression failure
+- GitHub: Comment on PR with test results
 
    **Metrics Tracking:**
-   - **Pass Rate**: % of tests passing
-   - **Execution Time**: Total and per-test duration
-   - **Flakiness Rate**: Tests that fail intermittently
-   - **Coverage**: % of user journeys covered
-   - **Trends**: Pass rate over time, flakiness trends
+
+- **Pass Rate**: % of tests passing
+- **Execution Time**: Total and per-test duration
+- **Flakiness Rate**: Tests that fail intermittently
+- **Coverage**: % of user journeys covered
+- **Trends**: Pass rate over time, flakiness trends
 
 1. **Create test execution plan** - Define execution schedule (nightly builds, pre-release, on-demand), establish triggers (CI/CD pipeline: PR/merge/release, Scheduled: nightly/weekly, Manual: developer/QA), organize test suites (Smoke 5-10min, Regression 30-60min, Full 1-2hr, Feature-specific), set execution sequence (authentication first, parallel for independent, sequential for dependent)
 

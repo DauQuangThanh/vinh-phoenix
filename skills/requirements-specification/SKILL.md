@@ -22,6 +22,7 @@ Use this skill when:
 - User mentions: specs, requirements, feature definition, user stories, acceptance criteria
 
 **Next Steps After Creating Specifications:**
+
 - Use `coding-standards` skill to establish product-level coding conventions
 - Use `architecture-design` skill for system architecture documentation
 - Use `technical-design` skill for feature-level implementation planning
@@ -309,6 +310,7 @@ Report to user with:
 3. **If issues found**, update the specification and repeat validation
 
 **Next Steps:**
+
 - If review passes, proceed to architecture (if new product) or technical design (if adding feature)
 - Use `architecture-design` skill for new product architecture
 - Use `technical-design` skill for feature implementation planning
@@ -320,6 +322,7 @@ Report to user with:
 **Input**: "Add user login with email and password"
 
 **Processing**:
+
 1. Short name: `user-login`
 2. Branch: `1-user-login` (no existing branches)
 3. Spec created with user scenarios, functional requirements, success criteria
@@ -332,6 +335,7 @@ Report to user with:
 **Input**: "Add payment processing"
 
 **Processing**:
+
 1. Initial spec created with [NEEDS CLARIFICATION] for payment methods
 2. User responds with choice
 3. Spec updated and re-validated
@@ -343,15 +347,19 @@ See [references/specification-guide.md](references/specification-guide.md) for d
 ## Edge Cases
 
 ### Case 1: Branch Already Exists
+
 Find highest existing number and increment. Document relationship in spec.
 
 ### Case 2: Empty or Vague Description
+
 Ask clarifying questions about what the feature should do, who will use it, and what problem it solves.
 
 ### Case 3: Script Execution Fails
+
 Check error output, resolve common issues, or create branch/directories manually.
 
 ### Case 4: Too Many Clarification Markers
+
 Prioritize by impact (scope > security > UX > technical), keep top 3, make informed guesses for rest. Document assumptions.
 
 See [references/specification-guide.md](references/specification-guide.md) for detailed edge case handling.
@@ -363,11 +371,13 @@ See [references/specification-guide.md](references/specification-guide.md) for d
 Specifications should describe user needs and business value, not implementation details. See [references/specification-guide.md](references/specification-guide.md) for detailed examples of good vs bad specifications.
 
 **DO:**
+
 - "Users can reset their password via email"
 - "System supports 10,000 concurrent users"
 - "Search results appear in under 1 second"
 
 **DON'T:**
+
 - "Use bcrypt for password hashing" (implementation detail)
 - "Store sessions in Redis" (technology choice)
 - "Implement with React hooks" (framework-specific)
@@ -386,11 +396,13 @@ See [references/specification-guide.md](references/specification-guide.md) for d
 See [references/specification-guide.md](references/specification-guide.md) for comprehensive lists of reasonable defaults and detailed clarification guidelines.
 
 **Reasonable Defaults** (don't ask about these):
+
 - Data retention, performance targets, error handling
 - Authentication methods, integration patterns
 - Standard industry practices
 
 **Use [NEEDS CLARIFICATION] only when**:
+
 - Scope impact, security/privacy implications
 - Multiple valid interpretations, fundamental UX differences
 - **Limit**: Maximum 3 clarification markers per feature
@@ -400,18 +412,23 @@ See [references/specification-guide.md](references/specification-guide.md) for c
 For common errors and their resolutions:
 
 ### Error: "No feature description provided"
+
 **Action**: Prompt user for feature description and proceed once provided.
 
 ### Error: "Cannot determine user scenarios"
+
 **Action**: Ask user who will use the feature and what they're trying to accomplish.
 
 ### Error: "Template file not found"
+
 **Action**: Check skill templates folder, or use generic spec structure with required sections.
 
 ### Error: "Script execution failed"
+
 **Action**: Parse output for error, resolve common issues (git config, permissions, invalid args), or create branch/directories manually if needed.
 
 ### Error: "Validation failed after 3 iterations"
+
 **Action**: Document failing items in checklist notes, provide detailed explanation to user, suggest manual review. See [references/specification-guide.md](references/specification-guide.md) for detailed validation guidance and common failure fixes.
 
 This skill includes:

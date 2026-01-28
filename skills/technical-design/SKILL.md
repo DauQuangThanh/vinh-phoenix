@@ -25,6 +25,7 @@ This skill guides you through a structured implementation planning workflow to c
 - When user requests "design this feature", "create technical plan", "plan implementation", or "design API"
 
 **Next Steps After Creating Technical Design:**
+
 - Use `project-management` skill to create task breakdown (tasks.md)
 - Use `e2e-test-design` skill for end-to-end test planning
 - Use `coding` skill to execute implementation
@@ -315,6 +316,7 @@ Design user authentication with email/password and OAuth support
 3. **If issues found**, update the design and repeat validation
 
 **Next Steps:**
+
 - If review passes, proceed to implementation using `coding` skill
 - **Recommended:** Ensure `coding-standards` skill has been used to establish code conventions before coding begins
 - Consider `e2e-test-design` skill for comprehensive test planning

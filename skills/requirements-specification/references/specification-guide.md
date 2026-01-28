@@ -5,6 +5,7 @@
 ### Mandatory vs Optional Sections
 
 **Mandatory Sections** (must be completed for every feature):
+
 - Feature Name
 - Overview
 - User Scenarios
@@ -12,12 +13,14 @@
 - Success Criteria
 
 **Optional Sections** (include only when relevant):
+
 - Key Entities (only if data/domain modeling is involved)
 - Assumptions (document any assumptions made)
 - Out of Scope (clarify what's explicitly excluded)
 - Dependencies (external systems or prerequisite features)
 
 **Section Handling Rule:**
+
 - If a section doesn't apply to your feature, remove it entirely
 - Never leave sections with just "N/A" or "Not applicable"
 - Keep the specification clean and focused
@@ -27,6 +30,7 @@
 ### Content Quality Checks
 
 **No Implementation Details:**
+
 - ❌ Bad: "Use bcrypt for password hashing"
 - ❌ Bad: "Store sessions in Redis"
 - ❌ Bad: "Implement with React hooks"
@@ -35,12 +39,14 @@
 - ✅ Good: "Interface responds to user interactions"
 
 **Focus on User Value:**
+
 - ❌ Bad: "Deploy using Docker containers"
 - ❌ Bad: "Use PostgreSQL database"
 - ✅ Good: "Users can access from multiple devices"
 - ✅ Good: "Data persists reliably"
 
 **Non-Technical Language:**
+
 - ❌ Bad: "API returns JSON with status codes"
 - ❌ Bad: "Frontend polls backend every 5 seconds"
 - ✅ Good: "System provides status updates"
@@ -49,6 +55,7 @@
 ### Requirement Completeness
 
 **Testable Requirements:**
+
 - Each requirement must be verifiable
 - Must have clear acceptance criteria
 - Must be measurable or observable
@@ -56,11 +63,13 @@
 - Example: "System is user-friendly" ❌ (not measurable)
 
 **Unambiguous Requirements:**
+
 - No vague terms: "fast", "easy", "intuitive"
 - Use specific metrics: "within 2 seconds", "in 3 clicks"
 - Avoid subjective terms without criteria
 
 **Success Criteria Properties:**
+
 - **Measurable**: Include specific metrics (time, percentage, count, rate)
   - ❌ "Search is fast"
   - ✅ "Search results appear in under 1 second"
@@ -79,6 +88,7 @@
 ### When to Use [NEEDS CLARIFICATION]
 
 **Only use when:**
+
 1. **Scope Impact**: Decision significantly changes feature scope
    - Example: "Should this support multiple languages?"
    - Impact: Internationalization affects entire feature
@@ -93,6 +103,7 @@
    - Impact: Changes interaction model
 
 **Don't use for:**
+
 - Technical implementation (make reasonable assumptions)
 - Standard industry practices (use common patterns)
 - Minor UX details (use best practices)
@@ -101,30 +112,35 @@
 ### Reasonable Defaults (Make Assumptions)
 
 **Data Retention:**
+
 - User data: Industry-standard GDPR compliance (e.g., 2-7 years)
 - Session data: 30 days
 - Log data: 90 days
 - Backup data: 30 days
 
 **Performance Targets:**
+
 - Page load: < 3 seconds (web), < 1 second (mobile)
 - API response: < 500ms
 - Search results: < 1 second
 - Form submission: < 2 seconds
 
 **Error Handling:**
+
 - User-friendly error messages
 - Graceful degradation
 - Retry logic for transient failures
 - Fallback to cached data when possible
 
 **Authentication:**
+
 - Session-based for web apps
 - OAuth2 for third-party integrations
 - Token expiration: 24 hours
 - Refresh token: 30 days
 
 **Integration Patterns:**
+
 - RESTful APIs for web services
 - Webhooks for event notifications
 - Polling: Every 30-60 seconds for non-critical updates
@@ -159,6 +175,7 @@ When you must use [NEEDS CLARIFICATION], format questions as:
 ### Example 1: User Authentication
 
 **❌ Bad Specification:**
+
 ```markdown
 ## Overview
 Implement user authentication using JWT tokens and bcrypt password hashing.
@@ -172,6 +189,7 @@ Store tokens in Redis cache with 24-hour expiration.
 ```
 
 **✅ Good Specification:**
+
 ```markdown
 ## Overview
 Users can securely create accounts and log in to access personalized features.
@@ -194,6 +212,7 @@ The system maintains user sessions across browser restarts and devices.
 ### Example 2: Search Feature
 
 **❌ Bad Specification:**
+
 ```markdown
 ## Overview
 Build search using Elasticsearch with fuzzy matching and n-gram tokenization.
@@ -207,6 +226,7 @@ Index documents using Logstash pipeline.
 ```
 
 **✅ Good Specification:**
+
 ```markdown
 ## Overview
 Users can quickly find content by entering keywords or phrases.
@@ -231,21 +251,25 @@ Search understands common misspellings and partial matches.
 ### Content Quality Validation
 
 **Check: No Implementation Details**
+
 - Scan entire spec for technology names
 - Look for: language names, framework names, database names, cloud providers
 - Verify: Focus is on behavior and outcomes, not tools
 
 **Check: Focused on User Value**
+
 - Each requirement should answer "What can users do?"
 - Success criteria should measure user or business outcomes
 - Technical metrics (cache hits, API calls) should be converted to user metrics
 
 **Check: Written for Non-Technical Stakeholders**
+
 - Avoid technical jargon
 - Use domain language, not engineering language
 - Should be understandable by product managers, designers, QA
 
 **Check: All Mandatory Sections Completed**
+
 - Feature Name: Present and descriptive
 - Overview: 2-3 paragraphs explaining purpose
 - User Scenarios: At least 1 primary flow
@@ -255,31 +279,37 @@ Search understands common misspellings and partial matches.
 ### Requirement Completeness Validation
 
 **Check: No [NEEDS CLARIFICATION] Markers**
+
 - Search for "[NEEDS CLARIFICATION"
 - All must be resolved before validation passes
 - If found, present questions to user
 
 **Check: Requirements are Testable**
+
 - Each requirement can be verified by QA
 - Clear acceptance criteria exists
 - Observable behavior is defined
 
 **Check: Success Criteria are Measurable**
+
 - Each criterion has a number (time, percentage, count)
 - Each can be measured during testing
 - No subjective terms without definition
 
 **Check: All Acceptance Scenarios Defined**
+
 - Primary user flow documented
 - Happy path clearly described
 - Expected outcomes specified
 
 **Check: Edge Cases Identified**
+
 - Error conditions documented
 - Boundary conditions specified
 - Unusual but valid scenarios considered
 
 **Check: Scope Clearly Bounded**
+
 - What's included is explicit
 - Out of Scope section removes ambiguity
 - Dependencies are identified
@@ -287,21 +317,25 @@ Search understands common misspellings and partial matches.
 ### Feature Readiness Validation
 
 **Check: Functional Requirements Have Acceptance Criteria**
+
 - Each requirement states what success looks like
 - Criteria are observable and verifiable
 - No ambiguous terms remain
 
 **Check: User Scenarios Cover Primary Flows**
+
 - Main use cases documented
 - Step-by-step flows provided
 - Expected outcomes clear
 
 **Check: Feature Meets Success Criteria**
+
 - Functional requirements align with success criteria
 - All success criteria can be met by specified requirements
 - No gaps between requirements and criteria
 
 **Check: No Implementation Leakage**
+
 - Final scan for any technical details
 - Verify user-centric language throughout
 - Ensure technology independence
@@ -309,27 +343,36 @@ Search understands common misspellings and partial matches.
 ## Common Validation Failures and Fixes
 
 ### Failure: "Requirements mention React, PostgreSQL, AWS"
+
 **Fix**: Rewrite in terms of user capabilities:
+
 - "React component" → "Interface element"
 - "PostgreSQL query" → "Data retrieval"
 - "AWS Lambda function" → "Background process"
 
 ### Failure: "Success criteria not measurable"
+
 **Fix**: Add specific metrics:
+
 - "Fast response" → "Response within 2 seconds"
 - "High availability" → "99.9% uptime"
 - "Many concurrent users" → "100 concurrent users"
 
 ### Failure: "Requirements not testable"
+
 **Fix**: Add observable outcomes:
+
 - "System is secure" → "Unauthorized users cannot access data"
 - "Code is maintainable" → "Features can be modified without breaking tests"
 
 ### Failure: "[NEEDS CLARIFICATION] markers remain"
+
 **Fix**: Present questions to user with format above, wait for responses, update spec
 
 ### Failure: "Missing acceptance scenarios"
+
 **Fix**: Add user flow with:
+
 1. User starts at [state]
 2. User performs [action]
 3. System responds with [outcome]
@@ -338,21 +381,25 @@ Search understands common misspellings and partial matches.
 ## Iteration Strategy
 
 ### First Iteration
+
 - Focus on removing implementation details
 - Add metrics to success criteria
 - Ensure all mandatory sections present
 
 ### Second Iteration
+
 - Verify requirements are testable
 - Check acceptance scenarios are complete
 - Resolve any remaining [NEEDS CLARIFICATION]
 
 ### Third Iteration (Final)
+
 - Final scan for technology leakage
 - Verify all checklist items
 - Document any remaining issues in notes
 
 ### After 3 Iterations
+
 - If still failing, document specific issues
 - Provide detailed explanation to user
 - Suggest manual review areas
