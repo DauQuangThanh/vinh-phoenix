@@ -1,0 +1,265 @@
+# Basic E-commerce GraphQL Schema Template
+
+"""
+Product in the catalog
+"""
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  currency: String!
+  images: [String!]!
+  category: Category!
+  inStock: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+Product category for organizing items
+"""
+type Category {
+  id: ID!
+  name: String!
+  slug: String!
+  products(first: Int, after: String): ProductConnection!
+}
+
+"""
+Shopping cart for a user session
+"""
+type Cart {
+  id: ID!
+  items: [CartItem!]!
+  total: Float!
+  currency: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+Individual item in a shopping cart
+"""
+type CartItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  subtotal: Float!
+}
+
+"""
+Customer order
+"""
+type Order {
+  id: ID!
+  user: User!
+  items: [OrderItem!]!
+  total: Float!
+  currency: String!
+  status: OrderStatus!
+  shippingAddress: Address!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+Item in an order
+"""
+type OrderItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  price: Float!
+  subtotal: Float!
+}
+
+"""
+User account
+"""
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  orders(first: Int, after: String): OrderConnection!
+  cart: Cart
+  addresses: [Address!]!
+  createdAt: DateTime!
+}
+
+"""
+Shipping or billing address
+"""
+type Address {
+  id: ID!
+  street: String!
+  city: String!
+  state: String!
+  postalCode: String!
+  country: String!
+}
+
+"""
+Order status
+"""
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+# Pagination types
+
+type ProductConnection {
+  edges: [ProductEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ProductEdge {
+  node: Product!
+  cursor: String!
+}
+
+type OrderConnection {
+  edges: [OrderEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type OrderEdge {
+  node: Order!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# Input types
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input AddToCartInput {
+  productId: ID!
+  quantity: Int!
+}
+
+input UpdateCartItemInput {
+  itemId: ID!
+  quantity: Int!
+}
+
+input CreateOrderInput {
+  shippingAddressId: ID!
+}
+
+input AddressInput {
+  street: String!
+  city: String!
+  state: String!
+  postalCode: String!
+  country: String!
+}
+
+# Payload types
+
+type CreateUserPayload {
+  user: User
+  token: String
+  errors: [Error!]
+}
+
+type AddToCartPayload {
+  cart: Cart
+  errors: [Error!]
+}
+
+type CreateOrderPayload {
+  order: Order
+  errors: [Error!]
+}
+
+type Error {
+  field: String
+  message: String!
+  code: String!
+}
+
+# Queries
+
+type Query {
+  """Get current authenticated user"""
+  me: User
+  
+  """Get product by ID"""
+  product(id: ID!): Product
+  
+  """Search products with filtering and sorting"""
+  products(
+    search: String
+    categoryId: ID
+    first: Int
+    after: String
+  ): ProductConnection!
+  
+  """Get category by ID"""
+  category(id: ID!): Category
+  
+  """List all categories"""
+  categories: [Category!]!
+  
+  """Get order by ID"""
+  order(id: ID!): Order
+  
+  """Get current user's cart"""
+  cart: Cart
+}
+
+# Mutations
+
+type Mutation {
+  """Register a new user"""
+  createUser(input: CreateUserInput!): CreateUserPayload!
+  
+  """Add item to cart"""
+  addToCart(input: AddToCartInput!): AddToCartPayload!
+  
+  """Update cart item quantity"""
+  updateCartItem(input: UpdateCartItemInput!): AddToCartPayload!
+  
+  """Remove item from cart"""
+  removeFromCart(itemId: ID!): AddToCartPayload!
+  
+  """Clear all items from cart"""
+  clearCart: AddToCartPayload!
+  
+  """Create order from cart"""
+  createOrder(input: CreateOrderInput!): CreateOrderPayload!
+  
+  """Add address to user account"""
+  addAddress(input: AddressInput!): User!
+}
+
+# Subscriptions
+
+type Subscription {
+  """Subscribe to order status updates"""
+  orderUpdated(orderId: ID!): Order!
+  
+  """Subscribe to product stock updates"""
+  productStockChanged(productId: ID!): Product!
+}
+
+scalar DateTime

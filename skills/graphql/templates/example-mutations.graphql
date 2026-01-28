@@ -1,0 +1,291 @@
+# Example GraphQL Mutations
+
+# Create new user
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      id
+      username
+      email
+      displayName
+      createdAt
+    }
+    token
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "username": "johndoe",
+#     "email": "john@example.com",
+#     "password": "SecurePass123!",
+#     "displayName": "John Doe"
+#   }
+# }
+
+# Update profile
+mutation UpdateProfile($input: UpdateProfileInput!) {
+  updateProfile(input: $input) {
+    id
+    displayName
+    bio
+    avatarUrl
+    coverImageUrl
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "displayName": "John Doe",
+#     "bio": "Software developer and coffee enthusiast",
+#     "avatarUrl": "https://example.com/avatar.jpg"
+#   }
+# }
+
+# Create post
+mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    post {
+      id
+      content
+      images
+      createdAt
+      author {
+        username
+        displayName
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "content": "Just launched my new app! Check it out at example.com",
+#     "images": ["https://example.com/screenshot.jpg"]
+#   }
+# }
+
+# Update post
+mutation UpdatePost($id: ID!, $input: UpdatePostInput!) {
+  updatePost(id: $id, input: $input) {
+    post {
+      id
+      content
+      updatedAt
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Delete post
+mutation DeletePost($id: ID!) {
+  deletePost(id: $id)
+}
+
+# Like post
+mutation LikePost($postId: ID!) {
+  likePost(postId: $postId) {
+    id
+    likesCount
+    isLikedByMe
+  }
+}
+
+# Unlike post
+mutation UnlikePost($postId: ID!) {
+  unlikePost(postId: $postId) {
+    id
+    likesCount
+    isLikedByMe
+  }
+}
+
+# Create comment
+mutation CreateComment($input: CreateCommentInput!) {
+  createComment(input: $input) {
+    comment {
+      id
+      content
+      createdAt
+      author {
+        username
+        displayName
+        avatarUrl
+      }
+      post {
+        id
+        commentsCount
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "postId": "post-123",
+#     "content": "Great post! Thanks for sharing."
+#   }
+# }
+
+# Create reply to comment
+mutation ReplyToComment($input: CreateCommentInput!) {
+  createComment(input: $input) {
+    comment {
+      id
+      content
+      createdAt
+      author {
+        username
+        displayName
+      }
+      parent {
+        id
+        author {
+          username
+        }
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "postId": "post-123",
+#     "content": "I agree!",
+#     "parentId": "comment-456"
+#   }
+# }
+
+# Follow user
+mutation FollowUser($userId: ID!) {
+  followUser(userId: $userId) {
+    id
+    followersCount
+    isFollowedByMe
+  }
+}
+
+# Unfollow user
+mutation UnfollowUser($userId: ID!) {
+  unfollowUser(userId: $userId) {
+    id
+    followersCount
+    isFollowedByMe
+  }
+}
+
+# Send direct message
+mutation SendMessage($input: SendMessageInput!) {
+  sendMessage(input: $input) {
+    id
+    content
+    createdAt
+    sender {
+      username
+    }
+    recipient {
+      username
+    }
+  }
+}
+
+# Variables:
+# {
+#   "input": {
+#     "recipientId": "user-789",
+#     "content": "Hey! How are you?"
+#   }
+# }
+
+# Mark notification as read
+mutation MarkNotificationRead($id: ID!) {
+  markNotificationRead(id: $id) {
+    id
+    isRead
+  }
+}
+
+# Mark all notifications as read
+mutation MarkAllNotificationsRead {
+  markAllNotificationsRead
+}
+
+# Bookmark post
+mutation BookmarkPost($postId: ID!) {
+  bookmarkPost(postId: $postId) {
+    id
+    isBookmarkedByMe
+  }
+}
+
+# Multiple mutations in one request
+mutation CreatePostAndComment(
+  $postInput: CreatePostInput!
+  $commentInput: CreateCommentInput!
+) {
+  createPost(input: $postInput) {
+    post {
+      id
+      content
+    }
+    errors {
+      message
+    }
+  }
+  
+  createComment(input: $commentInput) {
+    comment {
+      id
+      content
+    }
+    errors {
+      message
+    }
+  }
+}
+
+# Optimistic response pattern (for client-side)
+mutation LikePostOptimistic($postId: ID!) {
+  likePost(postId: $postId) {
+    id
+    likesCount
+    isLikedByMe
+  }
+}
+
+# Client-side optimistic response:
+# {
+#   "__typename": "Post",
+#   "id": postId,
+#   "likesCount": currentLikes + 1,
+#   "isLikedByMe": true
+# }

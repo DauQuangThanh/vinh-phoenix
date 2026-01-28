@@ -1,0 +1,294 @@
+# Example GraphQL Queries
+
+# Get user with paginated posts
+query GetUserWithPosts($username: String!, $first: Int = 10) {
+  user(username: $username) {
+    id
+    username
+    displayName
+    bio
+    avatarUrl
+    followersCount
+    followingCount
+    postsCount
+    
+    posts(first: $first) {
+      edges {
+        node {
+          id
+          content
+          likesCount
+          commentsCount
+          createdAt
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      totalCount
+    }
+  }
+}
+
+# Get feed with nested data
+query GetFeed($first: Int = 20, $after: String) {
+  feed(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        content
+        images
+        likesCount
+        commentsCount
+        isLikedByMe
+        createdAt
+        
+        author {
+          id
+          username
+          displayName
+          avatarUrl
+          isVerified
+        }
+        
+        comments(first: 3) {
+          edges {
+            node {
+              id
+              content
+              createdAt
+              author {
+                username
+                displayName
+              }
+            }
+          }
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+# Get post with all details
+query GetPostDetails($id: ID!) {
+  post(id: $id) {
+    id
+    content
+    images
+    videoUrl
+    likesCount
+    commentsCount
+    sharesCount
+    isLikedByMe
+    isBookmarkedByMe
+    createdAt
+    
+    author {
+      id
+      username
+      displayName
+      avatarUrl
+      isVerified
+    }
+    
+    comments(first: 50) {
+      edges {
+        node {
+          id
+          content
+          likesCount
+          isLikedByMe
+          createdAt
+          
+          author {
+            username
+            displayName
+            avatarUrl
+          }
+          
+          replies {
+            id
+            content
+            author {
+              username
+              displayName
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+
+# Search users
+query SearchUsers($query: String!, $first: Int = 10) {
+  searchUsers(query: $query, first: $first) {
+    edges {
+      node {
+        id
+        username
+        displayName
+        bio
+        avatarUrl
+        followersCount
+        isVerified
+        isFollowedByMe
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+# Get current user profile
+query GetMe {
+  me {
+    id
+    username
+    email
+    displayName
+    bio
+    avatarUrl
+    coverImageUrl
+    followersCount
+    followingCount
+    postsCount
+    isVerified
+    createdAt
+  }
+}
+
+# Get notifications
+query GetNotifications($first: Int = 20, $unreadOnly: Boolean = false) {
+  notifications(first: $first, unreadOnly: $unreadOnly) {
+    id
+    type
+    message
+    isRead
+    createdAt
+    
+    actor {
+      username
+      displayName
+      avatarUrl
+    }
+    
+    post {
+      id
+      content
+    }
+    
+    comment {
+      id
+      content
+    }
+  }
+}
+
+# Get conversations
+query GetConversations {
+  conversations {
+    id
+    unreadCount
+    updatedAt
+    
+    participants {
+      id
+      username
+      displayName
+      avatarUrl
+    }
+    
+    lastMessage {
+      id
+      content
+      createdAt
+      sender {
+        username
+      }
+    }
+  }
+}
+
+# Get conversation messages
+query GetConversationMessages($userId: ID!, $first: Int = 50) {
+  conversation(userId: $userId) {
+    id
+    
+    participants {
+      id
+      username
+      displayName
+      avatarUrl
+    }
+    
+    messages(first: $first) {
+      edges {
+        node {
+          id
+          content
+          isRead
+          createdAt
+          sender {
+            id
+            username
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+
+# Using fragments for reusability
+fragment UserBasic on User {
+  id
+  username
+  displayName
+  avatarUrl
+  isVerified
+}
+
+fragment PostSummary on Post {
+  id
+  content
+  images
+  likesCount
+  commentsCount
+  sharesCount
+  isLikedByMe
+  createdAt
+  author {
+    ...UserBasic
+  }
+}
+
+query GetFeedWithFragments($first: Int = 20) {
+  feed(first: $first) {
+    edges {
+      node {
+        ...PostSummary
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

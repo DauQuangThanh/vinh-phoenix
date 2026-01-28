@@ -1,0 +1,352 @@
+# Social Media GraphQL Schema Template
+
+"""
+User account with profile information
+"""
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  displayName: String!
+  bio: String
+  avatarUrl: String
+  coverImageUrl: String
+  followersCount: Int!
+  followingCount: Int!
+  postsCount: Int!
+  isVerified: Boolean!
+  createdAt: DateTime!
+  
+  """Posts created by this user"""
+  posts(first: Int, after: String): PostConnection!
+  
+  """Users following this user"""
+  followers(first: Int, after: String): UserConnection!
+  
+  """Users this user follows"""
+  following(first: Int, after: String): UserConnection!
+  
+  """Check if current user follows this user"""
+  isFollowedByMe: Boolean!
+}
+
+"""
+A post/status update
+"""
+type Post {
+  id: ID!
+  content: String!
+  author: User!
+  images: [String!]!
+  videoUrl: String
+  likesCount: Int!
+  commentsCount: Int!
+  sharesCount: Int!
+  isLikedByMe: Boolean!
+  isBookmarkedByMe: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  """Comments on this post"""
+  comments(first: Int, after: String): CommentConnection!
+  
+  """Users who liked this post"""
+  likes(first: Int, after: String): UserConnection!
+}
+
+"""
+Comment on a post
+"""
+type Comment {
+  id: ID!
+  content: String!
+  author: User!
+  post: Post!
+  parent: Comment
+  replies: [Comment!]!
+  likesCount: Int!
+  isLikedByMe: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+Direct message between users
+"""
+type Message {
+  id: ID!
+  content: String!
+  sender: User!
+  recipient: User!
+  isRead: Boolean!
+  createdAt: DateTime!
+}
+
+"""
+Conversation thread between users
+"""
+type Conversation {
+  id: ID!
+  participants: [User!]!
+  lastMessage: Message
+  unreadCount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  """Messages in this conversation"""
+  messages(first: Int, after: String): MessageConnection!
+}
+
+"""
+Notification for user activities
+"""
+type Notification {
+  id: ID!
+  type: NotificationType!
+  actor: User
+  post: Post
+  comment: Comment
+  message: String!
+  isRead: Boolean!
+  createdAt: DateTime!
+}
+
+"""
+Types of notifications
+"""
+enum NotificationType {
+  LIKE
+  COMMENT
+  FOLLOW
+  MENTION
+  REPLY
+  SHARE
+  MESSAGE
+}
+
+# Pagination types
+
+type PostConnection {
+  edges: [PostEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PostEdge {
+  node: Post!
+  cursor: String!
+}
+
+type CommentConnection {
+  edges: [CommentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CommentEdge {
+  node: Comment!
+  cursor: String!
+}
+
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+type MessageConnection {
+  edges: [MessageEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type MessageEdge {
+  node: Message!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# Input types
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String!
+  displayName: String!
+}
+
+input UpdateProfileInput {
+  displayName: String
+  bio: String
+  avatarUrl: String
+  coverImageUrl: String
+}
+
+input CreatePostInput {
+  content: String!
+  images: [String!]
+  videoUrl: String
+}
+
+input UpdatePostInput {
+  content: String
+}
+
+input CreateCommentInput {
+  postId: ID!
+  content: String!
+  parentId: ID
+}
+
+input SendMessageInput {
+  recipientId: ID!
+  content: String!
+}
+
+# Payload types
+
+type CreateUserPayload {
+  user: User
+  token: String
+  errors: [Error!]
+}
+
+type CreatePostPayload {
+  post: Post
+  errors: [Error!]
+}
+
+type CreateCommentPayload {
+  comment: Comment
+  errors: [Error!]
+}
+
+type Error {
+  field: String
+  message: String!
+  code: String!
+}
+
+# Queries
+
+type Query {
+  """Get current authenticated user"""
+  me: User
+  
+  """Get user by username"""
+  user(username: String!): User
+  
+  """Search users"""
+  searchUsers(query: String!, first: Int, after: String): UserConnection!
+  
+  """Get post by ID"""
+  post(id: ID!): Post
+  
+  """Get personalized feed"""
+  feed(first: Int, after: String): PostConnection!
+  
+  """Get posts from a user"""
+  userPosts(username: String!, first: Int, after: String): PostConnection!
+  
+  """Search posts"""
+  searchPosts(query: String!, first: Int, after: String): PostConnection!
+  
+  """Get trending posts"""
+  trending(first: Int, after: String): PostConnection!
+  
+  """Get notifications"""
+  notifications(first: Int, after: String, unreadOnly: Boolean): [Notification!]!
+  
+  """Get conversations"""
+  conversations: [Conversation!]!
+  
+  """Get conversation with user"""
+  conversation(userId: ID!): Conversation
+}
+
+# Mutations
+
+type Mutation {
+  """Register new user"""
+  createUser(input: CreateUserInput!): CreateUserPayload!
+  
+  """Update user profile"""
+  updateProfile(input: UpdateProfileInput!): User!
+  
+  """Follow a user"""
+  followUser(userId: ID!): User!
+  
+  """Unfollow a user"""
+  unfollowUser(userId: ID!): User!
+  
+  """Create a post"""
+  createPost(input: CreatePostInput!): CreatePostPayload!
+  
+  """Update a post"""
+  updatePost(id: ID!, input: UpdatePostInput!): CreatePostPayload!
+  
+  """Delete a post"""
+  deletePost(id: ID!): Boolean!
+  
+  """Like a post"""
+  likePost(postId: ID!): Post!
+  
+  """Unlike a post"""
+  unlikePost(postId: ID!): Post!
+  
+  """Bookmark a post"""
+  bookmarkPost(postId: ID!): Post!
+  
+  """Remove bookmark"""
+  unbookmarkPost(postId: ID!): Post!
+  
+  """Create a comment"""
+  createComment(input: CreateCommentInput!): CreateCommentPayload!
+  
+  """Delete a comment"""
+  deleteComment(id: ID!): Boolean!
+  
+  """Like a comment"""
+  likeComment(commentId: ID!): Comment!
+  
+  """Unlike a comment"""
+  unlikeComment(commentId: ID!): Comment!
+  
+  """Send a direct message"""
+  sendMessage(input: SendMessageInput!): Message!
+  
+  """Mark notification as read"""
+  markNotificationRead(id: ID!): Notification!
+  
+  """Mark all notifications as read"""
+  markAllNotificationsRead: Boolean!
+}
+
+# Subscriptions
+
+type Subscription {
+  """Subscribe to new posts in feed"""
+  newPost: Post!
+  
+  """Subscribe to new notifications"""
+  notificationReceived: Notification!
+  
+  """Subscribe to new messages"""
+  messageReceived: Message!
+  
+  """Subscribe to post updates"""
+  postUpdated(postId: ID!): Post!
+}
+
+scalar DateTime
