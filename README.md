@@ -90,6 +90,18 @@ The Phoenix CLI distributes skills to your projects:
 
 ```bash
 uv tool install phoenix-cli --from git+https://github.com/dauquangthanh/vinh-phoenix.git
+```
+
+**Need to upgrade?** See the [Upgrade Guide](./docs/upgrade.md) or run:
+
+```bash
+uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git
+```
+
+```bash
+uv tool install phoenix-cli --force --native-tls --from git+https://github.com/dauquangthanh/vinh-phoenix.git
+```
+
 
 ### 2. Initialize Your Project
 
@@ -122,37 +134,6 @@ Launch your AI assistant and describe what you want to build. The AI will automa
 
 Phoenix skills support both **Greenfield** (new projects) and **Brownfield** (existing projects) development:
 
-```mermaid
-flowchart LR
-    Start([Project Type?])
-    Start --> Greenfield[🌱 Greenfield<br/>New Project]
-    Start --> Brownfield[🏗️ Brownfield<br/>Existing Project]
-    
-    Greenfield --> GF1[📋 Set Ground Rules<br/>Set Principles]
-    GF1 --> GF2[🎯 Specify<br/>Define Features]
-    GF2 --> GF3[🔍 Clarify<br/>Refine Requirements]
-    GF3 --> GF4[📝 Architect<br/>System Design]
-    GF4 --> GF5[📏 Standardize<br/>Coding Rules]
-    GF5 --> GF6[🛠️ Design<br/>Technical Plan]
-    GF6 --> GF7[📋 Taskify<br/>Break Down Tasks]
-    GF7 --> GF8[⚡ Implement<br/>Build Features]
-    GF8 --> GF9[✅ Test & Deploy]
-    
-    Brownfield --> BF1[📚 Assess Context<br/>Analyze Codebase]
-    BF1 --> BF2[📋 Set Ground Rules<br/>Update Principles]
-    BF2 --> BF3[🎯 Specify<br/>New Feature]
-    BF3 --> BF4[🔍 Clarify<br/>Requirements]
-    BF4 --> BF5[🛠️ Design<br/>Integration Plan]
-    BF5 --> BF6[📋 Taskify<br/>Task Breakdown]
-    BF6 --> BF7[⚡ Implement<br/>Add Feature]
-    BF7 --> BF8[✅ Test & Deploy]
-    
-    style Greenfield fill:#90EE90
-    style Brownfield fill:#87CEEB
-    style GF8 fill:#FFD700
-    style BF7 fill:#FFD700
-```
-
 **Greenfield** projects start with establishing principles, architecture, and standards. **Brownfield** projects begin with context assessment to understand existing patterns.
 
 **Key Differences:**
@@ -160,7 +141,7 @@ flowchart LR
 | Aspect | 🌱 Greenfield | 🏗️ Brownfield |
 |--------|--------------|---------------|
 | **Starting Point** | Empty project | Existing codebase |
-| **Setup Skill** | `project-ground-rules-setup` | `context-assessment` |
+| **Setup Skill** | `project-ground-rules-setup` | `context-assessment`, `project-ground-rules-setup` |
 | **Focus** | Establish foundations first | Integrate with existing patterns |
 | **Timeline** | 2-4 weeks (MVP) | 1-2 weeks per feature |
 | **Flexibility** | Complete freedom in design | Must maintain consistency |
@@ -178,16 +159,6 @@ phoenix check
 <p align="center">
   <img src="./media/vinh-phoenix.png" alt="Vinh Phoenix Installation" width="100%"/>
 </p>
-
-**Need to upgrade?** See the [Upgrade Guide](./docs/upgrade.md) or run:
-
-```bash
-uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git
-```
-
-```bash
-uv tool install phoenix-cli --force --native-tls --from git+https://github.com/dauquangthanh/vinh-phoenix.git
-```
 
 <details>
 <summary><strong>Alternative: Run without installing</strong></summary>
@@ -243,7 +214,7 @@ Ask the AI to clarify underspecified areas through structured questioning:
 "Clarify the requirements, focusing on edge cases, data validation, and user experience details"
 ```
 
-#### 4️⃣ **Design System Architecture** *(Optional, once per product)*
+#### 4️⃣ **Design System Architecture** *(once per product)*
 
 Document your system architecture:
 
@@ -251,7 +222,7 @@ Document your system architecture:
 "Create system architecture documentation with C4 diagrams, tech stack decisions, and architecture patterns"
 ```
 
-#### 5️⃣ **Set Coding Standards** *(Optional, once per product)*
+#### 5️⃣ **Set Coding Standards** *(once per product)*
 
 Create coding standards for your team:
 
@@ -297,8 +268,6 @@ Execute all tasks automatically:
 Run your application and fix any issues. Your AI assistant will help debug.
 
 ---
-
-**Want more details?** Read our [complete guide](./spec-driven.md).
 
 ## 🤖 Supported AI Agents
 
@@ -402,11 +371,7 @@ phoenix version
 
 ### Available Agent Skills
 
-After running `phoenix init`, **18 agent skills** will be discoverable by your AI assistant, organized into categories:
-
-- **Core Workflow Skills** - Complete development cycle from requirements to implementation
-- **Product-Level Skills** - End-to-end testing (run once per product)
-- **Enhancement Skills** - Project management and integration capabilities
+After running `phoenix init`, **18 agent skills** will be discoverable by your AI assistant.
 
 #### How It Works: Skills-Based Architecture
 
@@ -432,46 +397,27 @@ After running `phoenix init`, **18 agent skills** will be discoverable by your A
 This modular design enables:
 
 - **Multi-agent support** - 20+ AI assistants use the same skills format
-- **Consistent workflows** - Same development process across different agents
 - **Easy updates** - Upgrade all skills at once with `phoenix init --here --force`
 
 After running `phoenix init`, your AI assistant can leverage these skills:
 
 > **💡 Automatic Commits:** All commands automatically generate semantic commit messages and commit their changes upon completion, maintaining a clear project history without manual intervention.
 
-#### Core Workflow Skills
-
-Essential skills for the complete Spec-Driven Development workflow:
-
-| Skill                  | When the AI Uses It                                                           | Auto Commit Prefix |
-| -------------------------- | ----------------------------------------------------------------------- |--------------------|
-| `project-ground-rules-setup`      | When you ask to create or update project principles and development guidelines | `docs:` |
+| Skill | When the AI Uses It | Auto Commit Prefix |
+| ----- | ------------------- | ------------------ |
+| `project-ground-rules-setup` | When you ask to create or update project principles and development guidelines | `docs:` |
 | `context-assessment` | When you need to analyze an existing codebase's architecture and patterns | `docs:` |
-| `requirements-specification`       | When you describe what you want to build (requirements and user stories)        | `docs:` |
-| `requirements-specification-review`       | When you ask to clarify underspecified requirements through structured questioning | `docs:` |
-| `architecture-design`         | When you request system architecture documentation with diagrams | `docs:` |
-| `coding-standards`       | When you need coding standards and conventions documented | `docs:` |
-| `technical-design`        | When you specify the tech stack and implementation approach     | `docs:` |
-| `project-management`       | When you ask to break down a design into actionable tasks                     | `docs:` |
-| `project-consistency-analysis`       | When you request analysis of plan consistency and coverage | `docs:` |
-| `coding`     | When you ask to implement tasks according to a plan         | `feat:`, `fix:`, `test:` (context-dependent) |
-
-#### Product-Level Skills
-
-Skills for end-to-end testing (run once per product, not per feature):
-
-| Skill                      | When the AI Uses It                                                           | Auto Commit Prefix |
-| ------------------------------ | ----------------------------------------------------------------------- |--------------------|
-| `e2e-test-design`   | When you request end-to-end test specifications for the product | `test:` |
-
-#### Enhancement Skills
-
-Additional skills for project management and integration:
-
-| Skill                  | When the AI Uses It                                                           | Auto Commit Prefix |
-| -------------------------- | ----------------------------------------------------------------------- |--------------------|
+| `requirements-specification` | When you describe what you want to build (requirements and user stories) | `docs:` |
+| `requirements-specification-review` | When you ask to clarify underspecified requirements through structured questioning | `docs:` |
+| `architecture-design` | When you request system architecture documentation with diagrams | `docs:` |
+| `coding-standards` | When you need coding standards and conventions documented | `docs:` |
+| `technical-design` | When you specify the tech stack and implementation approach | `docs:` |
+| `project-management` | When you ask to break down a design into actionable tasks | `docs:` |
+| `project-consistency-analysis` | When you request analysis of plan consistency and coverage | `docs:` |
+| `coding` | When you ask to implement tasks according to a plan | `feat:`, `fix:`, `test:` (context-dependent) |
+| `e2e-test-design` | When you request end-to-end test specifications for the product | `test:` |
 | `tasks-to-github-issues` | When you ask to convert tasks into GitHub issues with dependency tracking | `chore:` |
-| `tasks-to-azure-devops`  | When you ask to convert tasks into Azure DevOps work items with dependencies | `chore:` |
+| `tasks-to-azure-devops` | When you ask to convert tasks into Azure DevOps work items with dependencies | `chore:` |
 | `git-commit` | When committing changes with semantic commit messages | varies |
 | `code-review` | When you request code quality review and validation | n/a |
 
@@ -732,7 +678,7 @@ Read the review and acceptance checklist, and check off each item in the checkli
 
 It's important to use the interaction with Claude Code as an opportunity to clarify and ask questions around the specification - **do not treat its first attempt as final**.
 
-#### **STEP 4:** Generate a plan
+#### **STEP 4:** Generate a technical design
 
 You can now be specific about the tech stack and other technical requirements. You can use the `/phoenix.design` command that is built into the project template with a prompt like this:
 
@@ -955,7 +901,7 @@ Test the new feature in the context of the existing application. Ensure it integ
 
 ---
 
-## � Project Structure
+## 🏗️ Project Structure
 
 After running `phoenix init`, your project will have the following structure:
 
@@ -1025,7 +971,7 @@ Phoenix includes **18 reusable skills** that power your AI assistant:
 
 ---
 
-## �🛠️ Troubleshooting
+## 🛠️ Troubleshooting
 
 ### Git Authentication on Linux
 
