@@ -286,7 +286,7 @@ After running `phoenix init`, your AI assistant can leverage these skills:
 
 | Variable         | Description                                                                                    |
 | ------------------ | ------------------------------------------------------------------------------------------------ |
-| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to using `/phoenix.design` or follow-up commands. |
+| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to creating technical designs or implementing features. |
 
 ---
 
@@ -462,19 +462,17 @@ For new projects starting from scratch, follow these steps:
 
 Go to the project folder and run your AI agent. In our example, we're using `claude`.
 
-You will know that things are configured correctly if you see the `/phoenix.set-ground-rules`, `/phoenix.specify`, `/phoenix.design`, `/phoenix.taskify`, and `/phoenix.implement` commands available.
-
-The first step should be establishing your project's governing principles using the `/phoenix.set-ground-rules` command. This helps ensure consistent decision-making throughout all subsequent development phases:
+The first step should be establishing your project's governing principles. Simply ask your AI assistant to create project ground rules, and the `project-ground-rules-setup` skill will automatically activate. This helps ensure consistent decision-making throughout all subsequent development phases:
 
 ```text
-/phoenix.set-ground-rules Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
+Create project ground rules focused on code simplicity, maintainability & quality, testing standards, and user experience consistency requirements at a PoC level. Include governance for how these principles should guide technical decisions and implementation choices.
 ```
 
 This step creates or updates the `docs/ground-rules.md` file with your project's foundational guidelines that the AI agent will reference during specification, planning, and implementation phases.
 
 #### **STEP 2:** Create project specifications
 
-With your project principles established, you can now create the functional specifications. Use the `/phoenix.specify` command and then provide the concrete requirements for the project you want to develop.
+With your project principles established, you can now create the functional specifications. Simply describe what you want to build, and the `requirements-specification` skill will automatically activate to help structure your requirements.
 
 >[!IMPORTANT]
 >Be as explicit as possible about *what* you are trying to build and *why*. **Do not focus on the tech stack at this point**.
@@ -524,12 +522,12 @@ You should run the structured clarification workflow **before** creating a techn
 
 Preferred order:
 
-1. Use `/phoenix.clarify` (structured) – sequential, coverage-based questioning that records answers in a Clarifications section.
+1. Ask to clarify the specification – the `requirements-specification-review` skill will activate and conduct sequential, coverage-based questioning that records answers in a Clarifications section. Example: "Clarify the requirements in the specification"
 2. Optionally follow up with ad-hoc free-form refinement if something still feels vague.
 
 If you intentionally want to skip clarification (e.g., spike or exploratory prototype), explicitly state that so the agent doesn't block on missing clarifications.
 
-Example free-form refinement prompt (after `/phoenix.clarify` if still needed):
+Example free-form refinement prompt (after clarification if still needed):
 
 ```text
 For each sample project or project that you create there should be a variable number of tasks between 5 and 15
@@ -547,7 +545,7 @@ It's important to use the interaction with Claude Code as an opportunity to clar
 
 #### **STEP 4:** Generate a technical design
 
-You can now be specific about the tech stack and other technical requirements. You can use the `/phoenix.design` command that is built into the project template with a prompt like this:
+You can now be specific about the tech stack and other technical requirements. When you specify technical details and implementation approach, the `technical-design` skill will automatically activate. Use a prompt like this:
 
 ```text
 We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use
@@ -619,12 +617,12 @@ You can also ask Claude Code (if you have the [GitHub CLI](https://docs.github.c
 >[!NOTE]
 >Before you have the agent implement it, it's also worth prompting Claude Code to cross-check the details to see if there are any over-engineered pieces (remember - it can be over-eager). If over-engineered components or decisions exist, you can ask Claude Code to resolve them. Ensure that Claude Code follows the [ground rules](base/docs/ground-rules.md) as the foundational piece that it must adhere to when establishing the plan.
 
-#### **STEP 6:** Generate task breakdown with /phoenix.taskify
+#### **STEP 6:** Generate task breakdown
 
-With the implementation plan validated, you can now break down the plan into specific, actionable tasks that can be executed in the correct order. Use the `/phoenix.taskify` command to automatically generate a detailed task breakdown from your implementation plan:
+With the implementation plan validated, you can now break down the plan into specific, actionable tasks that can be executed in the correct order. When you ask to break down the design into tasks, the `project-management` skill will automatically activate to generate a detailed task breakdown from your implementation plan:
 
 ```text
-/phoenix.taskify
+Break down the technical design into actionable tasks
 ```
 
 This step creates a `tasks.md` file in your feature specification directory that contains:
@@ -636,17 +634,17 @@ This step creates a `tasks.md` file in your feature specification directory that
 - **Test-driven development structure** - If tests are requested, test tasks are included and ordered to be written before implementation
 - **Checkpoint validation** - Each user story phase includes checkpoints to validate independent functionality
 
-The generated tasks.md provides a clear roadmap for the `/phoenix.implement` command, ensuring systematic implementation that maintains code quality and allows for incremental delivery of user stories.
+The generated tasks.md provides a clear roadmap for implementation, ensuring systematic implementation that maintains code quality and allows for incremental delivery of user stories.
 
 #### **STEP 7:** Implementation
 
-Once ready, use the `/phoenix.implement` command to execute your implementation plan:
+Once ready, ask to implement the tasks. The `coding` skill will automatically activate to execute your implementation plan:
 
 ```text
-/phoenix.implement
+Implement all the tasks from the task breakdown
 ```
 
-The `/phoenix.implement` command will:
+The implementation process will:
 
 - Validate that all prerequisites are in place (ground-rules, spec, plan, and tasks)
 - Parse the task breakdown from `tasks.md`
@@ -667,13 +665,13 @@ For adding new features to existing codebases, follow this streamlined workflow:
 
 #### **STEP 1:** Assess existing codebase
 
-Start by analyzing the existing codebase to understand its architecture, patterns, and conventions:
+Start by analyzing the existing codebase to understand its architecture, patterns, and conventions. When you request a codebase assessment, the `context-assessment` skill will automatically activate:
 
 ```text
-/phoenix.assess-context
+Assess the existing codebase context and create a comprehensive analysis
 ```
 
-This command performs a comprehensive analysis of your codebase and creates `docs/context-assessment.md` that documents:
+This analysis will create `docs/context-assessment.md` that documents:
 
 - **Technology Stack** - Languages, frameworks, libraries, and tools in use
 - **Project Structure** - Directory organization and architectural layers
@@ -691,10 +689,10 @@ This command performs a comprehensive analysis of your codebase and creates `doc
 
 #### **STEP 2:** Update project principles
 
-With the codebase context understood, update or establish project principles that align with the existing architecture:
+With the codebase context understood, update or establish project principles that align with the existing architecture. The `project-ground-rules-setup` skill will automatically activate:
 
 ```text
-/phoenix.set-ground-rules Review the context assessment and update project principles to align with the existing codebase patterns. 
+Review the context assessment and update project principles to align with the existing codebase patterns. 
 Ensure principles cover code quality standards found in the assessment, testing practices currently in use, 
 and architectural decisions that should guide new feature development.
 ```
@@ -707,14 +705,14 @@ This step creates or updates `docs/ground-rules.md` to reflect:
 - Integration guidelines for maintaining consistency
 
 >[!TIP]
->The `/phoenix.set-ground-rules` command in brownfield projects should reference the context assessment to ensure principles align with existing practices rather than imposing new ones.
+>When establishing ground rules in brownfield projects, ensure they reference the context assessment to align principles with existing practices rather than imposing new ones.
 
 #### **STEP 3:** Create feature specification
 
-With both the codebase context and updated principles established, specify the new feature you want to add:
+With both the codebase context and updated principles established, specify the new feature you want to add. The `requirements-specification` skill will automatically activate:
 
 ```text
-/phoenix.specify Add a user notification system that sends email alerts when tasks are assigned. 
+Add a user notification system that sends email alerts when tasks are assigned. 
 Users can configure notification preferences (immediate, daily digest, or disabled) in their profile settings.
 ```
 
@@ -722,20 +720,20 @@ The AI agent will reference the context assessment and updated principles to ens
 
 #### **STEP 4:** Clarify requirements
 
-Use the clarification workflow to refine the specification:
+Ask to clarify the specification. The `requirements-specification-review` skill will automatically activate:
 
 ```text
-/phoenix.clarify
+Clarify the requirements in the specification
 ```
 
 This ensures all edge cases and integration points with the existing system are properly defined.
 
 #### **STEP 5:** Design integration plan
 
-Create a technical plan that integrates with the existing architecture:
+Create a technical plan that integrates with the existing architecture. The `technical-design` skill will automatically activate:
 
 ```text
-/phoenix.design Follow the existing email service pattern identified in the context assessment. 
+Create a technical design that follows the existing email service pattern identified in the context assessment. 
 Use the current user preference storage approach. Integrate with the existing task assignment workflow.
 ```
 
@@ -743,20 +741,20 @@ The plan will reference existing components, patterns, and conventions from the 
 
 #### **STEP 6:** Generate task breakdown
 
-Break down the implementation into specific tasks:
+Break down the implementation into specific tasks. The `project-management` skill will automatically activate:
 
 ```text
-/phoenix.taskify
+Break down the technical design into actionable tasks
 ```
 
 Tasks will be organized to integrate with existing code while maintaining consistency with established patterns.
 
 #### **STEP 7:** Implement the feature
 
-Execute the implementation plan:
+Execute the implementation plan. The `coding` skill will automatically activate:
 
 ```text
-/phoenix.implement
+Implement all the tasks from the task breakdown
 ```
 
 The AI agent will build the feature following existing coding conventions and integration patterns identified in the context assessment and established principles.
