@@ -1,11 +1,11 @@
 ---
 name: technical-design
-description: Executes implementation planning workflow to generate technical design artifacts including design documents, research findings, data models, and API contracts. Use when planning feature implementation, creating technical specifications, designing system components, or when user mentions implementation planning, technical design, API design, or data modeling.
+description: Executes implementation planning workflow to generate technical, detailed design artifacts including design documents, research findings, data models, and API contracts. Use when creating or updating detailed technical designs, planning feature implementation, designing system components, or when user mentions technical design creation, detailed design, API design, data modeling, implementation planning, or design updates.
 license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
-  last-updated: "2026-01-27"
+  last-updated: "2026-01-29"
 ---
 
 # Technical Design Skill

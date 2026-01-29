@@ -1,6 +1,6 @@
 ---
 name: technical-design-review
-description: Reviews technical design documentation for completeness, consistency, and quality. Validates design decisions, data models, API contracts, implementation plans, and alignment with requirements and ground rules. Use when reviewing technical designs, validating implementation plans, assessing design quality, or when user mentions design review, technical review, API contract validation, data model review, or implementation plan assessment.
+description: Reviews technical detailed design documentation for completeness, consistency, and quality. Validates design decisions, data models, API contracts, implementation plans, and alignment with requirements and ground rules. Use when reviewing technical detailed designs, validating implementation plans, assessing design quality, or when user mentions design review, technical design review, API contract validation, data model review, or implementation plan assessment.
 license: MIT
 metadata:
   author: Dau Quang Thanh
