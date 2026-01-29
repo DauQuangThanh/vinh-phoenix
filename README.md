@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔥 Vinh Phoenix
+# 🔥 Vinh Phoenix - Phượng Hoàng Trung Đô
 
 ## *Reusable Agent Skills for Structured Software Development*
 
@@ -19,18 +19,15 @@
 
 - [🎯 What is Vinh Phoenix?](#-what-is-vinh-phoenix)
 - [🧩 The Skills Library](#-the-skills-library)
-- [⚡ Get Started](#-get-started)
+- [⚡ Quick Start](#-quick-start)
 - [🤖 Supported AI Agents](#-supported-ai-agents)
 - [🔧 Phoenix CLI Reference](#-phoenix-cli-reference)
-- [📚 Core Philosophy](#-core-philosophy)
 - [🌟 Development Workflows](#-development-workflows)
-- [🔧 Prerequisites](#-prerequisites)
-- [📖 Learn More](#-learn-more)
-- [📋 Detailed Process](#-detailed-process)
+- [🏗️ Project Structure](#-project-structure)
+- [📋 Detailed Walkthrough](#-detailed-walkthrough)
 - [🔍 Troubleshooting](#-troubleshooting)
-- [👥 Maintainers](#-maintainers)
 - [💬 Support](#-support)
-- [🙏 Acknowledgements](#-acknowledgements)
+- [🙏 Credits](#-credits)
 - [📄 License](#-license)
 
 ## 🎯 What is Vinh Phoenix?
@@ -80,85 +77,20 @@ Phoenix includes **18 modular skills**, each containing:
 - 📦 **Self-contained** - Templates and scripts embedded in each skill
 - 🔧 **Cross-platform** - Both bash and PowerShell scripts included
 
-## ⚡ Get Started
+## ⚡ Quick Start
 
 ### 1. Install Phoenix CLI
 
-The Phoenix CLI distributes skills to your projects:
-
-**Recommended: Install once, use everywhere**
-
 ```bash
+# Install once, use everywhere
 uv tool install phoenix-cli --from git+https://github.com/dauquangthanh/vinh-phoenix.git
 ```
 
-**Need to upgrade?** See the [Upgrade Guide](./docs/upgrade.md) or run:
+**Upgrade to latest version:**
 
 ```bash
 uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git
 ```
-
-```bash
-uv tool install phoenix-cli --force --native-tls --from git+https://github.com/dauquangthanh/vinh-phoenix.git
-```
-
-
-### 2. Initialize Your Project
-
-Install skills into your project:
-
-```bash
-phoenix init <PROJECT_NAME>
-phoenix check
-```
-
-This installs all 18 skills into agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.), making them discoverable by your AI assistant.
-
-### 3. Work with Your AI Assistant
-
-Launch your AI assistant and describe what you want to build. The AI will automatically discover and use the relevant skills:
-
-```bash
-# The AI assistant automatically activates relevant skills based on your request
-"Specify a photo organizer with drag-and-drop albums"
-"Design this using Next.js with TypeScript and Tailwind CSS"
-"Break this down into actionable tasks"
-"Implement the feature"
-```
-
-**Skills are loaded on demand** - when your task matches a skill's description, the AI reads the full instructions and follows them.
-
----
-
-## 🌟 Development Workflows
-
-Phoenix skills support both **Greenfield** (new projects) and **Brownfield** (existing projects) development:
-
-**Greenfield** projects start with establishing principles, architecture, and standards. **Brownfield** projects begin with context assessment to understand existing patterns.
-
-**Key Differences:**
-
-| Aspect | 🌱 Greenfield | 🏗️ Brownfield |
-|--------|--------------|---------------|
-| **Starting Point** | Empty project | Existing codebase |
-| **Setup Skill** | `project-ground-rules-setup` | `context-assessment`, `project-ground-rules-setup` |
-| **Focus** | Establish foundations first | Integrate with existing patterns |
-| **Timeline** | 2-4 weeks (MVP) | 1-2 weeks per feature |
-| **Flexibility** | Complete freedom in design | Must maintain consistency |
-| **Skills Used** | All 18 skills available | Focus on 7-9 core skills |
-
----
-
-Then use it anywhere:
-
-```bash
-phoenix init <PROJECT_NAME>
-phoenix check
-```
-
-<p align="center">
-  <img src="./media/vinh-phoenix.png" alt="Vinh Phoenix Installation" width="100%"/>
-</p>
 
 <details>
 <summary><strong>Alternative: Run without installing</strong></summary>
@@ -167,105 +99,34 @@ phoenix check
 uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <PROJECT_NAME>
 ```
 
-```bash
-uvx --native-tls --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <PROJECT_NAME>
-```
-
-**Why install?**
-
-- ✅ Available everywhere in your terminal
-- ✅ Easy to upgrade with `uv tool upgrade`
-- ✅ Cleaner than shell aliases
-- ✅ Better tool management
-
 </details>
 
----
-
-### Your First Project in 9 Steps
-
-> **💡 Automatic Version Control:** All Phoenix commands automatically generate appropriate git commit messages and commit changes upon completion. Commands use semantic commit prefixes (`docs:`, `feat:`, `test:`, `chore:`) to maintain a clear project history.
-
-#### 1️⃣ **Set Project Rules**
-
-Launch your AI assistant in the project. Phoenix skills are now discoverable by the AI.
-
-Ask the AI to create your project's guiding principles:
+### 2. Initialize Your Project
 
 ```bash
-"Create project ground rules focused on code quality, testing standards, user experience consistency, and performance requirements"
+phoenix init <PROJECT_NAME>
+phoenix check
 ```
 
-#### 2️⃣ **Write the Specification**
+This installs all 18 skills into agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.), making them discoverable by your AI assistant.
 
-Describe **what** you want to build and **why** (not the tech stack yet):
+<p align="center">
+  <img src="./media/vinh-phoenix.png" alt="Vinh Phoenix Installation" width="100%"/>
+</p>
 
-```bash
-"Specify a photo organizer with albums grouped by date. 
-Users can drag-and-drop albums to reorganize them. Albums show photos in a tile view. 
-No nested albums allowed.
+### 3. Start Building
+
+Launch your AI assistant and describe what you want to build:
+
+```text
+"Create project ground rules focused on code quality and testing standards"
+"Specify a photo organizer with drag-and-drop albums"
+"Design this using Next.js with TypeScript and Tailwind CSS"
+"Break this down into actionable tasks"
+"Implement all the tasks"
 ```
 
-#### 3️⃣ **Clarify Requirements** *(Recommended)*
-
-Ask the AI to clarify underspecified areas through structured questioning:
-
-```bash
-"Clarify the requirements, focusing on edge cases, data validation, and user experience details"
-```
-
-#### 4️⃣ **Design System Architecture** *(once per product)*
-
-Document your system architecture:
-
-```bash
-"Create system architecture documentation with C4 diagrams, tech stack decisions, and architecture patterns"
-```
-
-#### 5️⃣ **Set Coding Standards** *(once per product)*
-
-Create coding standards for your team:
-
-```bash
-"Define coding standards including naming conventions, file organization, and best practices"
-```
-
-#### 6️⃣ **Create Technical Design**
-
-Now specify **how** to build it (tech stack and architecture):
-
-```bash
-"Design the technical implementation using Vite with vanilla HTML, CSS, and JavaScript. 
-Keep libraries minimal. Store metadata in local SQLite. No image uploads.
-```
-
-#### 7️⃣ **Break Down Tasks**
-
-Generate an actionable task list:
-
-```bash
-"Break this design down into actionable tasks"
-```
-
-#### 8️⃣ **Validate the Plan** *(Recommended)*
-
-Check consistency and coverage before implementation:
-
-```bash
-"Analyze the plan for consistency and coverage"
-```
-
-#### 9️⃣ **Build It**
-
-Execute all tasks automatically:
-
-```bash
-"Implement all the tasks according to the plan"
-```
-
-#### 🧪 **Test & Iterate**
-
-Run your application and fix any issues. Your AI assistant will help debug.
+Skills are loaded automatically when your task matches their purpose.
 
 ---
 
@@ -273,25 +134,25 @@ Run your application and fix any issues. Your AI assistant will help debug.
 
 | Agent                                                     | Support | Notes                                             |
 | ----------------------------------------------------------- | --------- |---------------------------------------------------|
-| [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️ | Amazon Q Developer CLI [does not support](https://github.com/aws/amazon-q-developer-cli/issues/3064) custom arguments for slash commands. |
-| [Amp](https://ampcode.com/)                               | ✅ | |
-| [Auggie CLI](https://docs.augmentcode.com/cli/overview)   | ✅ |                                                   |
-| [Claude Code](https://www.anthropic.com/claude-code)      | ✅ |                                                   |
-| [CodeBuddy CLI](https://www.codebuddy.ai/cli)             | ✅ |                                                   |
-| [Codex CLI](https://github.com/openai/codex)              | ✅ |                                                   |
-| [Cursor](https://cursor.sh/)                              | ✅ |                                                   |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | ✅ |                                                   |
-| [GitHub Copilot](https://code.visualstudio.com/)          | ✅ |                                                   |
-| [Google Antigravity](https://ai.google.dev/)              | ✅ | IDE-based agent with slash command support |
-| [IBM Bob](https://www.ibm.com/products/bob)               | ✅ | IDE-based agent with slash command support |
-| [Jules](https://jules.google.com/)                        | ✅ | |
-| [Kilo Code](https://github.com/Kilo-Org/kilocode)         | ✅ |                                                   |
-| [opencode](https://opencode.ai/)                          | ✅ |                                                   |
-| [Qoder CLI](https://qoder.ai)                             | ✅ |                                                   |
-| [Qwen Code](https://github.com/QwenLM/qwen-code)          | ✅ |                                                   |
-| [Roo Code](https://roocode.com/)                          | ✅ |                                                   |
-| [SHAI (OVHcloud)](https://github.com/ovh/shai)            | ✅ | |
-| [Windsurf](https://windsurf.com/)                         | ✅ |                                                   |
+| [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️ | File-based prompts [do not support argument substitution](https://github.com/aws/amazon-q-developer-cli/issues/3064) despite CLI accepting arguments. |
+| [Amp](https://ampcode.com/)                               | ✅ | Available as CLI/TUI and editor extension. Model-agnostic with role-specific modes. |
+| [Auggie CLI](https://docs.augmentcode.com/cli/overview)   | ✅ | Command-line interface for agentic code assistance. |
+| [Claude Code](https://www.anthropic.com/claude-code)      | ✅ | Desktop application powered by Claude AI models. |
+| [CodeBuddy CLI](https://www.codebuddy.ai/cli)             | ✅ | Command-line AI coding assistant. |
+| [Codex CLI](https://github.com/openai/codex)              | ✅ | Terminal-based coding assistant. |
+| [Cursor](https://cursor.sh/)                              | ✅ | AI-first code editor based on VS Code. |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | ✅ | Open-source terminal AI agent with 1M token context window. Supports MCP servers. |
+| [GitHub Copilot](https://code.visualstudio.com/)          | ✅ | IDE extension powered by OpenAI models. |
+| [Google Antigravity](https://ai.google.dev/)              | ✅ | IDE-based agent with slash command support. |
+| [IBM Bob](https://www.ibm.com/products/bob)               | ✅ | IDE-based agent with code review, vulnerability detection, and modernization support. |
+| [Jules](https://jules.google.com/)                        | ✅ | Autonomous coding agent that works in isolated VMs. Includes built-in peer review. |
+| [Kilo Code](https://github.com/Kilo-Org/kilocode)         | ✅ | Community-driven AI coding assistant. |
+| [opencode](https://opencode.ai/)                          | ✅ | Open-source AI coding platform. |
+| [Qoder CLI](https://qoder.ai)                             | ✅ | Terminal-based AI development assistant. |
+| [Qwen Code](https://github.com/QwenLM/qwen-code)          | ✅ | Qwen-powered coding assistant. |
+| [Roo Code](https://roocode.com/)                          | ✅ | Open-source VS Code extension with cloud agent team support. Model-agnostic with role-specific modes. |
+| [SHAI (OVHcloud)](https://github.com/ovh/shai)            | ✅ | Rust-based terminal agent with HTTP server mode. Supports MCP servers and multiple LLM providers. |
+| [Windsurf](https://windsurf.com/)                         | ✅ | IDE with Cascade agent for autonomous coding. 1M+ users. Supports MCP servers and memories. |
 
 ## 🔧 Phoenix CLI Reference
 
@@ -427,116 +288,122 @@ After running `phoenix init`, your AI assistant can leverage these skills:
 | ------------------ | ------------------------------------------------------------------------------------------------ |
 | `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to using `/phoenix.design` or follow-up commands. |
 
-## 🎯 Why Spec-Driven Development?
-
-Spec-Driven Development is built on these core principles:
-
-| Principle | What It Means |
-| ----------- | --------------- |
-| **Intent First** | Define the "*what*" and "*why*" before the "*how*" |
-| **Rich Specifications** | Create detailed specs with organizational principles and guardrails |
-| **Step-by-Step Refinement** | Improve through multiple steps, not one-shot generation |
-| **AI-Powered** | Use advanced AI to interpret specifications and generate implementations |
-
 ---
 
-## 🌟 When to Use Spec-Driven Development
+## 🌟 Development Workflows
 
-Vinh Phoenix supports three main development scenarios with different workflows:
+### Core Philosophy
 
-### Development Workflows Overview
+Phoenix follows **Spec-Driven Development** principles:
+
+- **Intent First** - Define the "*what*" and "*why*" before the "*how*"
+- **Rich Specifications** - Create detailed specs with organizational principles and guardrails
+- **Step-by-Step Refinement** - Improve through multiple steps, not one-shot generation
+- **AI-Powered** - Use advanced AI to interpret specifications and generate implementations
+
+### Workflow Types
+
+Phoenix supports both **Greenfield** (new projects) and **Brownfield** (existing projects) development:
+
+### Workflow Comparison
+
+| Aspect | 🌱 Greenfield | 🏗️ Brownfield |
+|--------|--------------|---------------|
+| **Starting Point** | Empty project | Existing codebase |
+| **First Step** | Set ground rules | Assess context |
+| **Timeline** | 2-4 weeks (MVP) | 1-2 weeks per feature |
+| **Flexibility** | Complete freedom | Must maintain consistency |
+| **Skills Used** | All 18 skills | Focus on 7-9 core skills |
 
 ```mermaid
 flowchart TB
-    subgraph Greenfield["🌱 GREENFIELD: New Applications (2-4 weeks)"]
+    subgraph Greenfield["🌱 GREENFIELD WORKFLOW"]
         direction TB
-        GF1[📋 Set Ground Rules: Set Principles] --> GF2[🎯 Specify: Feature Requirements]
-        GF2 --> GF3[🔍 Clarify: Refine Spec]
-        GF3 --> GF4[📝 Architect: System Design]
-        GF4 --> GF5[📏 Standardize: Coding Standards]
-        GF5 --> GF6[🛠️ Design: Technical Plan]
-        GF6 --> GF7[📋 Taskify: Break Down]
-        GF7 --> GF8[⚡ Implement: Build It]
-        GF8 --> GF9[✅ Test & Deploy]
+        GF1[Set Ground Rules] --> GF2[Specify Requirements]
+        GF2 --> GF3[Clarify Spec]
+        GF3 --> GF4[Design Architecture]
+        GF4 --> GF5[Set Standards]
+        GF5 --> GF6[Create Technical Design]
+        GF6 --> GF7[Break into Tasks]
+        GF7 --> GF8[Implement]
     end
     
-    subgraph Brownfield["🏗️ BROWNFIELD: Existing Apps (1-2 weeks/feature)"]
+    subgraph Brownfield["🏗️ BROWNFIELD WORKFLOW"]
         direction TB
-        BF1[📚 Assess Context: Analyze Codebase] --> BF2[📋 Set Ground Rules: Update Principles]
-        BF2 --> BF3[🎯 Specify: New Feature]
-        BF3 --> BF4[🔍 Clarify: Requirements]
-        BF4 --> BF5[🛠️ Design: Integration Plan]
-        BF5 --> BF6[📋 Taskify: Task List]
-        BF6 --> BF7[⚡ Implement: Add Feature]
-        BF7 --> BF8[✅ Test & Deploy]
+        BF1[Assess Context] --> BF2[Update Ground Rules]
+        BF2 --> BF3[Specify Feature]
+        BF3 --> BF4[Clarify Requirements]
+        BF4 --> BF5[Design Integration]
+        BF5 --> BF6[Break into Tasks]
+        BF6 --> BF7[Implement]
     end
     
     style Greenfield fill:#E8F5E9
     style Brownfield fill:#E3F2FD
-    style GF8 fill:#FFD700
-    style BF7 fill:#FFD700
 ```
 
-| Scenario | What You Can Do |
-| ---------- | ----------------- |
-| **🆕 New Projects (Greenfield)** | <ul><li>Start with high-level requirements</li><li>Establish project principles and architecture</li><li>Generate complete specifications</li><li>Plan implementation steps</li><li>Build production-ready apps with clear standards</li></ul> |
-| **🔧 Existing Projects (Brownfield)** | <ul><li>Add new features systematically to existing codebases</li><li>Maintain consistency with existing patterns</li><li>Adapt the SDD process to your current architecture</li><li>Integrate new functionality smoothly</li></ul> |
-| **🔬 Exploration** | <ul><li>Try different solutions in parallel</li><li>Test multiple tech stacks</li><li>Experiment with UX patterns</li><li>Rapid prototyping and validation</li></ul> |
-
----
-
-## 🔬 What We're Exploring
-
-Our experiments focus on making Spec-Driven Development work for real teams:
-
-- **🔧 Tech Independence** - Build apps with any tech stack, proving this process works across languages and frameworks
-- **🏢 Enterprise Ready** - Support organizational constraints: cloud providers, compliance requirements, design systems
-- **👥 User Focused** - Build for different user needs and development styles (from exploratory coding to structured workflows)
-- **🔄 Iterative & Creative** - Enable parallel exploration of solutions and robust workflows for modernization
-
----
-
-## ⚙️ What You Need
-
-Before you start, make sure you have:
+### Prerequisites
 
 - **Operating System:** Linux, macOS, or Windows
-- **AI Assistant:** Any [supported agent](#-supported-ai-agents) (Claude, Gemini, Copilot, Cursor, etc.)
+- **AI Assistant:** Any [supported agent](#-supported-ai-agents)
 - **Package Manager:** [uv](https://docs.astral.sh/uv/)
-- **Python:** [Version 3.11 or higher](https://www.python.org/downloads/)
+- **Python:** [Version 3.11+](https://www.python.org/downloads/)
 - **Version Control:** [Git](https://git-scm.com/downloads)
-
-> Having issues with an agent? [Open an issue](https://github.com/dauquangthanh/vinh-phoenix/issues/new) so we can improve it.
-
-## 📚 Learn More
-
-### Choose Your Workflow
-
-```mermaid
-flowchart TD
-    Start{What are you<br/>building?}
-    
-    Start -->|Brand new application| GF[🌱 Greenfield Workflow]
-    Start -->|Adding to existing app| BF[🏗️ Brownfield Workflow]
-    
-    GF --> GFDesc["<b>Timeline:</b> 2-4 weeks<br/><b>Steps:</b> Set Ground Rules → Specify →<br/>Architect → Standardize →<br/>Design → Taskify → Implement"]
-    BF --> BFDesc["<b>Timeline:</b> 1-2 weeks/feature<br/><b>Steps:</b> Assess Context →<br/>Set Ground Rules → Specify → Design → Implement"]
-    
-    style GF fill:#90EE90
-    style BF fill:#87CEEB
-    style GFDesc fill:#E8F5E9
-    style BFDesc fill:#E3F2FD
-```
-
-**Quick Links:**
-
-- 💬 [Get Support](https://github.com/dauquangthanh/vinh-phoenix/issues/new) - Ask questions or report issues
-- 📄 [View License](./LICENSE) - MIT License
-- 🌟 [Star on GitHub](https://github.com/dauquangthanh/vinh-phoenix) - Support the project
 
 ---
 
-## 📋 Detailed Process
+## 🏗️ Project Structure
+
+After running `phoenix init`, your project structure:
+
+```
+<project-root>/
+├── .<agent>/              # Agent-specific folder (.claude/, .github/, .gemini/)
+│   └── skills/            # 18 reusable skill modules
+│       ├── requirements-specification/
+│       ├── technical-design/
+│       ├── coding/
+│       └── ... (15 more)
+│
+├── docs/                  # Project documentation
+│   ├── ground-rules.md    # Project principles
+│   ├── architecture.md    # System architecture
+│   └── standards.md       # Coding standards
+│
+└── specs/                 # Feature specifications
+    └── <feature-name>/
+        ├── spec.md        # Requirements & user stories
+        ├── plan.md        # Technical implementation plan
+        ├── tasks.md       # Task breakdown
+        └── research.md    # Tech stack research
+```
+
+### Skills Overview
+
+| Skill Module | Purpose |
+| -------------- | --------- |
+| `requirements-specification` | Create feature specifications from natural language |
+| `requirements-specification-review` | Structured clarification workflow |
+| `technical-design` | Generate implementation plans with tech stack |
+| `technical-design-review` | Validate design consistency and coverage |
+| `project-management` | Break down designs into actionable tasks |
+| `coding` | Execute tasks and build features |
+| `architecture-design` | Document system architecture (C4 diagrams) |
+| `architecture-design-review` | Review architecture completeness |
+| `coding-standards` | Create coding conventions and standards |
+| `e2e-test-design` | Design end-to-end test specifications |
+| `project-ground-rules-setup` | Establish project principles |
+| `context-assessment` | Analyze existing codebases (brownfield) |
+| `project-consistency-analysis` | Check cross-artifact consistency |
+| `code-review` | Code review automation |
+| `git-commit` | Generate semantic commit messages |
+| `tasks-to-github-issues` | Sync tasks to GitHub issues |
+| `tasks-to-azure-devops` | Sync tasks to Azure DevOps |
+| `nextjs-mockup` / `nuxtjs-mockup` | Generate framework-specific mockups |
+
+---
+
+## 📋 Detailed Walkthrough
 
 <details>
 <summary>Click to expand the detailed step-by-step walkthrough</summary>
@@ -901,76 +768,6 @@ Test the new feature in the context of the existing application. Ensure it integ
 
 ---
 
-## 🏗️ Project Structure
-
-After running `phoenix init`, your project will have the following structure:
-
-```
-<project-root>/
-├── .<agent-folder>/       # Agent-specific folder (e.g., .claude/, .github/, .gemini/)
-│   └── phoenix.*.md       # 15 Phoenix agent skills
-│
-├── .<agent-folder>/skills/  # Agent-specific skills (reusable capabilities)
-│   ├── architecture-design/
-│   │   ├── SKILL.md       # Skill documentation
-│   │   ├── templates/     # Reusable templates for this skill
-│   │   └── scripts/       # Automation scripts (bash & PowerShell)
-│   ├── coding/
-│   ├── context-assessment/
-│   ├── nextjs-mockup/
-│   └── ... (18 skills total for various development tasks)
-│
-├── docs/                  # Project documentation (created by commands)
-│   ├── ground-rules.md    # Project principles (created by /phoenix.set-ground-rules)
-│   ├── architecture.md    # System architecture (created by /phoenix.architect)
-│   └── standards.md       # Coding standards (created by /phoenix.standardize)
-│
-└── specs/                 # Your feature specifications (created as you work)
-    └── <feature-name>/
-        ├── spec.md        # Requirements and user stories
-        ├── plan.md        # Technical implementation plan
-        ├── tasks.md       # Task breakdown for execution
-        └── research.md    # Tech stack research notes
-```
-
-**Key Folders:**
-
-- **`.<agent>/`** - Agent skills and configuration (`.claude/`, `.github/`, `.gemini/`, etc.)
-- **`.<agent>/skills/`** - Reusable skill modules (18 total, each with templates & scripts)
-- **`docs/`** - Project-level documentation (ground-rules, architecture, standards)
-- **`specs/`** - Your feature specifications (grows as you build)
-
-### 🧩 Available Skills
-
-Phoenix includes **18 reusable skills** that power your AI assistant:
-
-| Skill Module | Powers Command(s) | Purpose |
-| -------------- | ------------------- | --------- |
-| `requirements-specification` | `/phoenix.specify` | Create feature specifications from natural language |
-| `requirements-specification-review` | `/phoenix.clarify` | Structured clarification workflow |
-| `technical-design` | `/phoenix.design` | Generate implementation plans with tech stack |
-| `technical-design-review` | `/phoenix.analyze` | Validate design consistency and coverage |
-| `project-management` | `/phoenix.taskify` | Break down designs into actionable tasks |
-| `coding` | `/phoenix.implement` | Execute tasks and build features |
-| `architecture-design` | `/phoenix.architect` | Document system architecture (C4 diagrams) |
-| `architecture-design-review` | *(validation)* | Review architecture completeness |
-| `coding-standards` | `/phoenix.standardize` | Create coding conventions and standards |
-| `e2e-test-design` | `/phoenix.design-e2e-test` | Design end-to-end test specifications |
-| `project-ground-rules-setup` | `/phoenix.set-ground-rules` | Establish project principles |
-| `context-assessment` | `/phoenix.assess-context` | Analyze existing codebases (brownfield) |
-| `project-consistency-analysis` | `/phoenix.analyze` | Check cross-artifact consistency |
-| `code-review` | *(quality checks)* | Code review automation |
-| `git-commit` | *(auto-commits)* | Generate semantic commit messages |
-| `tasks-to-github-issues` | `/phoenix.tasks-to-issues` | Sync tasks to GitHub issues |
-| `tasks-to-azure-devops` | `/phoenix.tasks-to-ado` | Sync tasks to Azure DevOps |
-| `nextjs-mockup` / `nuxtjs-mockup` | *(rapid prototyping)* | Generate framework-specific mockups |
-
-**Skills are framework-agnostic** - they work with any tech stack and support 20+ AI agents through a common interface.
-
-**Note:** Agent-specific folders (like `.github/skills/`, `.claude/skills/`) are auto-managed by the Phoenix CLI. You primarily work in `specs/` for your features.
-
----
-
 ## 🛠️ Troubleshooting
 
 ### Git Authentication on Linux
@@ -1002,19 +799,13 @@ echo "✅ Done! Git Credential Manager is ready."
 
 ---
 
-## 👥 Project Team
-
-**Maintainer:** Dau Quang Thanh ([@dauquangthanh](https://github.com/dauquangthanh))
-
----
-
-## 💬 Get Help
-
-Need assistance? We're here to help:
+## 🎗️ Support
 
 - 🐛 **Bug Reports:** [Open an issue](https://github.com/dauquangthanh/vinh-phoenix/issues/new)
 - 💡 **Feature Requests:** [Open an issue](https://github.com/dauquangthanh/vinh-phoenix/issues/new)
-- ❓ **Questions:** [Open a discussion](https://github.com/dauquangthanh/vinh-phoenix/discussions)
+- ❓ **Questions:** [Start a discussion](https://github.com/dauquangthanh/vinh-phoenix/discussions)
+
+**Maintainer:** Dau Quang Thanh ([@dauquangthanh](https://github.com/dauquangthanh))
 
 ---
 
