@@ -56,12 +56,6 @@ function Find-ArchitectureFile {
         return $currentArch
     }
     
-    # Check .phoenix\docs\ (alternative location)
-    $phoenixArch = Join-Path $currentDir ".phoenix\docs\architecture.md"
-    if (Test-Path $phoenixArch) {
-        return $phoenixArch
-    }
-    
     return $null
 }
 
@@ -102,7 +96,7 @@ function Scan-SupportingDocs {
     }
     
     # Check for ground-rules.md
-    $groundRulesPath = Join-Path $RepoRoot "memory\ground-rules.md"
+    $groundRulesPath = Join-Path $RepoRoot "docs\ground-rules.md"
     if (Test-Path $groundRulesPath) {
         $script:GroundRulesFound = $true
         $script:AvailableDocs += "docs/ground-rules.md"
@@ -159,7 +153,6 @@ function Write-JsonOutput {
             searched_paths = @(
                 (Join-Path $currentDir "docs\architecture.md"),
                 (Join-Path $currentDir "architecture.md"),
-                (Join-Path $currentDir ".phoenix\docs\architecture.md")
             )
         }
         
@@ -207,7 +200,6 @@ function Write-HumanOutput {
         Write-Host "Searched paths:"
         Write-Host "  • $(Join-Path $currentDir 'docs\architecture.md')"
         Write-Host "  • $(Join-Path $currentDir 'architecture.md')"
-        Write-Host "  • $(Join-Path $currentDir '.phoenix\docs\architecture.md')"
     }
 }
 

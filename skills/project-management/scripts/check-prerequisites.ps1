@@ -46,10 +46,8 @@ function Find-FeatureDir {
         return $currentDir.Path
     }
     
-    # Check .phoenix/features/* subdirectories
-    $phoenixFeaturesDir = Join-Path $currentDir ".phoenix\features"
-    if (Test-Path $phoenixFeaturesDir) {
-        $dirs = Get-ChildItem -Path $phoenixFeaturesDir -Directory
+    if (Test-Path $phoenixSpecsDir) {
+        $dirs = Get-ChildItem -Path $phoenixSpecsDir -Directory
         foreach ($dir in $dirs) {
             if (Test-FeatureDir $dir.FullName) {
                 return $dir.FullName
@@ -57,10 +55,10 @@ function Find-FeatureDir {
         }
     }
     
-    # Check features/* subdirectories
-    $featuresDir = Join-Path $currentDir "features"
-    if (Test-Path $featuresDir) {
-        $dirs = Get-ChildItem -Path $featuresDir -Directory
+    # Check specs/* subdirectories
+    $specsDir = Join-Path $currentDir "specs"
+    if (Test-Path $specsDir) {
+        $dirs = Get-ChildItem -Path $specsDir -Directory
         foreach ($dir in $dirs) {
             if (Test-FeatureDir $dir.FullName) {
                 return $dir.FullName
@@ -68,10 +66,8 @@ function Find-FeatureDir {
         }
     }
     
-    # Check docs/features/* subdirectories
-    $docsFeaturesDir = Join-Path $currentDir "docs\features"
-    if (Test-Path $docsFeaturesDir) {
-        $dirs = Get-ChildItem -Path $docsFeaturesDir -Directory
+    if (Test-Path $docsSpecsDir) {
+        $dirs = Get-ChildItem -Path $docsSpecsDir -Directory
         foreach ($dir in $dirs) {
             if (Test-FeatureDir $dir.FullName) {
                 return $dir.FullName
@@ -171,9 +167,7 @@ function Write-JsonOutput {
             message = "Could not find feature directory. Looking for directory containing design.md or spec.md"
             searched_paths = @(
                 $currentDir.Path,
-                (Join-Path $currentDir ".phoenix\features"),
-                (Join-Path $currentDir "features"),
-                (Join-Path $currentDir "docs\features")
+                (Join-Path $currentDir "specs"),
             )
         }
         
@@ -211,9 +205,7 @@ function Write-HumanOutput {
         Write-Host ""
         Write-Host "Searched paths:"
         Write-Host "  • $($currentDir.Path)"
-        Write-Host "  • $(Join-Path $currentDir '.phoenix\features')"
-        Write-Host "  • $(Join-Path $currentDir 'features')"
-        Write-Host "  • $(Join-Path $currentDir 'docs\features')"
+        Write-Host "  • $(Join-Path $currentDir 'specs')"
     }
 }
 

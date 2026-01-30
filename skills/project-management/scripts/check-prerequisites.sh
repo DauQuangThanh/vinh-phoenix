@@ -65,9 +65,6 @@ find_feature_dir() {
         return 0
     fi
     
-    # Check .phoenix/features/* subdirectories
-    if [[ -d "$current_dir/.phoenix/features" ]]; then
-        for subdir in "$current_dir/.phoenix/features"/*; do
             if [[ -d "$subdir" ]] && is_feature_dir "$subdir"; then
                 echo "$subdir"
                 return 0
@@ -75,9 +72,9 @@ find_feature_dir() {
         done
     fi
     
-    # Check features/* subdirectories
-    if [[ -d "$current_dir/features" ]]; then
-        for subdir in "$current_dir/features"/*; do
+    # Check specs/* subdirectories
+    if [[ -d "$current_dir/specs" ]]; then
+        for subdir in "$current_dir/specs"/*; do
             if [[ -d "$subdir" ]] && is_feature_dir "$subdir"; then
                 echo "$subdir"
                 return 0
@@ -85,9 +82,6 @@ find_feature_dir() {
         done
     fi
     
-    # Check docs/features/* subdirectories
-    if [[ -d "$current_dir/docs/features" ]]; then
-        for subdir in "$current_dir/docs/features"/*; do
             if [[ -d "$subdir" ]] && is_feature_dir "$subdir"; then
                 echo "$subdir"
                 return 0
@@ -205,9 +199,7 @@ output_json() {
         echo "  \"message\": \"Could not find feature directory. Looking for directory containing design.md or spec.md\","
         echo "  \"searched_paths\": ["
         echo "    \"$current_dir\","
-        echo "    \"$current_dir/.phoenix/features\","
-        echo "    \"$current_dir/features\","
-        echo "    \"$current_dir/docs/features\""
+        echo "    \"$current_dir/specs\","
         echo "  ]"
         echo "}"
     fi
@@ -242,9 +234,7 @@ output_human() {
         echo ""
         echo "Searched paths:"
         echo "  • $current_dir"
-        echo "  • $current_dir/.phoenix/features"
-        echo "  • $current_dir/features"
-        echo "  • $current_dir/docs/features"
+        echo "  • $current_dir/specs"
     fi
 }
 

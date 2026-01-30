@@ -14,7 +14,7 @@ $RepoRoot = Resolve-Path (Join-Path $ScriptDir "..\..\..") | Select-Object -Expa
 
 # Feature discovery logic
 function Find-FeatureDir {
-    $searchPaths = @("specs", "features", "requirements", "docs\specs")
+    $searchPaths = @("specs")
     
     foreach ($basePath in $searchPaths) {
         $fullPath = Join-Path $RepoRoot $basePath
@@ -138,12 +138,12 @@ function Main {
         if ($Json) {
             $result = @{
                 success = $false
-                error = "No feature directory with tasks.md found. Expected in: specs/, features/, requirements/, docs/specs/"
+                error = "No feature directory with tasks.md found. Expected in: specs/"
             }
             $result | ConvertTo-Json -Depth 10
         } else {
             Write-Host "❌ Error: No feature directory with tasks.md found." -ForegroundColor Red
-            Write-Host "Expected locations: specs/, features/, requirements/, docs/specs/"
+            Write-Host "Expected location: specs/"
         }
         exit 1
     }

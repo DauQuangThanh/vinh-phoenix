@@ -76,12 +76,6 @@ find_architecture_file() {
         return 0
     fi
     
-    # Check .phoenix/docs/ (alternative location)
-    if [[ -f "$current_dir/.phoenix/docs/architecture.md" ]]; then
-        echo "$current_dir/.phoenix/docs/architecture.md"
-        return 0
-    fi
-    
     return 1
 }
 
@@ -89,7 +83,7 @@ find_architecture_file() {
 count_mermaid_diagrams() {
     local file="$1"
     local count
-    count=$(grep -c "^```mermaid" "$file" 2>/dev/null || echo "0")
+    count=$(grep -c "^\`\`\`mermaid" "$file" 2>/dev/null || echo "0")
     echo "$count"
 }
 
@@ -180,7 +174,7 @@ output_json() {
         echo "  \"searched_paths\": ["
         echo "    \"$current_dir/docs/architecture.md\","
         echo "    \"$current_dir/architecture.md\","
-        echo "    \"$current_dir/.phoenix/docs/architecture.md\""
+        echo "  ]"
         echo "  ]"
         echo "}"
     fi
@@ -225,7 +219,7 @@ output_human() {
         echo "Searched paths:"
         echo "  • $current_dir/docs/architecture.md"
         echo "  • $current_dir/architecture.md"
-        echo "  • $current_dir/.phoenix/docs/architecture.md"
+        
     fi
 }
 

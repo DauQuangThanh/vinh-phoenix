@@ -16,7 +16,7 @@ fi
 
 # Feature discovery logic
 find_feature_dir() {
-    local search_paths=("specs" "features" "requirements" "docs/specs")
+    local search_paths=("specs")
     
     for base_path in "${search_paths[@]}"; do
         local full_path="$REPO_ROOT/$base_path"
@@ -129,12 +129,12 @@ main() {
             cat <<EOF
 {
   "success": false,
-  "error": "No feature directory with tasks.md found. Expected in: specs/, features/, requirements/, docs/specs/"
+  "error": "No feature directory with tasks.md found. Expected in: specs/"
 }
 EOF
         else
             echo "❌ Error: No feature directory with tasks.md found."
-            echo "Expected locations: specs/, features/, requirements/, docs/specs/"
+            echo "Expected location: specs/"
         fi
         exit 1
     fi
