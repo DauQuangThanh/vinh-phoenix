@@ -3,12 +3,16 @@ name: context-assessment
 description: Analyze existing codebases to understand architecture, patterns, and conventions before adding new features. Use when assessing brownfield projects, documenting technical architecture, or when the user mentions codebase analysis, architecture review, or technical assessment.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---
 
 # Context Assessment Skill
+
+## Overview
+
+This skill analyzes existing codebases to understand architecture, patterns, and conventions before adding new features. It documents technical architecture, creates baseline assessments for brownfield projects, calculates technical health scores, and prepares comprehensive context for feature development.
 
 ## When to Use
 

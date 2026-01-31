@@ -1,14 +1,18 @@
 ---
 name: requirements-specification-review
 description: Reviews and clarifies existing feature specifications by identifying underspecified areas, asking targeted questions, and integrating answers back into the spec. Use when refining requirements, detecting ambiguities, validating completeness, or when user mentions spec review, clarification, requirements validation, or gap analysis.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
   last-updated: "2026-01-27"
+license: MIT
 ---
 
 # Requirements Specification Review
+
+## Overview
+
+This skill reviews and clarifies existing feature specifications by identifying underspecified areas, asking targeted questions, and integrating answers back into the spec. It helps refine requirements, detect ambiguities, and validate completeness before implementation planning.
 
 ## When to Use
 
@@ -376,7 +380,7 @@ After completing the specification review, consider:
 
 1. **If Outstanding items remain**: Run another review session
 2. **If all Critical items resolved**: Proceed to technical design
-3. **Use technical-design skill**: Create implementation plan
+3. **Use technical-detailed-design skill**: Create implementation plan
 4. **Use phoenix.architect**: Build architectural design
 5. **Use phoenix.design**: Create detailed technical design
 

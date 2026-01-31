@@ -1,12 +1,12 @@
 ---
 name: graphql
 description: Designs GraphQL schemas, writes queries and mutations, implements resolvers, and optimizes GraphQL APIs. Use when building GraphQL APIs, creating schemas, writing queries, implementing subscriptions, or when user mentions GraphQL, Apollo, schema design, queries, mutations, or API optimization.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
   last-updated: "2026-01-28"
   categories: [api-development, backend, database]
+license: MIT
 ---
 
 # GraphQL Skill

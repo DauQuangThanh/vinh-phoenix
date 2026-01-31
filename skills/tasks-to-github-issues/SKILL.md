@@ -4,7 +4,7 @@ description: Converts project tasks from tasks.md into actionable GitHub issues 
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 ---
 

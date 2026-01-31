@@ -3,7 +3,7 @@ name: architecture-design-review
 description: Reviews system architecture documentation for completeness, consistency, and quality. Validates C4 model diagrams, architecture decisions (ADRs), quality attributes, deployment design, and alignment with requirements. Use when reviewing architecture documents, validating architectural decisions, assessing architecture quality, or when user mentions architecture review, ADR validation, C4 model check, or architecture assessment.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---

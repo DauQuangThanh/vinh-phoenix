@@ -1,14 +1,14 @@
 ---
-name: technical-design-review
+name: technical-detailed-design-review
 description: Reviews technical detailed design documentation for completeness, consistency, and quality. Validates design decisions, data models, API contracts, implementation plans, and alignment with requirements and ground rules. Use when reviewing technical detailed designs, validating implementation plans, assessing design quality, or when user mentions design review, technical design review, API contract validation, data model review, or implementation plan assessment.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
   last-updated: "2026-01-27"
+license: MIT
 ---
 
-# Technical Design Review Skill
+# Technical Detailed Design Review Skill
 
 ## Overview
 
@@ -43,7 +43,7 @@ This skill performs comprehensive reviews of technical design documentation to e
 ## File Structure
 
 ```
-technical-design-review/
+technical-detailed-design-review/
 ├── SKILL.md                                 # Main skill documentation
 ├── scripts/
 │   ├── check-design.sh                      # Bash prerequisite checker (macOS/Linux)
@@ -63,19 +63,19 @@ Run the prerequisite check script to verify design documentation exists and iden
 **Bash (Unix/Linux/macOS):**
 
 ```bash
-/path/to/technical-design-review/scripts/check-design.sh --json
+/path/to/technical-detailed-design-review/scripts/check-design.sh --json
 ```
 
 **PowerShell (Windows):**
 
 ```powershell
-/path/to/technical-design-review/scripts/check-design.ps1 -Json
+/path/to/technical-detailed-design-review/scripts/check-design.ps1 -Json
 ```
 
-**Note**: Replace `/path/to/technical-design-review` with the actual path where this skill is located:
+**Note**: Replace `/path/to/technical-detailed-design-review` with the actual path where this skill is located:
 
-- Global installation: `~/.copilot/skills/technical-design-review`
-- Project installation: `.github/skills/technical-design-review`
+- Global installation: `~/.copilot/skills/technical-detailed-design-review`
+- Project installation: `.github/skills/technical-detailed-design-review`
 - Or wherever your agent stores skills (see agent-skills-folder-mapping.md for your specific tool)
 
 Parse the output to extract:
@@ -113,7 +113,7 @@ Read all design documentation and supporting files:
 
 ### Step 3: Execute Technical Design Review Workflow
 
-Perform comprehensive review following the template structure in `templates/technical-design-review-template.md`.
+Perform comprehensive review following the template structure in `templates/technical-detailed-design-review-template.md`.
 
 For detailed checklists, see [references/review-checklist.md](references/review-checklist.md).
 
@@ -204,7 +204,7 @@ Assess overall quality of the design documentation:
 Create a comprehensive review report using the template:
 
 1. **Prepare review report**:
-   - Use template from `templates/technical-design-review-template.md`
+   - Use template from `templates/technical-detailed-design-review-template.md`
    - Fill in all review sections with findings
    - Document all issues found (critical, major, minor)
 
@@ -303,7 +303,7 @@ Present the review findings to the user:
 ### Missing Design Documents
 
 - **Case**: Required design files (design.md, research.md, data-model.md) not found
-- **Handling**: ERROR and report which files are missing, suggest running technical-design skill first
+- **Handling**: ERROR and report which files are missing, suggest running technical-detailed-design skill first
 
 ### Design in Progress
 
@@ -381,7 +381,7 @@ This skill is self-contained and includes:
 
 **Templates** (in `templates/` directory):
 
-- `technical-design-review-template.md` - Review report structure
+- `technical-detailed-design-review-template.md` - Review report structure
 
 **Scripts** (in `scripts/` directory):
 

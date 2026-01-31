@@ -64,7 +64,7 @@ Vinh Phoenix uses the [Agent Skills format](https://agentskills.io) - an open st
 
 - 18 skill modules in agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.)
 - Each skill has SKILL.md (instructions), templates, scripts (bash & PowerShell)
-- Skills like `requirements-specification`, `technical-design`, `coding`, etc.
+- Skills like `requirements-specification`, `technical-detailed-design`, `coding`, etc.
 
 This architecture enables:
 
@@ -84,8 +84,8 @@ Follow this complete workflow for Spec-Driven Development:
 | `requirements-specification-review` | When you ask to clarify requirements |
 | `architecture-design` | When you request system architecture documentation |
 | `coding-standards` | When you need coding standards documented |
-| `technical-design` | When you specify tech stack and implementation |
-| `project-management` | When you ask to break down work into tasks |
+| `technical-detailed-design` | When you specify tech stack and implementation |
+| `task-management` | When you ask to break down work into tasks |
 | `project-consistency-analysis` | When you request plan validation |
 | `coding` | When you ask to implement according to plan |
 
@@ -121,9 +121,9 @@ Phoenix includes **18 modular skills**, each containing templates, scripts, and 
 | ------- | -------- | --------- |
 | `requirements-specification` | Requirements gathering | Capture feature requirements from natural language |
 | `requirements-specification-review` | Requirements clarification | Structured clarification through questioning |
-| `technical-design` | Technical planning | Create detailed implementation plans |
-| `technical-design-review` | Plan validation | Validate design consistency and coverage |
-| `project-management` | Task breakdown | Break down plans into actionable tasks |
+| `technical-detailed-design` | Technical planning | Create detailed implementation plans |
+| `technical-detailed-design-review` | Plan validation | Validate design consistency and coverage |
+| `task-management` | Task breakdown | Break down plans into actionable tasks |
 | `coding` | Implementation | Execute implementation tasks systematically |
 | `code-review` | Quality assurance | Review code quality and standards |
 | `architecture-design` | System design | Design system architecture with C4 diagrams |

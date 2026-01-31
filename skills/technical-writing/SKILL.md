@@ -1,14 +1,18 @@
 ---
 name: technical-writing
 description: Creates and improves technical documentation for software projects including API docs, README files, user guides, architecture documents, and tutorials. Use when writing technical documentation, documenting code, creating user guides, or when user mentions technical writing, documentation, API docs, README, or software documentation.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.1"
   last-updated: "2026-01-29"
+license: MIT
 ---
 
 # Technical Writing for Software Development
+
+## Overview
+
+This skill helps create and improve technical documentation for software projects, including API documentation, README files, user guides, architecture documents, and tutorials. It provides structured guidance for writing clear, comprehensive documentation tailored to different audiences.
 
 ## When to Use
 

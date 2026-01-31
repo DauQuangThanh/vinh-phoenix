@@ -1,10 +1,10 @@
 ---
 name: nextjs-mockup
 description: Creates interactive UI mockups and prototypes using Next.js 16, React 19, and Tailwind CSS 4. Builds responsive components, pages, and layouts from design specifications or wireframes. Use when creating mockups, prototypes, UI demos, design implementations, or when user mentions Next.js prototype, Tailwind mockup, interactive demo, or UI prototype.
-license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "2.0"
+  version: "2.0.0"
+license: MIT
 ---
 
 # Next.js Mockup Skill

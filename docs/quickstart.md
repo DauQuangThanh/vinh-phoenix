@@ -47,9 +47,9 @@ Each step uses a specific skill from the library:
 | 3️⃣ | `/phoenix.clarify` | `requirements-specification-review` | Clarify unclear areas |
 | 4️⃣ | `/phoenix.architect` | `architecture-design` | Design system architecture |
 | 5️⃣ | `/phoenix.standardize` | `coding-standards` | Create coding standards |
-| 6️⃣ | `/phoenix.design` | `technical-design` | Create implementation plan |
-| 7️⃣ | `/phoenix.taskify` | `project-management` | Break down into tasks |
-| 8️⃣ | `/phoenix.analyze` | `technical-design-review` | Validate consistency |
+| 6️⃣ | `/phoenix.design` | `technical-detailed-design` | Create implementation plan |
+| 7️⃣ | `/phoenix.taskify` | `task-management` | Break down into tasks |
+| 8️⃣ | `/phoenix.analyze` | `technical-detailed-design-review` | Validate consistency |
 | 9️⃣ | `/phoenix.implement` | `coding` | Build features! |
 
 > **💡 Smart Context:** Phoenix skills automatically detect your active feature from your Git branch (like `001-feature-name`).

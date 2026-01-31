@@ -1,11 +1,11 @@
 ---
 name: nuxtjs-mockup
 description: Creates interactive UI mockups and prototypes using Nuxt 4, Vue 3, and Tailwind CSS 4 with Vite build tool. Builds responsive components, pages, and layouts from design specifications or wireframes. Use when creating mockups, prototypes, UI demos, design implementations, or when user mentions Nuxt prototype, Vue mockup, Tailwind demo, or interactive Vue demo.
-license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "2.0"
+  version: "2.0.0"
   last-updated: "2026-01-27"
+license: MIT
 ---
 
 # Nuxt.js Mockup Skill

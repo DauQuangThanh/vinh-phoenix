@@ -1,11 +1,11 @@
 ---
 name: bug-analysis
 description: Analyzes and documents bugs systematically, creates structured bug reports, identifies root causes, and suggests fixes. Use when investigating issues, debugging problems, analyzing failures, or when user mentions bugs, errors, crashes, failures, or debugging.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
   category: debugging
+license: MIT
 ---
 
 # Bug Analysis Skill

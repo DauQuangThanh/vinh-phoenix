@@ -4,12 +4,14 @@ description: Converts tasks from tasks.md into Azure DevOps work items with depe
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
 ---
 
 # Tasks to Azure DevOps Work Items
 
-Converts structured tasks from `tasks.md` into Azure DevOps work items in the correct project, maintaining dependencies and tracking synchronization state.
+## Overview
+
+This skill converts structured tasks from `tasks.md` into Azure DevOps work items in the correct project, maintaining dependencies and tracking synchronization state.
 
 ## When to Use
 

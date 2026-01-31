@@ -3,7 +3,7 @@ name: coding
 description: Executes feature implementation by processing tasks.md files, validating checklists, setting up project structure, and implementing code following architectural patterns and coding standards. Handles phase-by-phase execution with TDD approach, dependency management, and progress tracking. Use when implementing features, executing task plans, coding from specifications, or when user mentions implement tasks, execute implementation, code feature, or follow task breakdown.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---
@@ -26,7 +26,7 @@ This skill executes feature implementations by processing structured task lists 
 
 **Related Skills:**
 
-- **Before coding**: Use `technical-design` and `project-management` skills for planning
+- **Before coding**: Use `technical-detailed-design` and `task-management` skills for planning
 - **After coding**: Use `code-review` skill for quality validation
 - **During coding**: Use `bug-analysis` skill if issues discovered
 - **Standards**: Use `coding-standards` skill if standards.md is missing

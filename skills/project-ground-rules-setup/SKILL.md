@@ -10,6 +10,10 @@ metadata:
 
 # Project Ground Rules Setup
 
+## Overview
+
+This skill guides you through creating or updating the project ground-rules document at `docs/ground-rules.md`. It follows a structured approach that loads templates, collects values for placeholders, applies semantic versioning to track governance changes, propagates changes to dependent templates, validates consistency across the codebase, and automatically commits changes with proper git messages.
+
 ## When to Use
 
 - Setting up initial project governance and development principles
@@ -24,17 +28,6 @@ metadata:
 - Write access to `docs/` directory
 - Git initialized in the repository (for auto-commit functionality)
 - Access to dependent template files (if synchronization with other templates is required)
-
-## Overview
-
-This skill guides you through creating or updating the project ground-rules document at `docs/ground-rules.md`. It follows a structured approach that:
-
-1. Loads the ground-rules template
-2. Collects/derives values for all placeholders
-3. Applies semantic versioning to track governance changes
-4. Propagates changes to dependent templates
-5. Validates consistency across the codebase
-6. Automatically commits changes with proper git message
 
 ## Instructions
 
@@ -140,7 +133,7 @@ Apply semantic versioning rules:
 
 #### Templates to check and update (if present)
 
-1. **Design Template** (in `technical-design` skill)
+1. **Design Template** (in `technical-detailed-design` skill)
    - Ensure "Ground-rules Check" sections align with updated principles
    - Update any hardcoded rule references
 
@@ -149,15 +142,11 @@ Apply semantic versioning rules:
    - Update if ground-rules adds/removes mandatory sections
    - Check constraints match new principles
 
-3. **Tasks Template** (in `project-management` skill)
+3. **Tasks Template** (in `task-management` skill)
    - Update task categorization for new/removed principles
    - Ensure principle-driven task types are current (e.g., observability, versioning, testing)
 
-4. **Command Files** (`commands/*.md`)
-   - Verify no outdated principle references
-   - Update generic guidance if required
-
-5. **Runtime Documentation**
+4. **Runtime Documentation**
    - `README.md`
    - `docs/quickstart.md`
    - Any agent-specific guidance files

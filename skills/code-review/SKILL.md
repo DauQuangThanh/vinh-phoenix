@@ -3,7 +3,7 @@ name: code-review
 description: Reviews implemented code against specifications, architecture, and standards. Validates test coverage, checks compliance with design patterns, verifies checklist completion, and generates comprehensive review reports. Use when reviewing code, validating implementation quality, checking standards compliance, or when user mentions code review, review implementation, validate code, or check quality.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---

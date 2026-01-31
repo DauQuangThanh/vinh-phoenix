@@ -3,12 +3,16 @@ name: architecture-design
 description: Create comprehensive system architecture documentation for products using C4 model diagrams, ADRs, and quality attribute strategies. Use when designing product architecture, creating architecture documentation, or when the user mentions architecture design, system design, C4 diagrams, or architectural decisions.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---
 
 # Architecture Design Skill
+
+## Overview
+
+This skill creates comprehensive system architecture documentation for products using C4 model diagrams, Architecture Decision Records (ADRs), and quality attribute strategies. It guides product-level architecture design, documents architectural decisions, defines quality requirements, and plans deployment architecture and infrastructure.
 
 ## When to Use
 
@@ -276,7 +280,7 @@ git commit -m "docs: add system architecture documentation"
 
 - If review passes, proceed to create feature specifications using `requirements-specification` skill
 - Use `coding-standards` skill to establish code conventions
-- Use `technical-design` skill for individual feature implementation planning
+- Use `technical-detailed-design` skill for individual feature implementation planning
 
 ## Examples
 

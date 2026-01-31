@@ -1,14 +1,18 @@
 ---
 name: requirements-specification
 description: Creates or updates feature specifications from natural language descriptions. Generates branch names, validates specification quality, and ensures requirements are testable and unambiguous. Use when creating product requirements, defining new features, documenting user needs, or when user mentions specifications, requirements gathering, feature definition, or needs to write a spec.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
   last-updated: "2026-01-27"
+license: MIT
 ---
 
 # Requirements Specification
+
+## Overview
+
+This skill creates or updates feature specifications from natural language descriptions, generating structured documentation with testable requirements, user stories, and acceptance criteria. It validates specification quality and ensures requirements are unambiguous and complete.
 
 ## When to Use
 
@@ -25,7 +29,7 @@ Use this skill when:
 
 - Use `coding-standards` skill to establish product-level coding conventions
 - Use `architecture-design` skill for system architecture documentation
-- Use `technical-design` skill for feature-level implementation planning
+- Use `technical-detailed-design` skill for feature-level implementation planning
 
 ## Prerequisites
 
@@ -313,7 +317,7 @@ Report to user with:
 
 - If review passes, proceed to architecture (if new product) or technical design (if adding feature)
 - Use `architecture-design` skill for new product architecture
-- Use `technical-design` skill for feature implementation planning
+- Use `technical-detailed-design` skill for feature implementation planning
 
 ## Examples
 

@@ -3,7 +3,7 @@ name: project-consistency-analysis
 description: Performs read-only cross-artifact consistency analysis across spec.md, design.md, and tasks.md. Detects duplications, ambiguities, coverage gaps, ground-rules violations, and inconsistencies. Generates structured analysis reports with severity levels and remediation recommendations. Use when validating project artifacts, checking consistency, analyzing quality, or when user mentions analyze project, check consistency, validate artifacts, or quality analysis.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---

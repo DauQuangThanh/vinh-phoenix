@@ -1,11 +1,11 @@
 ---
 name: coding-standards
 description: Generates comprehensive coding standards and conventions documentation covering UI naming (mandatory for frontend), code naming, file structure, API design, database conventions, testing, Git workflow, documentation standards, and code style guide. Use when creating product-level standards, establishing coding conventions, standardizing development practices, or when user mentions standards, conventions, style guide, naming conventions, or code quality guidelines.
-license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
+license: MIT
 ---
 
 # Coding Standards Generation Skill

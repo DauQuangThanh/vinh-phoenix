@@ -61,7 +61,7 @@ Phoenix includes **18 modular skills**, each containing:
 |----------|--------|----------|
 | **Requirements** | `requirements-specification`<br/>`requirements-specification-review` | Define and validate what to build |
 | **Architecture** | `architecture-design`<br/>`architecture-design-review`<br/>`context-assessment` | Design systems and understand existing codebases |
-| **Planning** | `technical-design`<br/>`technical-design-review`<br/>`project-management` | Create implementation plans and track progress |
+| **Planning** | `technical-detailed-design`<br/>`technical-detailed-design-review`<br/>`task-management` | Create implementation plans and track progress |
 | **Standards** | `coding-standards`<br/>`project-ground-rules-setup`<br/>`project-consistency-analysis` | Establish and maintain quality standards |
 | **Implementation** | `coding`<br/>`code-review` | Write and review code |
 | **Testing** | `e2e-test-design` | Design comprehensive test suites |
@@ -245,7 +245,7 @@ After running `phoenix init`, **18 agent skills** will be discoverable by your A
 **What gets installed:**
 
 - 18 reusable skill modules (in `skills/`), each with its own templates and scripts
-- Skills like `requirements-specification`, `technical-design`, `coding`, etc.
+- Skills like `requirements-specification`, `technical-detailed-design`, `coding`, etc.
 - Both bash and PowerShell scripts included automatically
 
 **How agents use skills:**
@@ -272,8 +272,8 @@ After running `phoenix init`, your AI assistant can leverage these skills:
 | `requirements-specification-review` | When you ask to clarify underspecified requirements through structured questioning | `docs:` |
 | `architecture-design` | When you request system architecture documentation with diagrams | `docs:` |
 | `coding-standards` | When you need coding standards and conventions documented | `docs:` |
-| `technical-design` | When you specify the tech stack and implementation approach | `docs:` |
-| `project-management` | When you ask to break down a design into actionable tasks | `docs:` |
+| `technical-detailed-design` | When you specify the tech stack and implementation approach | `docs:` |
+| `task-management` | When you ask to break down a design into actionable tasks | `docs:` |
 | `project-consistency-analysis` | When you request analysis of plan consistency and coverage | `docs:` |
 | `coding` | When you ask to implement tasks according to a plan | `feat:`, `fix:`, `test:` (context-dependent) |
 | `e2e-test-design` | When you request end-to-end test specifications for the product | `test:` |
@@ -361,7 +361,7 @@ After running `phoenix init`, your project structure:
 ├── .<agent>/              # Agent-specific folder (.claude/, .github/, .gemini/)
 │   └── skills/            # 18 reusable skill modules
 │       ├── requirements-specification/
-│       ├── technical-design/
+│       ├── technical-detailed-design/
 │       ├── coding/
 │       └── ... (15 more)
 │
@@ -384,9 +384,9 @@ After running `phoenix init`, your project structure:
 | -------------- | --------- |
 | `requirements-specification` | Create feature specifications from natural language |
 | `requirements-specification-review` | Structured clarification workflow |
-| `technical-design` | Generate implementation plans with tech stack |
-| `technical-design-review` | Validate design consistency and coverage |
-| `project-management` | Break down designs into actionable tasks |
+| `technical-detailed-design` | Generate implementation plans with tech stack |
+| `technical-detailed-design-review` | Validate design consistency and coverage |
+| `task-management` | Break down designs into actionable tasks |
 | `coding` | Execute tasks and build features |
 | `architecture-design` | Document system architecture (C4 diagrams) |
 | `architecture-design-review` | Review architecture completeness |
@@ -545,7 +545,7 @@ It's important to use the interaction with Claude Code as an opportunity to clar
 
 #### **STEP 4:** Generate a technical design
 
-You can now be specific about the tech stack and other technical requirements. When you specify technical details and implementation approach, the `technical-design` skill will automatically activate. Use a prompt like this:
+You can now be specific about the tech stack and other technical requirements. When you specify technical details and implementation approach, the `technical-detailed-design` skill will automatically activate. Use a prompt like this:
 
 ```text
 We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use
@@ -619,7 +619,7 @@ You can also ask Claude Code (if you have the [GitHub CLI](https://docs.github.c
 
 #### **STEP 6:** Generate task breakdown
 
-With the implementation plan validated, you can now break down the plan into specific, actionable tasks that can be executed in the correct order. When you ask to break down the design into tasks, the `project-management` skill will automatically activate to generate a detailed task breakdown from your implementation plan:
+With the implementation plan validated, you can now break down the plan into specific, actionable tasks that can be executed in the correct order. When you ask to break down the design into tasks, the `task-management` skill will automatically activate to generate a detailed task breakdown from your implementation plan:
 
 ```text
 Break down the technical design into actionable tasks
@@ -730,7 +730,7 @@ This ensures all edge cases and integration points with the existing system are 
 
 #### **STEP 5:** Design integration plan
 
-Create a technical plan that integrates with the existing architecture. The `technical-design` skill will automatically activate:
+Create a technical plan that integrates with the existing architecture. The `technical-detailed-design` skill will automatically activate:
 
 ```text
 Create a technical design that follows the existing email service pattern identified in the context assessment. 
@@ -741,7 +741,7 @@ The plan will reference existing components, patterns, and conventions from the 
 
 #### **STEP 6:** Generate task breakdown
 
-Break down the implementation into specific tasks. The `project-management` skill will automatically activate:
+Break down the implementation into specific tasks. The `task-management` skill will automatically activate:
 
 ```text
 Break down the technical design into actionable tasks

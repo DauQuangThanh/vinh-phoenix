@@ -100,8 +100,8 @@ Your AI agent should have discovered these core skills:
 | --------- | ---------- |
 | `project-ground-rules-setup` | When you ask to establish project principles |
 | `requirements-specification` | When you describe what to build |
-| `technical-design` | When you specify tech stack and implementation |
-| `project-management` | When you ask to break down work |
+| `technical-detailed-design` | When you specify tech stack and implementation |
+| `task-management` | When you ask to break down work |
 | `coding` | When you ask to implement |
 
 ### 2. Check Installation

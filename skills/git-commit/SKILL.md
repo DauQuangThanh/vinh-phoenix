@@ -3,14 +3,30 @@ name: git-commit
 description: Generates well-structured git commit messages following conventional commit standards (feat, fix, docs, refactor). Creates clear, atomic commits with proper formatting and context. Use when committing changes, writing commit messages, or when user mentions commit, git commit, conventional commits, or changelog.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---
 
 # Git Commit
 
-Generates well-structured git commit messages following conventional commit standards and best practices.
+## Overview
+
+This skill generates well-structured git commit messages following conventional commit standards and best practices. It helps create clear, atomic commits with proper formatting and context.
+
+## When to Use
+
+- Committing code changes to version control
+- Writing conventional commit messages
+- Creating changelog-ready commits
+- Following team commit standards
+- User mentions: "commit", "git commit", "conventional commits", "changelog"
+
+## Prerequisites
+
+- Git installed and initialized repository
+- Changes staged for commit
+- Understanding of changes being committed
 
 ## Key Principles
 

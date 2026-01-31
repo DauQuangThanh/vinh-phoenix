@@ -1,14 +1,14 @@
 ---
-name: technical-design
+name: technical-detailed-design
 description: Executes implementation planning workflow to generate technical, detailed design artifacts including design documents, research findings, data models, and API contracts. Use when creating or updating detailed technical designs, planning feature implementation, designing system components, or when user mentions technical design creation, detailed design, API design, data modeling, implementation planning, or design updates.
-license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
   last-updated: "2026-01-29"
+license: MIT
 ---
 
-# Technical Design Skill
+# Technical Detailed Design Skill
 
 ## Overview
 
@@ -26,7 +26,7 @@ This skill guides you through a structured implementation planning workflow to c
 
 **Next Steps After Creating Technical Design:**
 
-- Use `project-management` skill to create task breakdown (tasks.md)
+- Use `task-management` skill to create task breakdown (tasks.md)
 - Use `e2e-test-design` skill for end-to-end test planning
 - Use `coding` skill to execute implementation
 - Use `bug-analysis` skill if issues are discovered during development
@@ -304,7 +304,7 @@ Design user authentication with email/password and OAuth support
 
 **After completing the technical design, it's highly recommended to run a quality review:**
 
-1. **Run the technical-design-review skill** to validate:
+1. **Run the technical-detailed-design-review skill** to validate:
    - Alignment with architecture and specifications
    - Completeness of technical decisions
    - Feasibility and implementability
@@ -320,7 +320,7 @@ Design user authentication with email/password and OAuth support
 - If review passes, proceed to implementation using `coding` skill
 - **Recommended:** Ensure `coding-standards` skill has been used to establish code conventions before coding begins
 - Consider `e2e-test-design` skill for comprehensive test planning
-- Use `project-management` skill to break design into actionable tasks
+- Use `task-management` skill to break design into actionable tasks
 
 ### Example 2: Payment Processing Integration
 

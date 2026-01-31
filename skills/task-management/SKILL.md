@@ -1,14 +1,14 @@
 ---
-name: project-management
+name: task-management
 description: Generates actionable, dependency-ordered tasks.md files from design artifacts (spec.md, design.md, architecture.md). Organizes implementation tasks by user story with parallelization markers and test criteria. Use when breaking down features into tasks, creating implementation plans, or when user mentions tasks, project planning, implementation roadmap, task breakdown, or feature decomposition.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
 license: MIT
 ---
 
-# Project Management Skill
+# Task Management Skill
 
 ## Overview
 
@@ -352,7 +352,7 @@ This skill includes cross-platform scripts for checking prerequisites and identi
 ### Bash Script (Unix/Linux/macOS)
 
 ```bash
-bash skills/project-management/scripts/check-prerequisites.sh --json
+bash skills/task-management/scripts/check-prerequisites.sh --json
 ```
 
 **Features:**
@@ -365,7 +365,7 @@ bash skills/project-management/scripts/check-prerequisites.sh --json
 ### PowerShell Script (Windows)
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File skills/project-management/scripts/check-prerequisites.ps1 -Json
+powershell -ExecutionPolicy Bypass -File skills/task-management/scripts/check-prerequisites.ps1 -Json
 ```
 
 **Features:**
@@ -440,6 +440,6 @@ Before finalizing tasks.md, validate for AI implementation:
 **Before creating tasks:**
 
 - Ensure `requirements-specification` skill has been used to create feature specs
-- Ensure `technical-design` skill has been used to create implementation design
+- Ensure `technical-detailed-design` skill has been used to create implementation design
 - **Recommended:** Use `coding-standards` skill to establish code conventions (if not yet created)
 - Consider `architecture-design` skill for product-level architecture (if not yet created)

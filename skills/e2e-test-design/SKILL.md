@@ -1,11 +1,11 @@
 ---
 name: e2e-test-design
 description: Generates comprehensive end-to-end test plans and specifications covering test strategy, user journeys, test scenarios, test data management, test environments, test automation framework selection, and execution plans. Use when designing E2E tests, creating test specifications, planning test automation, or when user mentions end-to-end testing, E2E test plan, test scenarios, test automation, integration testing, or system testing.
-license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
+  version: "1.0.0"
   last-updated: "2026-01-27"
+license: MIT
 ---
 
 # E2E Test Design Skill
@@ -89,7 +89,7 @@ scripts/check-e2e-prerequisites.sh --json
      - `docs/ground-rules.md` (required)
      - At least one specification file in `specs/*/spec.md` (required)
      - Design documents in `docs/design.md` or `specs/*/design.md` (required)
-   - If required files are missing, inform user: "E2E test design requires specifications and design documents. Please create them first using the requirements-specification and technical-design skills."
+   - If required files are missing, inform user: "E2E test design requires specifications and design documents. Please create them first using the requirements-specification and technical-detailed-design skills."
    - DO NOT PROCEED without these files
 
 2. **Read context files** in order:
