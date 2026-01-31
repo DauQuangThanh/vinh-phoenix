@@ -96,7 +96,7 @@ if command -v git &> /dev/null && git rev-parse --git-dir &> /dev/null 2>&1; the
         
         if [[ -d "$FEATURE_DIR" ]]; then
             FEATURE_SPEC="$FEATURE_DIR/spec.md"
-            FEATURE_DESIGN="$FEATURE_DIR/design/design.md"
+            FEATURE_DESIGN="$FEATURE_DIR/design.md"
             TASKS="$FEATURE_DIR/tasks.md"
             
             if [[ "$PATHS_ONLY" == "false" ]]; then

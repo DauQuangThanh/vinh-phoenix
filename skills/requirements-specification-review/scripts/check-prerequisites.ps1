@@ -82,7 +82,7 @@ try {
                 
                 if (Test-Path $FeatureDir) {
                     $FeatureSpec = "$FeatureDir/spec.md"
-                    $FeatureDesign = "$FeatureDir/design/design.md"
+                    $FeatureDesign = "$FeatureDir/design.md"
                     $Tasks = "$FeatureDir/tasks.md"
                     
                     if (-not $PathsOnly) {

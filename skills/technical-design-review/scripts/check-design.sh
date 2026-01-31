@@ -85,7 +85,7 @@ DESIGN_DIR=""
 if [[ "$HAS_GIT" == "true" ]] && [[ "$CURRENT_BRANCH" =~ ^[0-9]+-.*$ ]]; then
     # Feature branch pattern (e.g., 123-feature-name)
     FEATURE_NUM=$(echo "$CURRENT_BRANCH" | grep -oE '^[0-9]+')
-    DESIGN_DIR="$REPO_ROOT/specs/$FEATURE_NUM-*/design"
+    DESIGN_DIR="$REPO_ROOT/specs/$FEATURE_NUM-*"
     # Find actual directory (handle wildcard)
     if compgen -G "$DESIGN_DIR" > /dev/null; then
         DESIGN_DIR=$(compgen -G "$DESIGN_DIR" | head -n 1)

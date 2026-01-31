@@ -46,7 +46,7 @@ This skill guides you through a structured implementation planning workflow to c
 - `docs/ground-rules.md` - Project constraints and standards
 - `docs/architecture.md` - Architectural decisions and patterns
 
-**Important:** Technical design must be done on a feature branch. The design artifacts will be created in `specs/N-feature-name/design/` directory.
+**Important:** Technical design must be done on a feature branch. The design artifacts will be created in `specs/N-feature-name/` directory.
 
 ## Instructions
 
@@ -102,7 +102,7 @@ This skill guides you through a structured implementation planning workflow to c
 
    The script will:
    - Verify you're on a feature branch (format: `N-feature-name`)
-   - Create `specs/N-feature-name/design/` directory structure
+   - Create `specs/N-feature-name/` directory structure
    - Copy all templates from skill's `templates/` directory
    - Return JSON with paths: `feature_design`, `research_file`, `data_model_file`, `contracts_dir`
 
@@ -260,11 +260,11 @@ This skill guides you through a structured implementation planning workflow to c
 1. **Stage all design files** (replace N-feature-name with actual feature branch name):
 
    ```bash
-   git add specs/N-feature-name/design/design.md
-   git add specs/N-feature-name/design/research/research.md
-   git add specs/N-feature-name/design/data-model.md
-   git add specs/N-feature-name/design/contracts/
-   git add specs/N-feature-name/design/quickstart.md
+   git add specs/N-feature-name/design.md
+   git add specs/N-feature-name/research/research.md
+   git add specs/N-feature-name/data-model.md
+   git add specs/N-feature-name/contracts/
+   git add specs/N-feature-name/quickstart.md
    ```
 
 2. **Create commit with 'feat:' prefix**:
@@ -298,7 +298,7 @@ Design user authentication with email/password and OAuth support
 5. contracts/ includes: POST /auth/login, POST /auth/register, GET /auth/me, POST /auth/oauth/callback
 6. quickstart.md outlines: auth middleware setup, token validation, refresh flow
 
-**Output**: Complete design package in specs/N-feature-name/design/ directory, committed to git
+**Output**: Complete design package in specs/N-feature-name/ directory, committed to git
 
 ### Step 9: Quality Review (Recommended)
 

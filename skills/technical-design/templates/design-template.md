@@ -153,7 +153,7 @@
 
 **Status**: Not Started | In Progress | Completed
 
-**Research Document**: `design/research/research.md`
+**Research Document**: `research/research.md`
 
 ### 5.1 Research Tasks
 
@@ -181,7 +181,7 @@
 
 **Status**: Not Started | In Progress | Completed
 
-**Data Model Document**: `design/data-model.md`
+**Data Model Document**: `data-model.md`
 
 ### 6.1 Entity Summary
 
@@ -210,7 +210,7 @@
 
 **Status**: Not Started | In Progress | Completed
 
-**Contract Location**: `design/contracts/`
+**Contract Location**: `contracts/`
 
 ### 7.1 API Endpoints Summary
 

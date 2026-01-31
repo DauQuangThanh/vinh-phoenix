@@ -104,7 +104,7 @@ try {
 
 # Design directory location - always feature-specific
 if ($FeatureDir -and (Test-Path $FeatureDir)) {
-    $DesignDir = "$FeatureDir/design"
+    $DesignDir = "$FeatureDir"
     Write-InfoMessage "Using feature-specific design directory: $DesignDir"
 } else {
     Write-ErrorMessage "Feature directory not found: $FeatureDir"

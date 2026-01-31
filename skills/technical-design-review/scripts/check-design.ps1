@@ -89,7 +89,7 @@ if ($HasGit -and $CurrentBranch -match '^\d+-.+$') {
     # Feature branch pattern (e.g., 123-feature-name)
     if ($CurrentBranch -match '^(\d+)-') {
         $FeatureNum = $Matches[1]
-        $SpecsPattern = Join-Path $RepoRoot "specs\$FeatureNum-*\design"
+        $SpecsPattern = Join-Path $RepoRoot "specs\$FeatureNum-*"
         $SpecsDirs = Get-Item $SpecsPattern -ErrorAction SilentlyContinue
         if ($SpecsDirs) {
             $DesignDir = $SpecsDirs[0].FullName

@@ -104,7 +104,7 @@ fi
 
 # Design directory location - always feature-specific
 if [[ -n "$FEATURE_DIR" && -d "$FEATURE_DIR" ]]; then
-    DESIGN_DIR="$FEATURE_DIR/design"
+    DESIGN_DIR="$FEATURE_DIR"
     print_info "Using feature-specific design directory: $DESIGN_DIR"
 else
     print_error "Feature directory not found: $FEATURE_DIR"

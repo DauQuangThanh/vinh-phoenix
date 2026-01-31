@@ -29,11 +29,11 @@ This skill performs comprehensive reviews of technical design documentation to e
 ## Prerequisites
 
 - **Technical design documentation**:
-  - `design/design.md` or `specs/*/design/design.md` - Main design document (Required)
-  - `design/research/research.md` - Research findings and decisions (Required)
-  - `design/data-model.md` - Data model documentation (Required)
-  - `design/contracts/*.md` - API contract specifications (Required)
-  - `design/quickstart.md` - Implementation guide (Optional but recommended)
+  - `design/design.md` or `specs/*/design.md` - Main design document (Required)
+  - `design/research/research.md` or `specs/*/research/research.md` - Research findings and decisions (Required)
+  - `design/data-model.md` or `specs/*/data-model.md` - Data model documentation (Required)
+  - `design/contracts/*.md` or `specs/*/contracts/*.md` - API contract specifications (Required)
+  - `design/quickstart.md` or `specs/*/quickstart.md` - Implementation guide (Optional but recommended)
 - **Supporting documents**:
   - `docs/ground-rules.md` - Project constraints (Optional but recommended)
   - `docs/architecture.md` - Architectural patterns (Optional but recommended)
