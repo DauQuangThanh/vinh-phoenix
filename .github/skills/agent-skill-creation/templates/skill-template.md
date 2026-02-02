@@ -3,179 +3,169 @@ name: skill-name
 description: "[ACTION 1], [ACTION 2], and [ACTION 3]. Use when [SCENARIO 1], [SCENARIO 2], or when user mentions [KEYWORD 1], [KEYWORD 2], or [KEYWORD 3]."
 license: MIT
 metadata:
-  author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "YYYY-MM-DD"
+  author: Your Name
+  version: "1.0"
+  last_updated: "YYYY-MM-DD"
 ---
 
 # Skill Name
 
+## Overview
+
+[Brief 2-3 sentence explanation of what this skill does and its primary purpose]
+
 ## When to Use
 
-- [Scenario 1: When to activate this skill]
-- [Scenario 2: Another use case]
-- [Scenario 3: Additional context]
+- [Specific scenario 1]
+- [Specific scenario 2]
+- [Specific scenario 3]
+- [User request pattern]
 
 ## Prerequisites
 
-- [Required tool or package 1]
-- [Required tool or package 2]
-- [Environment requirement if any]
+**Required:**
+- [Tool/package name] version X.X+
+- [Another requirement]
+
+**Optional:**
+- [Optional tool/package]
 
 ## Instructions
 
-### Step 1: [First Action]
+### Step 1: [Action Name]
 
-[Provide clear, step-by-step instructions for the first action]
+[Clear, specific instructions for this step]
 
-- Detail 1
-- Detail 2
-- Detail 3
+**Details:**
+- [Specific sub-step or consideration]
+- [Another important point]
 
-### Step 2: [Second Action]
-
-[Continue with sequential steps]
-
+**Example:**
 ```bash
-# Example command if applicable
 command --option value
 ```
 
-### Step 3: [Third Action]
+### Step 2: [Action Name]
 
-[Final steps to complete the task]
+[More instructions]
+
+**Validation:**
+- [ ] Check 1
+- [ ] Check 2
+
+### Step 3: [Action Name]
+
+[Continue with remaining steps]
 
 ## Examples
 
 ### Example 1: [Use Case Name]
 
+**Scenario:** [Description of the situation]
+
 **Input:**
-
 ```
-[Show example input]
-```
-
-**Expected Output:**
-
-```
-[Show expected result]
+[Sample input]
 ```
 
-**Explanation:**
-[Brief explanation of what happened]
+**Command/Action:**
+```bash
+command input.txt --output result.txt
+```
+
+**Output:**
+```
+[Expected output]
+```
+
+**Explanation:** [What happened and why]
 
 ### Example 2: [Another Use Case]
 
-**Input:**
-
-```
-[Another example]
-```
-
-**Expected Output:**
-
-```
-[Another result]
-```
+[Similar structure]
 
 ## Edge Cases
 
-### Case 1: [Unusual Situation]
+### Case 1: [Specific Situation]
 
-**Description**: [Explain the edge case]
+**Scenario:** [Describe the unusual situation]
 
-**Handling**: [How to handle this situation]
+**Handling:**
+1. [Step to detect/handle]
+2. [What to do]
+3. [Expected outcome]
 
-### Case 2: [Error Condition]
+**Example:**
+```
+[Code or command showing handling]
+```
 
-**Description**: [Explain the error condition]
+### Case 2: [Another Edge Case]
 
-**Handling**: [Steps to resolve]
+[Similar structure]
 
 ## Error Handling
 
-### Error: [Error Type 1]
+### Error: [Error Type or Message]
 
-**Symptoms**: [How to identify this error]
+**Symptom:** 
+```
+[Error message or behavior]
+```
 
-**Cause**: [Why this error occurs]
+**Cause:** [Why this error occurs]
 
-**Resolution**:
+**Solution:**
+1. [Step 1 to fix]
+2. [Step 2 to fix]
 
-1. [Step to resolve]
-2. [Another step]
+**Prevention:** [How to avoid this error]
 
-### Error: [Error Type 2]
+### Error: [Another Error]
 
-**Symptoms**: [Error indicators]
+[Similar structure]
 
-**Resolution**: [How to fix]
+## Scripts (If Applicable)
 
-## Scripts
+### Script Name
 
-If your skill includes executable scripts, document them here:
+**Purpose:** [What the script does]
 
-### Cross-Platform Script (Recommended)
-
+**Usage:**
 ```bash
-# Python script works on all platforms
-python3 scripts/script-name.py --input file.txt --output result.txt
+python3 scripts/script-name.py <input> [--option value]
 ```
 
-**Requirements:**
+**Options:**
+- `input` (required): [Description]
+- `--option` (optional): [Description]
 
-- Python 3.8+
-- [Package name]: `pip install package-name`
-
-### Platform-Specific Scripts
-
-**macOS/Linux (Bash):**
-
+**Example:**
 ```bash
-chmod +x scripts/script-name.sh
-./scripts/script-name.sh --input file.txt
+python3 scripts/process.py data.csv --output results/
 ```
 
-**Windows (PowerShell):**
+## Quality Checklist
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/script-name.ps1 -Input file.txt
-```
+Before considering this task complete:
 
-## Guidelines
+- [ ] [Requirement 1]
+- [ ] [Requirement 2]
+- [ ] [Validation check]
+- [ ] [Test passed]
 
-1. [Guideline 1: Important rule to follow]
-2. [Guideline 2: Best practice]
-3. [Guideline 3: Convention to maintain]
+## Tips
 
-## Validation
-
-To validate this skill:
-
-```bash
-# If validation script available
-python3 scripts/validate-skill.py .
-```
-
-**Manual Checks:**
-
-- [ ] All instructions are clear and actionable
-- [ ] Examples cover common use cases
-- [ ] Edge cases documented
-- [ ] Scripts tested on target platforms
+1. **[Tip Category]**: [Helpful advice]
+2. **[Another Tip]**: [More guidance]
+3. **[Best Practice]**: [Recommended approach]
 
 ## Additional Resources
 
-- See [references/detailed-guide.md](references/detailed-guide.md) for in-depth information
-- See [references/api-reference.md](references/api-reference.md) for technical details
-- See [templates/output-template.md](templates/output-template.md) for output format
+For more detailed information:
+- [references/topic.md](references/topic.md) - [Description]
+- [templates/template.ext](templates/template.ext) - [Description]
 
 ---
 
-**Notes:**
-
-- Replace all [PLACEHOLDER] text with actual content
-- Remove sections not applicable to your skill
-- Keep SKILL.md under 500 lines
-- Move extensive details to references/
-- Test thoroughly before deploying
+**Note:** [Any important notes or warnings]
