@@ -1,10 +1,10 @@
 ---
 name: architecture-design
-description: Create comprehensive system architecture documentation for products using C4 model diagrams, ADRs, and quality attribute strategies. Use when designing product architecture, creating architecture documentation, or when the user mentions architecture design, system design, C4 diagrams, or architectural decisions.
+description: Creates comprehensive system architecture documentation using C4 model diagrams and ADRs. Use when designing product architecture, defining quality strategies, or when user mentions architecture design, system design, C4 diagrams, or architectural decisions.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "1.1.0"
+  last_updated: "2026-02-02"
 license: MIT
 ---
 
@@ -29,6 +29,7 @@ This skill creates comprehensive system architecture documentation for products 
 
 **Required Tools**:
 
+- Python 3.8+
 - Git (recommended for version control)
 - File system access to project repository
 
@@ -80,22 +81,11 @@ This skill creates comprehensive system architecture documentation for products 
 
 Run the setup script to prepare the architecture environment:
 
-**Bash (macOS/Linux)**:
-
 ```bash
-cd <SKILL_DIR>/scripts
-./setup-architect.sh --json
-```
-
-**PowerShell (Windows)**:
-
-```powershell
-cd <SKILL_DIR>/scripts
-./setup-architect.ps1 -Json
+python3 <SKILL_DIR>/scripts/setup_architect.py
 ```
 
 The script will:
-
 - Detect repository root
 - Create `docs/` and `docs/adr/` directories
 - Copy architecture template to `docs/architecture.md`
@@ -103,7 +93,6 @@ The script will:
 - Return paths and metadata in JSON format
 
 **Parse the JSON output** to get:
-
 - `ARCH_DOC`: Path to the architecture document
 - `DOCS_DIR`: Documentation directory
 - `ADR_DIR`: Architecture Decision Records directory
@@ -234,18 +223,8 @@ Document ADRs for major architectural choices and map quality strategies to requ
 
 After completing the architecture, update agent-specific context files:
 
-**Bash (macOS/Linux)**:
-
 ```bash
-cd <SKILL_DIR>/scripts
-./update-agent-context.sh [agent-type]
-```
-
-**PowerShell (Windows)**:
-
-```powershell
-cd <SKILL_DIR>/scripts
-./update-agent-context.ps1 -AgentType [agent-type]
+python3 <SKILL_DIR>/scripts/update_agent_context.py [agent-type]
 ```
 
 **Supported agent types**: claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, roo, codebuddy, amp, shai, q, bob, jules, qoder, antigravity
@@ -328,24 +307,14 @@ git commit -m "docs: add system architecture documentation"
 3. **Mermaid Diagrams Required**: All diagrams MUST use Mermaid format embedded in markdown
 4. **ADRs Are Mandatory**: Every major architectural decision MUST have an ADR
 5. **Measurable Targets**: Quality attribute targets must be specific and measurable (not "fast", but "95% < 200ms")
-6. **Respect Ground Rules**: Ground-rules constraints MUST be respected; violations must be justified
-7. **Reference Specs**: Document which feature specs influenced each architectural decision
+6. **Reference Specs**: Document which feature specs influenced each architectural decision
+7. **Respect Ground Rules**: Ground-rules constraints MUST be respected; violations must be justified
 8. **Concrete Values**: Use concrete numbers, versions, URLs (not placeholders)
-9. **Non-Technical Summary**: Executive Summary must be understandable for business stakeholders
-10. **One Architecture Per Product**: This is product-level, not feature-level planning
+9. **One Architecture Per Product**: This is product-level, not feature-level planning
 
 ## Architecture Decision Record (ADR) Format
 
 See [references/c4-and-adr-guide.md](references/c4-and-adr-guide.md) for detailed ADR template with complete example.
-
-Each ADR should include:
-
-- **Status**, **Date**, **Deciders**
-- **Context**: Issue prompting decision
-- **Decision**: Chosen approach
-- **Rationale**: Why this choice
-- **Consequences**: Positive and negative impacts
-- **Alternatives Considered**: Other options and why rejected
 
 ## Edge Cases
 
@@ -361,23 +330,7 @@ Each ADR should include:
 
 **Handling**: Consider: team size, deployment frequency, scalability needs, organizational structure. Document decision in ADR with clear rationale. Default to monolith for small teams unless specific drivers require microservices.
 
-### Case 4: Multiple Deployment Targets
-
-**Handling**: Document primary deployment target in main architecture. Create separate deployment sections for each target (cloud, on-premise, hybrid). Note differences and constraints.
-
-### Case 5: Legacy System Integration
-
-**Handling**: Document legacy systems in C4 Context diagram. Create ADR for integration approach (API gateway, message queue, ETL). Note risks and migration strategies in technical debt section.
-
-### Case 6: Compliance Requirements
-
-**Handling**: Document compliance requirements (GDPR, HIPAA, PCI DSS) in Architecture Snapshot. Add security controls to Quality Attributes section. Create ADRs for compliance-driven decisions. Include audit logging and data protection strategies.
-
 ## Error Handling
-
-### Error: No Ground Rules File
-
-**Action**: Cannot proceed without ground-rules. Prompt user to create project principles first using project-ground-rules-setup skill or equivalent.
 
 ### Error: Template Not Found
 
@@ -387,77 +340,24 @@ Each ADR should include:
 
 **Action**: Validate Mermaid syntax using online editor (mermaid.live). Fix syntax errors. Test rendering in markdown preview.
 
-### Warning: No Feature Specifications
-
-**Action**: Can proceed but architecture will be high-level. Recommend creating feature specifications first for more detailed architecture.
-
-### Warning: Incomplete ADRs
-
-**Action**: Ensure each ADR has all required sections (Context, Decision, Rationale, Consequences, Alternatives). Don't leave placeholders.
-
-### Warning: Non-Measurable Quality Targets
-
-**Action**: Replace vague targets ("fast", "scalable") with specific metrics ("95% < 200ms", "10k concurrent users"). Use industry standards as reference.
-
-## Success Criteria
-
-Architecture design is complete when:
-
-- [ ] Executive Summary is clear and understandable for business stakeholders
-- [ ] Architecture Snapshot lists concrete constraints and quality targets
-- [ ] C4 Context diagram shows all user types and external systems
-- [ ] C4 Container diagram shows all major containers with technology choices
-- [ ] C4 Component diagram shows key components for critical containers
-- [ ] Deployment Summary includes runtime, regions, CI/CD, secrets management
-- [ ] At least 3-5 ADRs document major architectural decisions
-- [ ] Each ADR includes Context, Decision, Rationale, Consequences, Alternatives
-- [ ] Quality Attributes section has measurable targets for each attribute
-- [ ] Quality strategies map to specific quality attribute requirements
-- [ ] Risks identified with impact assessment and mitigation strategies
-- [ ] Agent Checklist is complete with concrete values (not placeholders)
-- [ ] All Mermaid diagrams render correctly
-- [ ] All "ACTION REQUIRED" comments are replaced with actual content
-- [ ] Ground-rules constraints are respected and documented
-- [ ] Architecture committed to git
-
 ## Scripts
 
-### setup-architect.sh / .ps1
+### setup_architect.py
 
 Creates architecture environment and copies template:
 
 ```bash
-# Bash
-cd <SKILL_DIR>/scripts
-./setup-architect.sh --json
-
-# PowerShell
-cd <SKILL_DIR>/scripts
-./setup-architect.ps1 -Json
+python3 <SKILL_DIR>/scripts/setup_architect.py
 ```
 
 **Returns**: JSON with paths (ARCH_DOC, DOCS_DIR, ADR_DIR, SPECS_DIR, SPEC_COUNT, FEATURE_SPECS, PRODUCT_NAME, GROUND_RULES)
 
-### update-agent-context.sh / .ps1
+### update_agent_context.py
 
 Updates agent-specific context with architecture decisions:
 
 ```bash
-# Bash - Update specific agent
-cd <SKILL_DIR>/scripts
-./update-agent-context.sh claude
-
-# Bash - Update all agents
-cd <SKILL_DIR>/scripts
-./update-agent-context.sh
-
-# PowerShell - Update specific agent
-cd <SKILL_DIR>/scripts
-./update-agent-context.ps1 -AgentType claude
-
-# PowerShell - Update all agents
-cd <SKILL_DIR>/scripts
-./update-agent-context.ps1
+python3 <SKILL_DIR>/scripts/update_agent_context.py [agent-type]
 ```
 
 ## Templates
@@ -466,37 +366,4 @@ cd <SKILL_DIR>/scripts
 
 Located at: `<SKILL_DIR>/templates/arch-template.md`
 
-Streamlined architecture template with sections for:
-
-- Executive Summary
-- Architecture Snapshot
-- System Overview (C4 Model with Mermaid diagrams)
-- Deployment Summary
-- Architecture Decisions (ADR Log)
-- Quality Attributes (Targets & Strategies)
-- Risks & Technical Debt
-- Agent Checklist
-
-Optimized for AI agent consumption with concrete values and minimal fluff.
-
-## Additional Resources
-
-- Template: `<SKILL_DIR>/templates/arch-template.md`
-- Setup Script: `<SKILL_DIR>/scripts/setup-architect.sh` (Bash)
-- Setup Script: `<SKILL_DIR>/scripts/setup-architect.ps1` (PowerShell)
-- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.sh` (Bash)
-- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.ps1` (PowerShell)
-- C4 Model: <https://c4model.com/>
-- Mermaid Live Editor: <https://mermaid.live/>
-- ADR Templates: <https://github.com/joelparkerhenderson/architecture-decision-record>
-
-## Notes
-
-- This is **product-level architecture**, not feature-level implementation plans
-- Run this AFTER creating feature specs and ground-rules
-- Run this BEFORE creating feature implementation plans
-- The architecture guides ALL subsequent feature implementation
-- Treat `docs/architecture.md` as a living document that evolves with the product
-- Update architecture when adding major features or making significant changes
-- Use feature-level design skill for individual feature implementation plans
-- Architecture should align with ground-rules principles and constraints
+Streamlined architecture template with sections for C4 diagrams, deployment, ADRs, and quality attributes.
