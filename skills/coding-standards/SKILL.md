@@ -1,11 +1,11 @@
 ---
 name: coding-standards
 description: Generates comprehensive coding standards and conventions documentation covering UI naming (mandatory for frontend), code naming, file structure, API design, database conventions, testing, Git workflow, documentation standards, and code style guide. Use when creating product-level standards, establishing coding conventions, standardizing development practices, or when user mentions standards, conventions, style guide, naming conventions, or code quality guidelines.
+license: MIT
 metadata:
   author: Dau Quang Thanh
   version: "1.0.0"
-  last-updated: "2026-01-27"
-license: MIT
+  last_updated: "2026-02-02"
 ---
 
 # Coding Standards Generation Skill
@@ -44,28 +44,19 @@ Activate this skill when:
 
 **Validation:**
 
-Use the prerequisite checking scripts to verify required files exist:
-
-**Bash (macOS/Linux):**
+Use the prerequisite checking script to verify required files exist (script provided in `tools/`):
 
 ```bash
-scripts/check-standards-prerequisites.sh
-```
-
-**PowerShell (Windows):**
-
-```powershell
-.\scripts\check-standards-prerequisites.ps1
+python3 tools/check-prerequisites.py
 ```
 
 **JSON Output (for parsing):**
 
 ```bash
-scripts/check-standards-prerequisites.sh --json
-.\scripts\check-standards-prerequisites.ps1 -Json
+python3 tools/check-prerequisites.py --json
 ```
 
-**What the scripts check:**
+**What the script checks:**
 
 - Presence of `docs/ground-rules.md` (required)
 - Presence of `docs/architecture.md` (recommended)
@@ -77,8 +68,8 @@ scripts/check-standards-prerequisites.sh --json
 ### Setup Phase
 
 1. **Run prerequisite script** to detect required files:
-   - Execute the appropriate script for your platform
-   - Parse JSON output to get file paths
+   - Execute `python3 tools/check-prerequisites.py`
+   - Parse JSON output with `--json` flag to get file paths
    - Verify `ground-rules.md` exists (required)
    - Note if `architecture.md` exists (highly recommended for tech stack context)
 
