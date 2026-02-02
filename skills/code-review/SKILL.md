@@ -3,8 +3,8 @@ name: code-review
 description: Reviews implemented code against specifications, architecture, and standards. Validates test coverage, checks compliance with design patterns, verifies checklist completion, and generates comprehensive review reports. Use when reviewing code, validating implementation quality, checking standards compliance, or when user mentions code review, review implementation, validate code, or check quality.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "2.0"
+  last_updated: "2026-02-02"
 license: MIT
 ---
 
@@ -16,88 +16,69 @@ This skill performs comprehensive code reviews by analyzing implemented code aga
 
 ## When to Use
 
-- Reviewing completed implementations
-- Validating code quality before merging
-- Checking compliance with specifications and standards
+- Reviewing implemented code
+- Validating implementation against `spec.md` and `design.md`
+- Checking compliance with coding standards (e.g. `docs/standards.md`)
 - Verifying test coverage and quality
-- Assessing architectural alignment
-- Validating checklist completion
-- User mentions: "review code", "validate implementation", "check code quality", "code review", "review my code"
+- When user mentions: "review code", "validate implementation", "check code quality", "run code review"
 
 ## Prerequisites
 
 - **Required documents in feature directory**:
-  - Implementation code files (Required)
-  - `spec.md` - Feature requirements and acceptance criteria (Required)
-  - `design.md` - Technical design and architecture (Required)
+  - Implementation code files
+  - `spec.md` - Feature requirements and acceptance criteria
+  - `design.md` - Technical design and architecture
 - **Product-level documentation** (Optional but recommended):
-  - `docs/architecture.md` - System architecture, patterns, ADRs
-  - `docs/standards.md` - Coding conventions and standards
-- **Optional supporting documents**:
-  - `tasks.md` - Implementation task checklist
-  - `data-model.md` - Entity definitions
-  - `contracts/` - API specifications
-  - `checklists/` - Quality checklists
-- **Tools**: bash (Unix/Linux/macOS) or PowerShell (Windows) for running prerequisite checks
+  - `docs/architecture.md`
+  - `docs/standards.md`
+- **Python 3.8+** for running the prerequisite check script.
 
 ## Instructions
 
 ### Step 1: Check Prerequisites and Discover Implementation
 
-Run the prerequisite check script to discover implementation artifacts:
-
-**Bash (Unix/Linux/macOS):**
+Run the prerequisite check script to discover implementation artifacts and missing documents.
 
 ```bash
-cd /path/to/repo
-bash skills/code-review/scripts/check-review-prerequisites.sh --json
+python3 skills/code-review/scripts/check-prerequisites.py
 ```
 
-**PowerShell (Windows):**
-
-```powershell
-cd C:\path\to\repo
-powershell -ExecutionPolicy Bypass -File skills/code-review/scripts/check-review-prerequisites.ps1 -Json
-```
-
-Parse the output to extract:
-
-- `FEATURE_DIR`: Absolute path to feature directory
-- `AVAILABLE_DOCS`: List of available documentation
-- `IMPLEMENTATION_FILES`: List of code files to review
-- `TEST_FILES`: List of test files found
-- `CHECKLIST_STATUS`: Status of quality checklists
+The script will output a JSON summary. Parse it to identify:
+- `missing_docs`: If any required documents (`spec.md`, `design.md`) are missing, **stop and ask the user to provide them**.
+- `implementation_files`: The list of source files to review.
+- `test_files`: The list of test files available.
+- `checklist_status`: Availability of quality checklists.
 
 ### Step 2: Load Review Context
 
-Read all available documents to build complete review context:
+Read all available documents identified in Step 1 to build a complete review context.
 
-#### Required Documents
+#### Required Context
+1. **Read `spec.md`**: Extract acceptance criteria, user stories, and constraints.
+2. **Read `design.md`**: Understand the intended architecture, data models, and API contracts.
 
-1. **spec.md** (Required):
-   - Extract user stories and acceptance criteria
-   - Extract functional requirements
-   - Extract non-functional requirements
-   - Extract constraints and assumptions
+#### Product Standards
+If `docs/standards.md` or `docs/architecture.md` exist, read them to understand the broader coding conventions and patterns.
 
-2. **design.md** (Required):
-   - Extract tech stack and libraries
-   - Extract project structure
-   - Extract component architecture
-   - Extract technical decisions
-   - Extract API contracts
-   - Extract data models
+### Step 3: Perform Code Review
 
-#### Product-Level Documents (If Available)
+Analyze the `implementation_files` one by one or in logical groups. Compare them against:
+1. **Requirements**: Does it fulfill `spec.md` criteria?
+2. **Design**: Does it follow `design.md` structure?
+3. **Quality**: Are variable names clear? Is logic simple? Is error handling robust?
+4. **Tests**: Do `test_files` cover the main paths and edge cases?
 
-1. **docs/architecture.md** (Optional):
-   - Extract architectural patterns and styles
-   - Extract C4 model component organization
-   - Extract technology stack decisions
-   - Extract ADRs (Architecture Decision Records)
-   - Extract deployment architecture
-   - Extract quality attribute requirements
-   - Extract security patterns
+### Step 4: Generate Report
+
+Create a review report using the template `skills/code-review/templates/review-report.md`.
+Fill in:
+- **Summary**: High-level assessment.
+- **Findings**: Issues categorized by severity (Critical, Major, Minor).
+- **Verification**: Status of tests and checklists.
+- **Recommendations**: Actionable steps to fix issues.
+
+Save the report as `review-report.md` in the current directory (or update existing).
+
    - Extract performance strategies
 
 2. **docs/standards.md** (Optional):
@@ -268,21 +249,19 @@ See [references/review-criteria.md](references/review-criteria.md) for complete 
 **Input:**
 
 ```bash
-bash skills/code-review/scripts/check-review-prerequisites.sh --json
+python3 skills/code-review/scripts/check-prerequisites.py
 ```
 
 **Output:**
 
 ```json
 {
-  "success": true,
   "feature_dir": "/path/to/specs/feature-name",
-  "available_docs": ["spec.md", "design.md", "tasks.md", "checklists/"],
+  "available_docs": ["spec.md", "design.md", "tasks.md", "checklists/ux.md"],
+  "missing_docs": [],
   "implementation_files": ["src/feature.ts", "src/feature-service.ts", "src/types.ts"],
   "test_files": ["tests/feature.test.ts", "tests/feature-service.test.ts"],
-  "checklist_status": "all_passed",
-  "architecture_available": true,
-  "standards_available": true
+  "checklist_status": "Found: checklists/ux.md"
 }
 ```
 
@@ -293,7 +272,7 @@ bash skills/code-review/scripts/check-review-prerequisites.sh --json
 3. Validate 2 test files for coverage and quality
 4. Check architecture alignment with docs/architecture.md
 5. Verify standards compliance with docs/standards.md
-6. Validate checklist completion (all passed)
+6. Validate checklist completion
 7. Generate comprehensive review report
 8. Report: "Approved - All checks passed, 2 minor suggestions"
 
@@ -345,52 +324,30 @@ bash skills/code-review/scripts/check-review-prerequisites.sh --json
 
 This skill includes cross-platform scripts for checking review prerequisites:
 
-### Bash Script (Unix/Linux/macOS)
+### Bash Script (Unia cross-platform Python script for checking review prerequisites:
+
+### Prerequisite Check Script
 
 ```bash
-bash skills/code-review/scripts/check-review-prerequisites.sh --json
+python3 skills/code-review/scripts/check-prerequisites.py
 ```
 
 **Features:**
+- Locates feature directory and documentation.
+- Discovers implementation files and test files.
+- Validates checklist existence.
+- Checks for product-level documentation (architecture.md, standards.md).
+- Outputs JSON for easy parsing.
 
-- Locates feature directory and documentation
-- Discovers implementation files
-- Finds test files
-- Validates checklist status
-- Checks for architecture.md and standards.md
-- JSON and human-readable output
+**Output Format:**
 
-### PowerShell Script (Windows)
-
-```powershell
-powershell -ExecutionPolicy Bypass -File skills/code-review/scripts/check-review-prerequisites.ps1 -Json
-```
-
-**Features:**
-
-- Locates feature directory and documentation
-- Discovers implementation files
-- Finds test files
-- Validates checklist status
-- Checks for architecture.md and standards.md
-- JSON and human-readable output
-
-### Script Output Format
-
-Both scripts output JSON with:
-
-- `success`: Boolean indicating if prerequisites met
-- `feature_dir`: Path to feature directory
-- `available_docs`: Array of found documents
-- `implementation_files`: Array of code files to review
-- `test_files`: Array of test files
-- `checklist_status`: "all_passed", "some_incomplete", or "no_checklists"
-- `checklist_details`: Array of checklist statuses
-- `architecture_available`: Boolean indicating docs/architecture.md exists
-- `standards_available`: Boolean indicating docs/standards.md exists
-- `error`: Error message if prerequisites not met
-
-## Templates
+The script outputs JSON with:
+- `feature_dir`: Path to feature directory.
+- `available_docs`: List of found documents.
+- `missing_docs`: List of expected but missing documents.
+- `implementation_files`: List of source code files.
+- `test_files`: List of test files.
+- `checklist_status`: Summary string of found checklists.
 
 - `templates/review-report.md`: Structure for comprehensive code review reports
 - `templates/review-checklist.md`: Checklist template for manual review tracking
