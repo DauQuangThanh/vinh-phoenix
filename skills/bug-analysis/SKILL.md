@@ -1,11 +1,11 @@
 ---
 name: bug-analysis
-description: Analyzes and documents bugs systematically, creates structured bug reports, identifies root causes, and suggests fixes. Use when investigating issues, debugging problems, analyzing failures, or when user mentions bugs, errors, crashes, failures, or debugging.
+description: Systematically analyzes bugs, creates structured bug reports, identifies root causes, and proposes fixes with risk assessment. Use when investigating errors, debugging application issues, analyzing crashes, documenting failures, or when user mentions bugs, errors, crashes, debugging, failures, or broken functionality.
+license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  category: debugging
-license: MIT
+  version: "2.0"
+  last_updated: "2026-02-02"
 ---
 
 # Bug Analysis Skill
@@ -202,13 +202,15 @@ If bug is in undocumented legacy code:
 3. Carefully analyze dependencies
 4. Consider refactoring alongside bug fix
 
-## Guidelines
+## Best Practices
 
-1. **Always document your analysis** - Future you will thank you
-2. **Test the fix thoroughly** - Ensure no regression
-3. **Update tests** - Add test cases for the bug
-4. **Communicate status** - Keep stakeholders informed
-5. **Learn from bugs** - Update documentation to prevent similar issues
+1. **Always document your analysis** - Create detailed bug reports for future reference
+2. **Test the fix thoroughly** - Ensure no regression and cover edge cases
+3. **Update tests** - Add test cases for the bug to prevent recurrence
+4. **Communicate status** - Keep stakeholders informed throughout the process
+5. **Learn from bugs** - Update documentation and share learnings with the team
+6. **Prioritize correctly** - Balance urgency with proper investigation time
+7. **Version control** - Use git bisect for finding when bugs were introduced
 
 ## Error Handling
 
@@ -245,28 +247,34 @@ If bug is in undocumented legacy code:
 
 ## Scripts
 
+This skill includes Python automation scripts for bug analysis tasks.
+
 ### Generate Bug Report
 
+Creates a new bug report from the template.
+
+**Usage:**
 ```bash
-# Create a new bug report from template
-scripts/create-bug-report.sh <bug-id> <title>
+python3 scripts/create_bug_report.py <bug_id> <title>
 ```
 
-```powershell
-# PowerShell version
-scripts/create-bug-report.ps1 -BugId <bug-id> -Title <title>
+**Example:**
+```bash
+python3 scripts/create_bug_report.py 001 "Contact form crashes on submit"
 ```
 
 ### Analyze Git History
 
+Analyzes git history and blame information for a specific file.
+
+**Usage:**
 ```bash
-# Find when issue was introduced
-scripts/analyze-git-history.sh <file-path>
+python3 scripts/analyze_git_history.py <file_path> [--limit <number>]
 ```
 
-```powershell
-# PowerShell version
-scripts/analyze-git-history.ps1 -FilePath <file-path>
+**Example:**
+```bash
+python3 scripts/analyze_git_history.py src/components/ContactForm.tsx --limit 5
 ```
 
 ## Additional Resources
