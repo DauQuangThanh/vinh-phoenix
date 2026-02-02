@@ -3,8 +3,8 @@ name: coding
 description: Executes feature implementation by processing tasks.md files, validating checklists, setting up project structure, and implementing code following architectural patterns and coding standards. Handles phase-by-phase execution with TDD approach, dependency management, and progress tracking. Use when implementing features, executing task plans, coding from specifications, or when user mentions implement tasks, execute implementation, code feature, or follow task breakdown.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "1.1.0"
+  last_updated: "2026-02-02"
 license: MIT
 ---
 
@@ -99,18 +99,10 @@ This skill executes feature implementations by processing structured task lists 
 
 Run the prerequisite check script to verify required documents exist:
 
-**Bash (Unix/Linux/macOS):**
+**Cross-platform (Python):**
 
 ```bash
-cd /path/to/repo
-bash skills/coding/scripts/check-implementation.sh --json
-```
-
-**PowerShell (Windows):**
-
-```powershell
-cd C:\path\to\repo
-powershell -ExecutionPolicy Bypass -File skills/coding/scripts/check-implementation.ps1 -Json
+python3 skills/coding/scripts/check_implementation.py /path/to/feature --json
 ```
 
 Parse the output to extract:
