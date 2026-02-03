@@ -187,20 +187,11 @@ Follow the assessment phases systematically:
 
 After completing the assessment, update agent-specific context files:
 
-**Note**: Agent context update script is currently being migrated to Python. For now, manually update agent files or use the original bash/PowerShell scripts.
-
-**Bash (macOS/Linux) - Legacy**:
+**Cross-platform (Python 3.8+)**:
 
 ```bash
 cd <SKILL_DIR>/scripts
-./update-agent-context.sh [agent-type]
-```
-
-**PowerShell (Windows) - Legacy**:
-
-```powershell
-cd <SKILL_DIR>/scripts
-./update-agent-context.ps1 -AgentType [agent-type]
+python3 update-agent-context.py [agent-type]
 ```
 
 **Supported agent types**: claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, roo, codebuddy, amp, shai, q, bob, jules, qoder, antigravity
@@ -372,29 +363,21 @@ python3 setup-context-assessment.py --json
 
 **Returns**: JSON with paths (CONTEXT_ASSESSMENT, DOCS_DIR, REPO_ROOT, HAS_GIT)
 
-### update-agent-context.sh / .ps1
+### update-agent-context.py
 
 Updates agent-specific context with assessment findings:
 
-**Note**: Currently available as bash/PowerShell scripts. Python migration in progress.
-
 ```bash
-# Bash - Update specific agent
+# Update specific agent
 cd <SKILL_DIR>/scripts
-./update-agent-context.sh claude
+python3 update-agent-context.py claude
 
-# Bash - Update all agents
+# Update all agents
 cd <SKILL_DIR>/scripts
-./update-agent-context.sh
-
-# PowerShell - Update specific agent
-cd <SKILL_DIR>/scripts
-./update-agent-context.ps1 -AgentType claude
-
-# PowerShell - Update all agents
-cd <SKILL_DIR>/scripts
-./update-agent-context.ps1
+python3 update-agent-context.py
 ```
+
+**Returns**: Success/error status with colored output
 
 ## Templates
 
@@ -423,8 +406,7 @@ Each section includes detailed prompts and examples.
 
 - Template: `<SKILL_DIR>/templates/context-assessment-template.md`
 - Setup Script: `<SKILL_DIR>/scripts/setup-context-assessment.py` (Python 3.8+)
-- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.sh` (Bash - Legacy)
-- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.ps1` (PowerShell - Legacy)
+- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.py` (Python 3.8+)
 
 ## Notes
 
