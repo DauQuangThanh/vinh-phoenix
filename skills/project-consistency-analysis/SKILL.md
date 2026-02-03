@@ -3,8 +3,8 @@ name: project-consistency-analysis
 description: Performs read-only cross-artifact consistency analysis across spec.md, design.md, and tasks.md. Detects duplications, ambiguities, coverage gaps, ground-rules violations, and inconsistencies. Generates structured analysis reports with severity levels and remediation recommendations. Use when validating project artifacts, checking consistency, analyzing quality, or when user mentions analyze project, check consistency, validate artifacts, or quality analysis.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "1.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -43,18 +43,11 @@ This skill performs comprehensive, non-destructive consistency and quality analy
 
 Run the prerequisite check script to verify required documents exist:
 
-**Bash (Unix/Linux/macOS):**
+**Python 3 (Cross-platform):**
 
 ```bash
 cd /path/to/repo
-bash skills/project-consistency-analysis/scripts/check-analysis-prerequisites.sh --json
-```
-
-**PowerShell (Windows):**
-
-```powershell
-cd C:\path\to\repo
-powershell -ExecutionPolicy Bypass -File skills/project-consistency-analysis/scripts/check-analysis-prerequisites.ps1 -Json
+python3 skills/project-consistency-analysis/scripts/check-analysis-prerequisites.py --json
 ```
 
 Parse the output to extract:
@@ -243,7 +236,7 @@ Ground rules from `docs/ground-rules.md` are **non-negotiable**:
 **Input:**
 
 ```bash
-bash skills/project-consistency-analysis/scripts/check-analysis-prerequisites.sh --json
+python3 skills/project-consistency-analysis/scripts/check-analysis-prerequisites.py --json
 ```
 
 **Output:**
@@ -304,33 +297,21 @@ bash skills/project-consistency-analysis/scripts/check-analysis-prerequisites.sh
 
 ## Scripts
 
-This skill includes cross-platform scripts for checking analysis prerequisites:
+This skill includes a cross-platform script for checking analysis prerequisites:
 
-### Bash Script (Unix/Linux/macOS)
+### Python 3 Script (Cross-platform)
 
 ```bash
-bash skills/project-consistency-analysis/scripts/check-analysis-prerequisites.sh --json
+python3 skills/project-consistency-analysis/scripts/check-analysis-prerequisites.py [--json] [feature-directory]
 ```
 
 **Features:**
 
 - Locates feature directory and required artifacts
 - Verifies spec.md, design.md, tasks.md exist
-- Checks for ground-rules.md, architecture.md, standards.md
-- JSON and human-readable output
-
-### PowerShell Script (Windows)
-
-```powershell
-powershell -ExecutionPolicy Bypass -File skills/project-consistency-analysis/scripts/check-analysis-prerequisites.ps1 -Json
-```
-
-**Features:**
-
-- Locates feature directory and required artifacts
-- Verifies spec.md, design.md, tasks.md exist
-- Checks for ground-rules.md, architecture.md, standards.md
-- JSON and human-readable output
+- Checks for ground-rules.md, architecture.md, standards.md in memory/docs directories
+- JSON and human-readable output with color coding
+- Cross-platform compatibility (works on Linux, macOS, Windows)
 
 ### Script Output Format
 
@@ -362,6 +343,45 @@ Both scripts output JSON with:
 8. **Never Modify Files**: Strictly read-only analysis
 9. **Use Examples**: Show concrete instances, not abstractions
 10. **Report Gracefully**: Handle zero-issues case positively
+
+## Quality Checklist
+
+Before considering analysis complete:
+
+- [ ] All required artifacts (spec.md, design.md, tasks.md) located and readable
+- [ ] Optional artifacts (ground-rules.md, architecture.md, standards.md) checked
+- [ ] Six detection passes completed (duplication, ambiguity, underspecification, ground-rules, coverage, inconsistency)
+- [ ] Severity levels assigned to all findings (CRITICAL, HIGH, MEDIUM, LOW)
+- [ ] Coverage percentage calculated (requirements mapped to tasks)
+- [ ] Structured report generated with executive summary and findings table
+- [ ] Next actions provided based on severity assessment
+- [ ] No file modifications made during analysis
+- [ ] Token efficiency maintained (progressive disclosure, limited output)
+
+## Tips
+
+1. **Start with Prerequisites**: Always run the prerequisite check first to ensure artifacts exist
+2. **Focus on High-Impact**: Prioritize CRITICAL and HIGH severity findings for immediate action
+3. **Ground Rules First**: Address ground-rules violations before other issues
+4. **Coverage Critical**: Ensure all requirements have corresponding tasks
+5. **Read-Only Analysis**: Remember this skill never modifies files
+6. **Progressive Loading**: Load only necessary content to stay within token limits
+7. **Structured Output**: Use the provided templates for consistent reporting
+8. **Severity-Based Actions**: Use severity levels to determine next steps
+9. **Cross-Reference**: Check findings across multiple artifacts for consistency
+10. **Actionable Recommendations**: Provide specific file paths and line numbers
+
+## Additional Resources
+
+For more detailed information:
+
+- [references/analysis-patterns.md](references/analysis-patterns.md) - Detailed detection algorithms, severity guidelines, and remediation patterns
+- [templates/analysis-report.md](templates/analysis-report.md) - Structured report template with examples
+- [references/consistency-checklist.md](references/consistency-checklist.md) - Comprehensive checklist for manual consistency verification
+
+---
+
+**Note:** This skill performs read-only analysis. For remediation suggestions, ask the skill to provide specific edit recommendations.
 
 ## Success Criteria
 

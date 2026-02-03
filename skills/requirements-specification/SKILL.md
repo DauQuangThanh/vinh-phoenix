@@ -3,8 +3,8 @@ name: requirements-specification
 description: Creates or updates feature specifications from natural language descriptions. Generates branch names, validates specification quality, and ensures requirements are testable and unambiguous. Use when creating product requirements, defining new features, documenting user needs, or when user mentions specifications, requirements gathering, feature definition, or needs to write a spec.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "1.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -37,6 +37,7 @@ Use this skill when:
 
 - Git (for branch management)
 - Bash or PowerShell (for running scripts)
+- Python 3.6+ (recommended for cross-platform compatibility)
 - Text editor or file system access
 
 **Required Files:**
@@ -136,6 +137,12 @@ Execute the appropriate script with the calculated number and short-name:
 
 ```powershell
 <SKILL_DIR>/scripts/create-feature.ps1 -Json -Number <N+1> -ShortName "<short-name>" "<feature description>"
+```
+
+**Python 3 (Cross-platform):**
+
+```bash
+python3 <SKILL_DIR>/scripts/create-feature.py --json --number <N+1> --short-name "<short-name>" "<feature description>"
 ```
 
 Replace `<SKILL_DIR>` with the absolute path to this skill directory.
@@ -435,27 +442,105 @@ For common errors and their resolutions:
 
 **Action**: Document failing items in checklist notes, provide detailed explanation to user, suggest manual review. See [references/specification-guide.md](references/specification-guide.md) for detailed validation guidance and common failure fixes.
 
-This skill includes:
+This skill includes cross-platform scripts for feature creation:
 
-- `templates/spec-template.md` - Comprehensive specification template with all required sections
-- `templates/checklist-template.md` - Quality validation checklist template
-- `scripts/create-feature.sh` - Bash script for feature creation (cross-platform: macOS/Linux)
-- `scripts/create-feature.ps1` - PowerShell script for feature creation (Windows)
+### Bash Script (Unix/Linux/macOS)
+
+```bash
+bash skills/requirements-specification/scripts/create-feature.sh --number 5 --short-name "user-auth" "Add user authentication"
+```
+
+**Features:**
+
+- Creates Git branch with numbered naming convention
+- Generates spec.md and checklist.md from templates
+- Replaces placeholders with feature details
+- JSON and human-readable output
+
+### PowerShell Script (Windows)
+
+```powershell
+.\skills\requirements-specification\scripts\create-feature.ps1 -Number 5 -ShortName "user-auth" -Description "Add user authentication"
+```
+
+**Features:**
+
+- Creates Git branch with numbered naming convention
+- Generates spec.md and checklist.md from templates
+- Replaces placeholders with feature details
+- JSON and human-readable output
+
+### Python 3 Script (Cross-platform)
+
+```bash
+python3 skills/requirements-specification/scripts/create-feature.py --number 5 --short-name "user-auth" "Add user authentication"
+```
+
+**Features:**
+
+- Cross-platform compatibility (works on Linux, macOS, Windows)
+- Creates Git branch with numbered naming convention
+- Generates spec.md and checklist.md from templates
+- Replaces placeholders with feature details
+- JSON and human-readable output with color coding
+- Input validation and error handling
 
 Optional workspace files (if available):
 
 - `docs/architecture.md` - Technology stack and architectural patterns
-- `dSelf-Contained**: This skill includes all necessary templates and scripts - no external dependencies required
-- **Cross-Platform**: Provides both Bash (macOS/Linux) and PowerShell (Windows) scripts for maximum compatibility
-- **Progressive Disclosure**: Loads minimal context initially and fetches additional details only when needed
-- **Technology-Agnostic**: Specifications describe user needs and business value, not implementation details
-- **Validation-First**: Quality validation ensures specifications are complete before proceeding to design
-- **User-Focused**: All requirements and success criteria must be verifiable from a user/business perspective
-- **Portable**: Can be used in any project - workspace-level architecture/standards files are optional enhancements
+- `docs/standards.md` - Naming conventions and coding standards
 
-## Notes
+**Self-Contained**: This skill includes all necessary templates and scripts - no external dependencies required
+**Cross-Platform**: Provides both Bash (macOS/Linux), PowerShell (Windows), and Python 3 (all platforms) scripts for maximum compatibility
+**Progressive Disclosure**: Loads minimal context initially and fetches additional details only when needed
+**Technology-Agnostic**: Specifications describe user needs and business value, not implementation details
+**Validation-First**: Quality validation ensures specifications are complete before proceeding to design
+**User-Focused**: All requirements and success criteria must be verifiable from a user/business perspective
+**Portable**: Can be used in any project - workspace-level architecture/standards files are optional enhancements
 
-- **Progressive Disclosure**: This skill loads minimal context initially and fetches additional details (templates, context files) only when needed
-- **Technology-Agnostic**: Specifications should describe user needs and business value, not implementation details
-- **Validation-First**: Quality validation ensures specifications are complete before proceeding to design
-- **User-Focused**: All requirements and success criteria must be verifiable from a user/business perspective
+## Quality Checklist
+
+Before considering specification complete:
+
+- [ ] Ground rules reviewed and aligned with specification
+- [ ] Feature description parsed and key concepts extracted
+- [ ] Short name validated (lowercase, numbers, hyphens only)
+- [ ] Feature number determined from existing branches
+- [ ] Git branch created with proper naming convention
+- [ ] Spec directory structure created (specs/N-shortname/)
+- [ ] Spec template copied and placeholders replaced
+- [ ] Checklist template created and linked to spec
+- [ ] Specification filled with functional requirements
+- [ ] User scenarios and acceptance criteria defined
+- [ ] Success criteria established (measurable, technology-agnostic)
+- [ ] Edge cases and assumptions documented
+- [ ] Quality validation checklist completed
+- [ ] Specification committed with proper commit message
+- [ ] No [NEEDS CLARIFICATION] markers remain (or clarified)
+- [ ] Ready for requirements-specification-review skill
+
+## Tips
+
+1. **Ground Rules First**: Always check for docs/ground-rules.md before creating specifications
+2. **Progressive Disclosure**: Load architecture.md and standards.md if available for better alignment
+3. **Reasonable Defaults**: Use industry standards for unspecified technical details
+4. **Clarification Limits**: Keep [NEEDS CLARIFICATION] markers to maximum 3 per feature
+5. **Technology Agnostic**: Focus on user needs, not implementation details
+6. **Testable Requirements**: Every functional requirement must be verifiable
+7. **Measurable Success**: Success criteria must include specific metrics
+8. **Short Name Format**: Use lowercase letters, numbers, and hyphens only
+9. **Branch Numbering**: Always increment from highest existing number
+10. **Template Validation**: Verify templates exist before running scripts
+
+## Additional Resources
+
+For more detailed information:
+
+- [references/specification-guide.md](references/specification-guide.md) - Detailed specification writing guide, validation criteria, and examples
+- [templates/spec-template.md](templates/spec-template.md) - Complete specification template with all sections
+- [templates/checklist-template.md](templates/checklist-template.md) - Quality validation checklist template
+- [references/ground-rules.md](references/ground-rules.md) - Ground rules setup and validation guide
+
+---
+
+**Note:** This skill generates structured specifications from natural language. For quality review of completed specifications, use the `requirements-specification-review` skill.
