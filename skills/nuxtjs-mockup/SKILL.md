@@ -3,8 +3,8 @@ name: nuxtjs-mockup
 description: Creates interactive UI mockups and prototypes using Nuxt 4, Vue 3, and Tailwind CSS 4 with Vite build tool. Builds responsive components, pages, and layouts from design specifications or wireframes. Use when creating mockups, prototypes, UI demos, design implementations, or when user mentions Nuxt prototype, Vue mockup, Tailwind demo, or interactive Vue demo.
 metadata:
   author: Dau Quang Thanh
-  version: "2.0.0"
-  last-updated: "2026-01-27"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -40,18 +40,18 @@ Creates interactive UI mockups and prototypes using the latest Nuxt 4 (Vue 3 fra
 **Check Prerequisites:**
 
 ```bash
-# Bash
-./skills/nuxtjs-mockup/scripts/check-nuxt-prerequisites.sh
+# Python 3 script (cross-platform)
+python3 skills/nuxtjs-mockup/scripts/check-nuxt-prerequisites.py
 
-# PowerShell
-.\skills\nuxtjs-mockup\scripts\check-nuxt-prerequisites.ps1
+# Or with JSON output for automation
+python3 skills/nuxtjs-mockup/scripts/check-nuxt-prerequisites.py --json
 ```
 
 ## Technology Stack
 
-**Latest Versions (January 2026):**
+**Latest Versions (February 2026):**
 
-- Nuxt 4.3, Vue 3.5, Tailwind CSS 4.1, Vite 5.4, TypeScript 5.6
+- Nuxt 4.4, Vue 3.5, Tailwind CSS 4.2, Vite 6.0, TypeScript 5.7
 
 See [references/setup-guide.md](references/setup-guide.md#technology-stack-details) for complete version details and features.
 
@@ -96,7 +96,7 @@ See [references/setup-guide.md](references/setup-guide.md#project-setup-steps) f
 
 ```bash
 # Check prerequisites
-./skills/nuxtjs-mockup/scripts/check-nuxt-prerequisites.sh
+python3 skills/nuxtjs-mockup/scripts/check-nuxt-prerequisites.py
 
 # Create project
 pnpm create nuxt@latest mockup
@@ -229,7 +229,7 @@ nuxt generate         # Generate static site
 
 ## Success Criteria
 
-- ✅ Nuxt 3 project initialized with latest versions
+- ✅ Nuxt 4 project initialized with latest versions
 - ✅ Vite build tool configured and working
 - ✅ All designed pages/views implemented
 - ✅ Responsive design works on mobile, tablet, desktop
@@ -266,14 +266,81 @@ The skill provides these templates:
 
 ## Scripts
 
-Prerequisite check scripts:
+Prerequisite check script:
 
-- **scripts/check-nuxt-prerequisites.sh**: Bash script for Node.js, npm/pnpm/yarn validation
-- **scripts/check-nuxt-prerequisites.ps1**: PowerShell script for Windows
+- **scripts/check-nuxt-prerequisites.py**: Python 3 script for Node.js, npm/pnpm/yarn validation (cross-platform)
 
 ## Examples
 
 For detailed examples including landing pages, dashboards, and e-commerce catalogs with complete code, see [`references/EXAMPLES.md`](references/EXAMPLES.md).
+
+## Edge Cases
+
+### Case 1: Legacy Node.js Versions
+
+**Scenario:** User has Node.js 16 or earlier installed
+
+**Handling:**
+
+1. Script will detect version incompatibility
+2. Display clear error message with upgrade instructions
+3. Suggest using Node Version Manager (nvm) for easy upgrades
+4. Provide alternative installation methods
+
+**Example Error Output:**
+
+```
+✗ Node.js version 16.14.0 is too old. Nuxt 4 requires Node.js 18.0.0 or higher
+
+Installation Tips:
+  - Upgrade Node.js: nvm install 20 && nvm use 20
+  - Or download from: https://nodejs.org/
+```
+
+### Case 2: Network Issues During Installation
+
+**Scenario:** Package installation fails due to network connectivity
+
+**Handling:**
+
+1. Detect npm/pnpm installation failures
+2. Suggest checking network connectivity
+3. Recommend using different package manager
+4. Provide offline installation alternatives
+
+**Example:**
+
+```
+Error: Network timeout during package installation
+Solution: Check internet connection or try different package manager
+```
+
+### Case 3: Existing Conflicting Projects
+
+**Scenario:** Running in directory with conflicting build tools or frameworks
+
+**Handling:**
+
+1. Check for existing configuration files
+2. Warn about potential conflicts
+3. Suggest creating mockup in separate directory
+4. Offer to backup existing files
+
+## Quality Checklist
+
+Before considering mockup complete:
+
+- [ ] Prerequisites check passed without errors
+- [ ] Nuxt 4 project initialized successfully
+- [ ] Tailwind CSS 4 configured and working
+- [ ] All specified pages/components created
+- [ ] Interactive elements functional
+- [ ] Responsive design tested on multiple screen sizes
+- [ ] No console errors in development server
+- [ ] Build process completes without errors
+- [ ] Design matches provided specifications
+- [ ] Code follows Vue 3 Composition API patterns
+- [ ] Components are reusable and well-structured
 
 ## Notes
 
