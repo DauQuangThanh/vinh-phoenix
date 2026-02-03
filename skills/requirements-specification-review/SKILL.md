@@ -3,8 +3,8 @@ name: requirements-specification-review
 description: Reviews and clarifies existing feature specifications by identifying underspecified areas, asking targeted questions, and integrating answers back into the spec. Use when refining requirements, detecting ambiguities, validating completeness, or when user mentions spec review, clarification, requirements validation, or gap analysis.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -30,7 +30,7 @@ Use this skill when:
 **Required:**
 
 - Existing feature specification file
-- Scripts provided with this skill (in `scripts/` directory)
+- Python script provided with this skill (in `scripts/` directory)
 - Templates provided with this skill (in `templates/` directory)
 
 **Optional (workspace-level enhancements):**
@@ -45,24 +45,18 @@ Use this skill when:
 
 1. **Run prerequisites check script** to locate the feature specification:
 
-   **Bash (macOS/Linux):**
+    **Python:**
 
-   ```bash
-   <SKILL_DIR>/scripts/check-prerequisites.sh --json --paths-only
-   ```
+    ```bash
+    python <SKILL_DIR>/scripts/check-prerequisites.py --json --paths-only
+    ```
 
-   **PowerShell (Windows):**
+    Replace `<SKILL_DIR>` with the absolute path to this skill directory.
 
-   ```powershell
-   <SKILL_DIR>/scripts/check-prerequisites.ps1 -Json -PathsOnly
-   ```
-
-   Replace `<SKILL_DIR>` with the absolute path to this skill directory.
-
-   The script returns JSON with:
-   - `FEATURE_DIR` - Feature directory path
-   - `FEATURE_SPEC` - Path to spec.md file
-   - `CURRENT_BRANCH` - Git branch name (if available)
+    The script returns JSON with:
+    - `FEATURE_DIR` - Feature directory path
+    - `FEATURE_SPEC` - Path to spec.md file
+    - `CURRENT_BRANCH` - Git branch name (if available)
 
 2. **Load the specification file**:
    - Read the spec file from `FEATURE_SPEC` path
@@ -364,8 +358,7 @@ This skill is self-contained and includes:
 
 **Scripts** (in `scripts/` directory):
 
-- `check-prerequisites.sh` - Bash script to locate spec file (macOS/Linux)
-- `check-prerequisites.ps1` - PowerShell script to locate spec file (Windows)
+- `check-prerequisites.py` - Python script to locate spec file (cross-platform)
 
 **Optional Workspace Files** (if available):
 
@@ -387,9 +380,32 @@ After completing the specification review, consider:
 ## Notes
 
 - **Self-Contained**: Skill includes all necessary scripts and templates
-- **Cross-Platform**: Bash and PowerShell scripts for maximum compatibility
+- **Cross-Platform**: Python script for maximum compatibility across macOS, Linux, and Windows
 - **Incremental Updates**: Saves after each answer to prevent data loss
 - **Interactive**: Sequential questioning with recommendations
 - **Comprehensive**: 12-category taxonomy for thorough coverage
 - **Portable**: Works in any project with or without git
 - **Non-Destructive**: Only adds/updates, never removes user content without explicit conflict resolution
+
+## Quality Checklist
+
+- [ ] **Script Compatibility**: Python script runs on macOS, Linux, and Windows without platform-specific issues
+- [ ] **Git Integration**: Correctly detects git repositories and feature branches
+- [ ] **File Detection**: Accurately locates spec.md files in expected locations
+- [ ] **Error Handling**: Provides clear error messages when prerequisites are not met
+- [ ] **Output Formats**: Supports both JSON and human-readable output modes
+- [ ] **Documentation**: SKILL.md is up-to-date with current implementation details
+
+## Tips
+
+- Run the prerequisite check early to ensure your environment is properly set up before starting the review
+- Use `--json --paths-only` flags when integrating with other tools or scripts
+- Ensure you're on a feature branch (format: `N-feature-name`) for automatic spec detection
+- If the spec file is not found, create one first using the `requirements-specification` skill
+
+## Additional Resources
+
+- [requirements-specification skill](skills/requirements-specification/) - Create initial feature specifications
+- [technical-detailed-design skill](skills/technical-detailed-design/) - Design technical implementation after spec review
+- [phoenix.architect](https://opencode.ai) - Generate architectural designs
+- [phoenix.design](https://opencode.ai) - Create detailed technical designs
