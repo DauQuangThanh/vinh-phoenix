@@ -86,6 +86,7 @@ python3 <SKILL_DIR>/scripts/setup_architect.py
 ```
 
 The script will:
+
 - Detect repository root
 - Create `docs/` and `docs/adr/` directories
 - Copy architecture template to `docs/architecture.md`
@@ -93,6 +94,7 @@ The script will:
 - Return paths and metadata in JSON format
 
 **Parse the JSON output** to get:
+
 - `ARCH_DOC`: Path to the architecture document
 - `DOCS_DIR`: Documentation directory
 - `ADR_DIR`: Architecture Decision Records directory

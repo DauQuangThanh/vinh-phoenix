@@ -15,6 +15,7 @@ metadata:
 This self-contained skill helps AI agents create and update agent commands that conform to platform-specific guidelines. It provides complete resources: instructions, templates, validation rules, and scripts—all within this skill directory. Commands can be created in Markdown (.md) or TOML (.toml) format depending on the target agent.
 
 **Key Concept: Progressive Disclosure**
+
 - **Tier 1**: Metadata (name + description) for discovery
 - **Tier 2**: This SKILL.md with instructions (<500 lines)
 - **Tier 3**: references/, templates/, scripts/, assets/ for detailed content
@@ -48,28 +49,33 @@ This self-contained skill helps AI agents create and update agent commands that 
 ### Quick Start: 5-Step Process
 
 **Step 1: Choose Target Agent & Format**
+
 - Identify target agent (see Agent Directory Reference below)
 - Determine file format: Markdown (.md) or TOML (.toml)
 - Note the correct directory path
 
 **Step 2: Write Clear Description**
+
 - One sentence, 10-80 characters
 - Start with action verb
 - Include expected outcome
 - Example: "Create feature specification from user requirements"
 
 **Step 3: Generate Command Structure**
+
 ```bash
 python3 scripts/generate-command.py command-name --agent claude
 ```
 
 **Step 4: Write Instructions**
+
 - Use clear, step-by-step format
 - Include examples with input/output
 - Specify output format explicitly
 - Handle edge cases
 
 **Step 5: Validate**
+
 ```bash
 python3 scripts/validate-command.py ./path/to/command.md
 ```
@@ -79,6 +85,7 @@ python3 scripts/validate-command.py ./path/to/command.md
 ### Step 1: Select Format Based on Agent
 
 **Decision Rule:**
+
 - **TOML (.toml)**: Gemini CLI, Qwen Code
 - **Markdown (.md)**: All other agents (Claude, Copilot, Cursor, Windsurf, etc.)
 
@@ -104,10 +111,12 @@ See `references/agent-directory-reference.md` for complete list of 17+ agents.
 📏 **Length**: Keep concise but meaningful
 
 **Examples:**
+
 - ✅ `specify.md`, `implement.md`, `analyze-coverage.md`
 - ❌ `do-stuff.md` (vague), `Specify.md` (uppercase), `specify_.md` (underscore)
 
 **For GitHub Copilot mode field:**
+
 - Format: `project.command-name`
 - Example: `vinh.specify`, `myapp.analyze`
 
@@ -116,12 +125,14 @@ See `references/agent-directory-reference.md` for complete list of 17+ agents.
 **Formula:** `[Action] + [from/with what] + [producing what]`
 
 **Requirements:**
+
 - Length: 10-80 characters
 - Start with action verb
 - Be specific and actionable
 - Include expected outcome
 
 **Examples:**
+
 ```yaml
 ✅ "Create feature specification from user requirements"
 ✅ "Analyze codebase for security vulnerabilities and generate report"
@@ -190,6 +201,7 @@ See `templates/` for complete templates.
 5. **Examples Section**: At least 2 concrete examples
 
 **Best practices:**
+
 - Number each step explicitly
 - Use imperative language ("Create", "Analyze", "Generate")
 - Break complex tasks into phases
@@ -197,6 +209,7 @@ See `templates/` for complete templates.
 - Provide specific file paths and formats
 
 **Example instruction pattern:**
+
 ```markdown
 ## Instructions
 
@@ -257,6 +270,7 @@ Always be explicit about output. Include file path, format, required structure, 
 ### Step 9: Validate Command
 
 **Manual checklist:**
+
 - [ ] Name follows conventions (lowercase, hyphens)
 - [ ] Description is clear and actionable (10-80 chars)
 - [ ] Correct file format for target agent
@@ -268,6 +282,7 @@ Always be explicit about output. Include file path, format, required structure, 
 - [ ] Correct argument syntax ($ARGUMENTS or {{args}})
 
 **Automated validation:**
+
 ```bash
 python3 scripts/validate-command.py path/to/command.md
 ```
@@ -302,6 +317,7 @@ See `references/agent-directory-reference.md` for complete list.
 4. Location: `.claude/commands/specify.md`
 
 **Content:**
+
 ```markdown
 ---
 description: "Create detailed feature specification from requirements"
@@ -340,6 +356,7 @@ Create `specs/[feature-name].md` with:
 **Scenario:** Create an analysis command for Gemini CLI.
 
 **Content for `.gemini/commands/analyze.toml`:**
+
 ```toml
 description = "Analyze code quality and identify improvements"
 
@@ -371,16 +388,19 @@ analyze ./api --security-focus
 ## Edge Cases
 
 **Empty or missing arguments:**
+
 - Document required vs optional arguments
 - Provide helpful error message
 - Show usage example
 
 **Complex multi-step workflows:**
+
 - Break into clear phases
 - Include validation checkpoints
 - Allow resuming from specific phase
 
 **Platform-specific behavior:**
+
 - Document any OS-specific requirements
 - Ensure scripts use cross-platform paths
 - Test on Windows, macOS, Linux
@@ -390,20 +410,24 @@ analyze ./api --security-focus
 **Common errors and solutions:**
 
 **Error: Invalid frontmatter**
+
 - Solution: Ensure YAML starts/ends with `---`
 - Check for proper indentation
 - Validate field names (e.g., `description`, not `desc`)
 
 **Error: Wrong argument syntax**
+
 - Solution: Use `$ARGUMENTS` for Markdown, `{{args}}` for TOML
 - Check target agent requirements
 
 **Error: Command not recognized**
+
 - Solution: Verify file is in correct directory for target agent
 - Check file extension (.md vs .toml)
 - For GitHub Copilot, ensure `mode:` field is set
 
 **Error: Unclear instructions**
+
 - Solution: Add more specific steps
 - Include concrete examples
 - Specify exact file paths and formats
@@ -411,16 +435,19 @@ analyze ./api --security-focus
 ## Scripts
 
 **Generate new command:**
+
 ```bash
 python3 scripts/generate-command.py command-name --agent claude
 ```
 
 **Validate existing command:**
+
 ```bash
 python3 scripts/validate-command.py .claude/commands/specify.md
 ```
 
 **Test command across platforms:**
+
 ```bash
 python3 scripts/test-command.py specify.md
 ```
@@ -428,6 +455,7 @@ python3 scripts/test-command.py specify.md
 ## References
 
 For detailed information, see:
+
 - `references/format-standards.md` - Complete format specifications
 - `references/prompt-engineering.md` - Advanced instruction patterns
 - `references/agent-directory-reference.md` - All supported agents
@@ -439,6 +467,7 @@ For detailed information, see:
 Use `assets/checklists/command-validation-checklist.md` for systematic review.
 
 **Quick validation:**
+
 - [ ] Correct file format for target agent
 - [ ] Valid YAML frontmatter
 - [ ] Clear, actionable description

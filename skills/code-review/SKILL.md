@@ -44,6 +44,7 @@ python3 skills/code-review/scripts/check-prerequisites.py
 ```
 
 The script will output a JSON summary. Parse it to identify:
+
 - `missing_docs`: If any required documents (`spec.md`, `design.md`) are missing, **stop and ask the user to provide them**.
 - `implementation_files`: The list of source files to review.
 - `test_files`: The list of test files available.
@@ -54,15 +55,18 @@ The script will output a JSON summary. Parse it to identify:
 Read all available documents identified in Step 1 to build a complete review context.
 
 #### Required Context
+
 1. **Read `spec.md`**: Extract acceptance criteria, user stories, and constraints.
 2. **Read `design.md`**: Understand the intended architecture, data models, and API contracts.
 
 #### Product Standards
+
 If `docs/standards.md` or `docs/architecture.md` exist, read them to understand the broader coding conventions and patterns.
 
 ### Step 3: Perform Code Review
 
 Analyze the `implementation_files` one by one or in logical groups. Compare them against:
+
 1. **Requirements**: Does it fulfill `spec.md` criteria?
 2. **Design**: Does it follow `design.md` structure?
 3. **Quality**: Are variable names clear? Is logic simple? Is error handling robust?
@@ -72,6 +76,7 @@ Analyze the `implementation_files` one by one or in logical groups. Compare them
 
 Create a review report using the template `skills/code-review/templates/review-report.md`.
 Fill in:
+
 - **Summary**: High-level assessment.
 - **Findings**: Issues categorized by severity (Critical, Major, Minor).
 - **Verification**: Status of tests and checklists.
@@ -79,9 +84,9 @@ Fill in:
 
 Save the report as `review-report.md` in the current directory (or update existing).
 
-   - Extract performance strategies
+- Extract performance strategies
 
-2. **docs/standards.md** (Optional):
+1. **docs/standards.md** (Optional):
    - Extract UI naming conventions
    - Extract code naming conventions
    - Extract file structure standards
@@ -324,7 +329,7 @@ python3 skills/code-review/scripts/check-prerequisites.py
 
 This skill includes cross-platform scripts for checking review prerequisites:
 
-### Bash Script (Unia cross-platform Python script for checking review prerequisites:
+### Bash Script (Unia cross-platform Python script for checking review prerequisites
 
 ### Prerequisite Check Script
 
@@ -333,6 +338,7 @@ python3 skills/code-review/scripts/check-prerequisites.py
 ```
 
 **Features:**
+
 - Locates feature directory and documentation.
 - Discovers implementation files and test files.
 - Validates checklist existence.
@@ -342,6 +348,7 @@ python3 skills/code-review/scripts/check-prerequisites.py
 **Output Format:**
 
 The script outputs JSON with:
+
 - `feature_dir`: Path to feature directory.
 - `available_docs`: List of found documents.
 - `missing_docs`: List of expected but missing documents.

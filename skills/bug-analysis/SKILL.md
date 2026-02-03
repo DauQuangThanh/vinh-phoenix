@@ -254,11 +254,13 @@ This skill includes Python automation scripts for bug analysis tasks.
 Creates a new bug report from the template.
 
 **Usage:**
+
 ```bash
 python3 scripts/create_bug_report.py <bug_id> <title>
 ```
 
 **Example:**
+
 ```bash
 python3 scripts/create_bug_report.py 001 "Contact form crashes on submit"
 ```
@@ -268,11 +270,13 @@ python3 scripts/create_bug_report.py 001 "Contact form crashes on submit"
 Analyzes git history and blame information for a specific file.
 
 **Usage:**
+
 ```bash
 python3 scripts/analyze_git_history.py <file_path> [--limit <number>]
 ```
 
 **Example:**
+
 ```bash
 python3 scripts/analyze_git_history.py src/components/ContactForm.tsx --limit 5
 ```

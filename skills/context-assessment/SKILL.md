@@ -3,8 +3,8 @@ name: context-assessment
 description: Analyze existing codebases to understand architecture, patterns, and conventions before adding new features. Use when assessing brownfield projects, documenting technical architecture, or when the user mentions codebase analysis, architecture review, or technical assessment.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "1.1.0"
+  last_updated: "2026-02-03"
 license: MIT
 ---
 
@@ -42,18 +42,11 @@ This skill analyzes existing codebases to understand architecture, patterns, and
 
 Run the setup script to prepare the assessment environment:
 
-**Bash (macOS/Linux)**:
+**Cross-platform (Python 3.8+)**:
 
 ```bash
 cd <SKILL_DIR>/scripts
-./setup-context-assessment.sh --json
-```
-
-**PowerShell (Windows)**:
-
-```powershell
-cd <SKILL_DIR>/scripts
-./setup-context-assessment.ps1 -Json
+python3 setup-context-assessment.py --json
 ```
 
 The script will:
@@ -194,14 +187,16 @@ Follow the assessment phases systematically:
 
 After completing the assessment, update agent-specific context files:
 
-**Bash (macOS/Linux)**:
+**Note**: Agent context update script is currently being migrated to Python. For now, manually update agent files or use the original bash/PowerShell scripts.
+
+**Bash (macOS/Linux) - Legacy**:
 
 ```bash
 cd <SKILL_DIR>/scripts
 ./update-agent-context.sh [agent-type]
 ```
 
-**PowerShell (Windows)**:
+**PowerShell (Windows) - Legacy**:
 
 ```powershell
 cd <SKILL_DIR>/scripts
@@ -366,18 +361,13 @@ Assessment is complete when:
 
 ## Scripts
 
-### setup-context-assessment.sh / .ps1
+### setup-context-assessment.py
 
-Creates assessment environment and copies template:
+Sets up context assessment environment (Python 3.8+ cross-platform):
 
 ```bash
-# Bash
 cd <SKILL_DIR>/scripts
-./setup-context-assessment.sh --json
-
-# PowerShell
-cd <SKILL_DIR>/scripts
-./setup-context-assessment.ps1 -Json
+python3 setup-context-assessment.py --json
 ```
 
 **Returns**: JSON with paths (CONTEXT_ASSESSMENT, DOCS_DIR, REPO_ROOT, HAS_GIT)
@@ -385,6 +375,8 @@ cd <SKILL_DIR>/scripts
 ### update-agent-context.sh / .ps1
 
 Updates agent-specific context with assessment findings:
+
+**Note**: Currently available as bash/PowerShell scripts. Python migration in progress.
 
 ```bash
 # Bash - Update specific agent
@@ -430,10 +422,9 @@ Each section includes detailed prompts and examples.
 ## Additional Resources
 
 - Template: `<SKILL_DIR>/templates/context-assessment-template.md`
-- Setup Script: `<SKILL_DIR>/scripts/setup-context-assessment.sh` (Bash)
-- Setup Script: `<SKILL_DIR>/scripts/setup-context-assessment.ps1` (PowerShell)
-- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.sh` (Bash)
-- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.ps1` (PowerShell)
+- Setup Script: `<SKILL_DIR>/scripts/setup-context-assessment.py` (Python 3.8+)
+- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.sh` (Bash - Legacy)
+- Agent Update: `<SKILL_DIR>/scripts/update-agent-context.ps1` (PowerShell - Legacy)
 
 ## Notes
 

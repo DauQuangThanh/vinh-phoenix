@@ -15,6 +15,7 @@ metadata:
 This skill performs comprehensive reviews of system architecture documentation (`architecture.md`) to ensure completeness, consistency, and quality. It validates all aspects of the architecture including stakeholder concerns, quality attributes, C4 model diagrams, architecture decisions (ADRs), deployment design, and alignment with requirements and ground rules.
 
 **Key Concept: Progressive Disclosure**
+
 - **Tier 1** (Always loaded): Metadata (name + description) for discovery
 - **Tier 2** (On activation): This SKILL.md with instructions
 - **Tier 3** (On demand): templates/, scripts/
@@ -46,6 +47,7 @@ python3 skills/architecture-design-review/scripts/validate_architecture.py --jso
 ```
 
 Parse the JSON output to identify:
+
 - `architecture_file`: Path to architecture.md
 - `available_docs`: List of available supporting documents
 - `adr_count`: Number of ADR files found
