@@ -3,8 +3,8 @@ name: technical-detailed-design
 description: Executes implementation planning workflow to generate technical, detailed design artifacts including design documents, research findings, data models, and API contracts. Use when creating or updating detailed technical designs, planning feature implementation, designing system components, or when user mentions technical design creation, detailed design, API design, data modeling, implementation planning, or design updates.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-29"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -37,7 +37,7 @@ This skill guides you through a structured implementation planning workflow to c
 
 - Feature specification or requirements document available
 - Templates provided with this skill (in `templates/` directory)
-- Scripts provided with this skill (in `scripts/` directory)
+- Python 3.6+ and setup script provided with this skill (in `scripts/setup-design.py`)
 - Git repository with feature branch (format: `N-feature-name`, e.g., `1-user-authentication`)
 - Feature directory at `specs/N-feature-name/` with `spec.md` file
 
@@ -86,16 +86,10 @@ This skill guides you through a structured implementation planning workflow to c
 
 1. **Run setup script** to create directory structure and copy templates:
 
-   **Bash (macOS/Linux):**
+   **Python 3 (Cross-platform):**
 
    ```bash
-   <SKILL_DIR>/scripts/setup-design.sh --json
-   ```
-
-   **PowerShell (Windows):**
-
-   ```powershell
-   <SKILL_DIR>/scripts/setup-design.ps1 -Json
+   python3 <SKILL_DIR>/scripts/setup-design.py --json
    ```
 
    Replace `<SKILL_DIR>` with the absolute path to this skill directory.
@@ -408,28 +402,38 @@ Add Stripe payment processing to checkout flow
 9. **Mark unknowns clearly** with "NEEDS CLARIFICATION" during initial analysis
 10. **Resolve all clarifications** before moving to design phase
 
-## Included Resources
+## Quality Checklist
 
-This skill is self-contained and includes:
+- [ ] **Prerequisites Met**: Feature spec exists, git repo initialized, on feature branch
+- [ ] **Templates Used**: All required templates copied and populated
+- [ ] **Research Complete**: All NEEDS CLARIFICATION items resolved with documented decisions
+- [ ] **Data Models Defined**: All entities documented with fields, relationships, and validation
+- [ ] **API Contracts Complete**: All endpoints specified with request/response schemas
+- [ ] **Ground Rules Compliant**: Design aligns with project standards and architecture
+- [ ] **Schemas Valid**: OpenAPI/GraphQL schemas validate without syntax errors
+- [ ] **Artifacts Committed**: All design files committed with proper commit message
+- [ ] **Review Completed**: Technical design review skill run and issues addressed
 
-**Templates** (in `templates/` directory):
+## Tips
 
-- `design-template.md` - Main implementation plan structure
-- `research-template.md` - Research findings and decisions format
-- `data-model-template.md` - Entity and data model documentation
-- `api-contract-template.md` - API endpoint specification format
+- **Start Small**: Begin with core functionality, expand to edge cases
+- **Document Assumptions**: When requirements are unclear, document your assumptions
+- **Reference Architecture**: Always check architecture.md for existing patterns
+- **Validate Early**: Test API contracts against real data early
+- **Keep It DRY**: Reuse existing data models and API patterns
+- **Consider Testing**: Design with testability in mind from the start
+- **Version APIs**: Plan for API evolution and backward compatibility
+- **Security First**: Address security requirements in design phase
+- **Performance Matters**: Consider scalability and performance constraints
+- **Automate Setup**: Use the provided Python script for consistent setup
 
-**Scripts** (in `scripts/` directory):
+## Additional Resources
 
-- `setup-design.sh` - Bash script for directory setup (macOS/Linux)
-- `setup-design.ps1` - PowerShell script for directory setup (Windows)
-
-**Optional Workspace Files** (if available in project):
-
-- `docs/ground-rules.md` - Project constraints and standards
-- `docs/architecture.md` - Architectural decisions and patterns
-
-All templates are automatically copied by the setup script to the appropriate design directory.
+- [OpenAPI Specification](https://swagger.io/specification/) - For API contract standards
+- [Data Modeling Best Practices](https://en.wikipedia.org/wiki/Data_modeling) - Entity-relationship design
+- [REST API Design Guidelines](https://restfulapi.net/) - API design principles
+- [State Machine Patterns](https://en.wikipedia.org/wiki/Finite-state_machine) - For complex workflows
+- [Technical Debt Management](https://martinfowler.com/bliki/TechnicalDebt.html) - Design decisions impact
 
 ## Next Steps After Design
 
