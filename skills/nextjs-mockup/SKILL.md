@@ -1,9 +1,10 @@
 ---
 name: nextjs-mockup
-description: Creates interactive UI mockups and prototypes using Next.js 16, React 19, and Tailwind CSS 4. Builds responsive components, pages, and layouts from design specifications or wireframes. Use when creating mockups, prototypes, UI demos, design implementations, or when user mentions Next.js prototype, Tailwind mockup, interactive demo, or UI prototype.
+description: Creates interactive UI mockups and prototypes using Next.js 16, React 19, and Tailwind CSS 4. Builds responsive components, pages, and layouts from design specifications. Use when creating mockups, prototypes, or UI demos, or when user mentions Next.js prototype, Tailwind mockup, or interactive demo.
 metadata:
   author: Dau Quang Thanh
   version: "2.0.0"
+  last_updated: "2026-02-03"
 license: MIT
 ---
 
@@ -39,11 +40,11 @@ Creates interactive UI mockups and prototypes using the latest Next.js (v16), Re
 **Check Prerequisites:**
 
 ```bash
-# Bash
-./skills/nextjs-mockup/scripts/check-nextjs-prerequisites.sh
+# Python 3.8+
+python3 skills/nextjs-mockup/scripts/check-prerequisites.py
 
-# PowerShell
-.\skills\nextjs-mockup\scripts\check-nextjs-prerequisites.ps1
+# Or with JSON output
+python3 skills/nextjs-mockup/scripts/check-prerequisites.py --json
 ```
 
 ## Technology Stack
@@ -91,16 +92,14 @@ Creates interactive UI mockups and prototypes using the latest Next.js (v16), Re
 1. **Run prerequisite check:**
 
    ```bash
-   # Bash
-   ./skills/nextjs-mockup/scripts/check-nextjs-prerequisites.sh --json
-   
-   # PowerShell
-   .\skills\nextjs-mockup\scripts\check-nextjs-prerequisites.ps1 -Json
+   # Python 3.8+
+   python3 skills/nextjs-mockup/scripts/check-prerequisites.py --json
    ```
 
 2. **Parse script output:**
-   - `node_version`: Must be 18.0.0 or higher
-   - `package_manager`: npm or pnpm detected
+   - `node.available`: Must be true
+   - `node.major_version`: Must be 18 or higher
+   - `package_manager.name`: npm or pnpm detected
    - `workspace_root`: Repository root path
 
 3. **Initialize Next.js project** (if not exists):
@@ -473,10 +472,9 @@ The skill provides these templates:
 
 ## Scripts
 
-Prerequisite check scripts:
+Prerequisite check script:
 
-- **scripts/check-nextjs-prerequisites.sh**: Bash script for Node.js, npm/pnpm validation
-- **scripts/check-nextjs-prerequisites.ps1**: PowerShell script for Windows
+- **scripts/check-prerequisites.py**: Python 3.8+ script for cross-platform Node.js, npm/pnpm validation
 
 ## Examples
 
