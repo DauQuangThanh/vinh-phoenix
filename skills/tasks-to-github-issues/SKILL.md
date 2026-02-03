@@ -4,7 +4,8 @@ description: Converts project tasks from tasks.md into actionable GitHub issues 
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
   last-updated: "2026-01-27"
 ---
 
@@ -43,25 +44,16 @@ Activate this skill when:
 
 **Validation:**
 
-Use the prerequisite checking scripts to verify required files and configuration:
-
-**Bash (macOS/Linux):**
+Use the prerequisite checking script to verify required files and configuration:
 
 ```bash
-skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.sh
-```
-
-**PowerShell (Windows):**
-
-```powershell
-.\skills\tasks-to-github-issues\scripts\check-tasks-to-issues-prerequisites.ps1
+python skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.py
 ```
 
 **JSON Output (for parsing):**
 
 ```bash
-skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.sh --json
-.\skills\tasks-to-github-issues\scripts\check-tasks-to-issues-prerequisites.ps1 -Json
+python skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.py --json
 ```
 
 **What the scripts check:**
@@ -196,24 +188,18 @@ The template provides a structured format for converting tasks to issues with al
 
 ## Scripts
 
-### Prerequisite Checking
+The skill includes prerequisite checking scripts:
 
-**Bash (macOS/Linux):**
+**Python (Cross-Platform):**
 
 ```bash
-skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.sh
-```
-
-**PowerShell (Windows):**
-
-```powershell
-.\skills\tasks-to-github-issues\scripts\check-tasks-to-issues-prerequisites.ps1
+python skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.py
 ```
 
 **JSON Output:**
 
 ```bash
-skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.sh --json
+python skills/tasks-to-github-issues/scripts/check-tasks-to-issues-prerequisites.py --json
 ```
 
 **Output includes:**
@@ -263,3 +249,32 @@ For more detailed guidance, see:
   - GitHub issue creation with dependencies
   - Metadata tracking
   - Cross-platform prerequisite checking scripts
+
+- **v2.1.0** (2026-02-03): Python3 migration
+  - Migrated prerequisite scripts to Python3
+  - Updated documentation and metadata
+  - Enhanced cross-platform compatibility
+
+## Quality Checklist
+
+- [ ] **Script Compatibility**: Python script runs on macOS, Linux, and Windows without platform-specific issues
+- [ ] **Git Remote Parsing**: Correctly extracts owner and repository name from GitHub remote URLs
+- [ ] **File Detection**: Accurately locates tasks.md files in the repository
+- [ ] **JSON Output**: Produces valid JSON with all required fields for programmatic use
+- [ ] **Error Handling**: Provides clear error messages when prerequisites are not met
+- [ ] **Documentation**: SKILL.md is up-to-date with current implementation details
+
+## Tips
+
+- Ensure your Git remote is configured to point to a GitHub repository before running this skill
+- Run the prerequisite check first to validate your environment setup
+- Use the `--json` flag for integration with automated workflows
+- Keep your tasks.md file updated with the latest task breakdown before syncing
+- Review the generated GitHub issues to ensure proper categorization and assignment
+
+## Additional Resources
+
+- [task-management skill](skills/task-management/) - Create structured tasks.md from design artifacts
+- [coding skill](skills/coding/) - Execute implementation tasks from tasks.md
+- [project-consistency-analysis skill](skills/project-consistency-analysis/) - Validate project artifact consistency
+- [tasks-to-azure-devops skill](skills/tasks-to-azure-devops/) - Sync tasks to Azure DevOps work items
