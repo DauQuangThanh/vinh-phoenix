@@ -3,8 +3,8 @@ name: technical-detailed-design-review
 description: Reviews technical detailed design documentation for completeness, consistency, and quality. Validates design decisions, data models, API contracts, implementation plans, and alignment with requirements and ground rules. Use when reviewing technical detailed designs, validating implementation plans, assessing design quality, or when user mentions design review, technical design review, API contract validation, data model review, or implementation plan assessment.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -38,7 +38,7 @@ This skill performs comprehensive reviews of technical design documentation to e
   - `docs/ground-rules.md` - Project constraints (Optional but recommended)
   - `docs/architecture.md` - Architectural patterns (Optional but recommended)
   - `specs/*/spec.md` - Feature specifications (Required for traceability)
-- **Tools**: bash (Unix/Linux/macOS) or PowerShell (Windows) for running prerequisite checks
+- **Tools**: Python 3.6+ for running prerequisite checks
 
 ## File Structure
 
@@ -60,16 +60,10 @@ technical-detailed-design-review/
 
 Run the prerequisite check script to verify design documentation exists and identify all design artifacts:
 
-**Bash (Unix/Linux/macOS):**
+**Python 3 (Cross-platform):**
 
 ```bash
-/path/to/technical-detailed-design-review/scripts/check-design.sh --json
-```
-
-**PowerShell (Windows):**
-
-```powershell
-/path/to/technical-detailed-design-review/scripts/check-design.ps1 -Json
+python3 /path/to/technical-detailed-design-review/scripts/check-design.py --json
 ```
 
 **Note**: Replace `/path/to/technical-detailed-design-review` with the actual path where this skill is located:
@@ -375,22 +369,39 @@ Present the review findings to the user:
 9. **Report clearly**: Use structured format from template
 10. **Use absolute paths**: Always reference files with full paths
 
-## Included Resources
+## Quality Checklist
 
-This skill is self-contained and includes:
+- [ ] **Prerequisites Met**: All required design files exist and are accessible
+- [ ] **Document Completeness**: All required sections present in design documents
+- [ ] **Research Validation**: All decisions documented with rationale and alternatives
+- [ ] **Data Model Validation**: Entities, fields, relationships, and constraints defined
+- [ ] **API Contract Validation**: Endpoints, schemas, and error handling specified
+- [ ] **Requirements Traceability**: All requirements addressed in design
+- [ ] **Ground Rules Compliance**: Design adheres to project standards (if applicable)
+- [ ] **Architecture Alignment**: Design follows established patterns (if applicable)
+- [ ] **Implementation Feasibility**: Design is realistic and implementable
+- [ ] **Review Report Complete**: All findings documented with recommendations
 
-**Templates** (in `templates/` directory):
+## Tips
 
-- `technical-detailed-design-review-template.md` - Review report structure
+- **Review Early**: Start review as soon as design is draft-complete, don't wait for perfection
+- **Check Traceability**: Use feature specs to verify all requirements are covered
+- **Focus on Critical Issues**: Prioritize blocking issues over minor formatting problems
+- **Be Specific**: Reference exact file locations and line numbers in findings
+- **Balance Feedback**: Provide constructive criticism with positive recognition
+- **Consider Context**: Understand project constraints and business requirements
+- **Validate Assumptions**: Question unverified assumptions in the design
+- **Test Feasibility**: Think about implementation challenges and risks
+- **Document Exceptions**: Note when designs deviate from standards with justification
+- **Follow Up**: Ensure critical issues are addressed before implementation begins
 
-**Scripts** (in `scripts/` directory):
+## Additional Resources
 
-- `check-design.sh` - Bash script for prerequisite checking (macOS/Linux)
-- `check-design.ps1` - PowerShell script for prerequisite checking (Windows)
-
-**References** (in `references/` directory):
-
-- `review-checklist.md` - Detailed checklists for all review phases
+- [Technical Design Review Best Practices](https://martinfowler.com/bliki/DesignReview.html) - Design review principles
+- [Code Review Guidelines](https://google.github.io/eng-practices/review/) - Review best practices
+- [API Design Review Checklist](https://apisyouwonthate.com/blog/api-design-review-checklist) - API-specific reviews
+- [Data Modeling Review](https://en.wikipedia.org/wiki/Data_modeling#Data_modeling_review) - Data model validation
+- [Architecture Decision Records](https://adr.github.io/) - Documenting architectural choices
 
 ## Next Steps After Review
 
