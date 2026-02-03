@@ -4,8 +4,8 @@ description: Generates and updates agent skills following the Agent Skills speci
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "2.0"
-  last_updated: "2026-02-01"
+  version: "2.1"
+  last_updated: "2026-02-03"
 ---
 
 # Agent Skill Creation
@@ -116,13 +116,13 @@ python3 scripts/validate-skill.py ./skill-name
 **Use the 3-part formula:**
 
 ```
-[What it does] + [When to use] + [Keywords for matching]
+[Active Verbs] + [Use when Scenarios] + [User Mentions/Keywords]
 ```
 
 **Template:**
 
 ```yaml
-description: "[ACTION 1], [ACTION 2], and [ACTION 3]. Use when [SCENARIO 1], [SCENARIO 2], or when user mentions [KEYWORD 1], [KEYWORD 2], or [KEYWORD 3]."
+description: "[Action 1] and [Action 2]. Use when [Scenario 1] or [Scenario 2], or when user mentions [Keyword 1] or [Keyword 2]."
 ```
 
 **Requirements:**
@@ -130,7 +130,7 @@ description: "[ACTION 1], [ACTION 2], and [ACTION 3]. Use when [SCENARIO 1], [SC
 - Length: 150-300 characters optimal (max 1024)
 - Include 2-4 specific actions (active verbs)
 - Include 2-3 use cases starting with "Use when..."
-- Include 3-5 keywords users might mention
+- **Critical:** Include keywords clause ("or when user mentions...") for discovery
 - Be specific, not vague
 
 **Example:**

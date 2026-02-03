@@ -1,6 +1,6 @@
 ---
 name: skill-name
-description: "[ACTION 1], [ACTION 2], and [ACTION 3]. Use when [SCENARIO 1], [SCENARIO 2], or when user mentions [KEYWORD 1], [KEYWORD 2], or [KEYWORD 3]."
+description: "[Active Verbs]. Use when [Specific Scenarios] or when user mentions [Keywords]."
 license: MIT
 metadata:
   author: Your Name
