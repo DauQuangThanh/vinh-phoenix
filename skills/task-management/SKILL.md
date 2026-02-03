@@ -3,8 +3,8 @@ name: task-management
 description: Generates actionable, dependency-ordered tasks.md files from design artifacts (spec.md, design.md, architecture.md). Organizes implementation tasks by user story with parallelization markers and test criteria. Use when breaking down features into tasks, creating implementation plans, or when user mentions tasks, project planning, implementation roadmap, task breakdown, or feature decomposition.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last-updated: "2026-01-27"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -35,7 +35,7 @@ This skill generates comprehensive implementation task lists (`tasks.md`) from d
   - `quickstart.md` (test scenarios) - Optional
 - **Product-level documentation**:
   - `docs/architecture.md` (architectural patterns, ADRs, deployment) - Optional
-- **Tools**: bash (Unix/Linux/macOS) or PowerShell (Windows) for running prerequisite checks
+- **Tools**: Python 3.6+ for running prerequisite checks
 
 ## Instructions
 
@@ -81,11 +81,10 @@ This skill generates comprehensive implementation task lists (`tasks.md`) from d
 
 Run the prerequisite check script to identify the feature directory and available design documents:
 
-**Bash (Unix/Linux/macOS):**
+**Python:**
 
 ```bash
-cd /path/to/repo
-bash skills/project-management/scripts/check-prerequisites.sh --json
+python skills/task-management/scripts/check-prerequisites.py --json
 ```
 
 **PowerShell (Windows):**
@@ -349,10 +348,10 @@ As a user, I want to log in...
 
 This skill includes cross-platform scripts for checking prerequisites and identifying feature directories:
 
-### Bash Script (Unix/Linux/macOS)
+### Python Script (Cross-Platform)
 
 ```bash
-bash skills/task-management/scripts/check-prerequisites.sh --json
+python skills/task-management/scripts/check-prerequisites.py [--json]
 ```
 
 **Features:**
@@ -443,3 +442,28 @@ Before finalizing tasks.md, validate for AI implementation:
 - Ensure `technical-detailed-design` skill has been used to create implementation design
 - **Recommended:** Use `coding-standards` skill to establish code conventions (if not yet created)
 - Consider `architecture-design` skill for product-level architecture (if not yet created)
+
+## Quality Checklist
+
+- [ ] **Script Compatibility**: Python script runs on macOS, Linux, and Windows without platform-specific issues
+- [ ] **Directory Detection**: Correctly identifies feature directories in various project structures
+- [ ] **Document Scanning**: Accurately detects required and optional design documents
+- [ ] **JSON Output**: Produces valid JSON with all required fields
+- [ ] **Error Handling**: Provides clear error messages when prerequisites are not met
+- [ ] **Documentation**: SKILL.md is up-to-date with current implementation details
+
+## Tips
+
+- Always verify that design.md and spec.md exist and are approved before generating tasks
+- Use the prerequisite check script to automatically locate feature directories
+- Run the script with `--json` flag for programmatic integration
+- Ensure user stories in spec.md have clear priorities (P1, P2, P3...) for proper phasing
+- Review the generated tasks.md format to ensure AI implementation readiness
+
+## Additional Resources
+
+- [requirements-specification skill](skills/requirements-specification/) - Create initial feature specifications
+- [technical-detailed-design skill](skills/technical-detailed-design/) - Create detailed implementation designs
+- [coding skill](skills/coding/) - Execute the implementation tasks
+- [project-consistency-analysis skill](skills/project-consistency-analysis/) - Validate document consistency
+- [coding-standards skill](skills/coding-standards/) - Establish code conventions
