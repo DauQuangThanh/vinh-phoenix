@@ -4,7 +4,8 @@ description: Converts tasks from tasks.md into Azure DevOps work items with depe
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 ---
 
 # Tasks to Azure DevOps Work Items
@@ -41,11 +42,7 @@ This skill converts structured tasks from `tasks.md` into Azure DevOps work item
 **Check Prerequisites:**
 
 ```bash
-# Bash
-./scripts/check-tasks-to-ado-prerequisites.sh
-
-# PowerShell
-.\scripts\check-tasks-to-ado-prerequisites.ps1
+python skills/tasks-to-azure-devops/scripts/check-tasks-to-ado-prerequisites.py --json
 ```
 
 ## Instructions
@@ -54,13 +51,9 @@ This skill converts structured tasks from `tasks.md` into Azure DevOps work item
 
 1. **Run prerequisite check script** to validate environment:
 
-   ```bash
-   # Bash
-   ./scripts/check-tasks-to-ado-prerequisites.sh --json
-   
-   # PowerShell
-   .\scripts\check-tasks-to-ado-prerequisites.ps1 -Json
-   ```
+    ```bash
+    python skills/tasks-to-azure-devops/scripts/check-tasks-to-ado-prerequisites.py --json
+    ```
 
 2. **Parse script output** to extract:
    - `workspace_root`: Repository root directory
@@ -268,8 +261,7 @@ The skill uses the following template:
 
 The skill includes prerequisite check scripts:
 
-- **scripts/check-tasks-to-ado-prerequisites.sh**: Bash script to validate environment (Git, Azure DevOps remote, tasks.md)
-- **scripts/check-tasks-to-ado-prerequisites.ps1**: PowerShell script for Windows environments
+- **scripts/check-tasks-to-ado-prerequisites.py**: Python script to validate environment (Git, Azure DevOps remote, tasks.md)
 
 ## Examples
 
@@ -366,3 +358,26 @@ To fix:
 7. **Authentication:** Requires Azure DevOps MCP server to be configured with proper authentication (Personal Access Token or OAuth).
 
 8. **Project Validation:** The skill will ONLY create work items in the project that matches the Git remote. This prevents accidental work item creation in wrong projects.
+
+## Quality Checklist
+
+- [ ] **Script Compatibility**: Python script runs on macOS, Linux, and Windows without platform-specific issues
+- [ ] **Git Remote Parsing**: Correctly extracts organization, project, and repository from Azure DevOps remote URLs
+- [ ] **File Detection**: Accurately locates tasks.md files in the repository
+- [ ] **JSON Output**: Produces valid JSON with all required fields for programmatic use
+- [ ] **Error Handling**: Provides clear error messages when prerequisites are not met
+- [ ] **Documentation**: SKILL.md is up-to-date with current implementation details
+
+## Tips
+
+- Ensure your Git remote is configured to point to an Azure DevOps repository before running this skill
+- Run the prerequisite check first to validate your environment setup
+- Use the `--json` flag for integration with automated workflows
+- Keep your tasks.md file updated with the latest task breakdown before syncing
+- Review the generated work items in Azure DevOps to ensure proper categorization and assignment
+
+## Additional Resources
+
+- [task-management skill](skills/task-management/) - Create structured tasks.md from design artifacts
+- [coding skill](skills/coding/) - Execute implementation tasks from tasks.md
+- [project-consistency-analysis skill](skills/project-consistency-analysis/) - Validate project artifact consistency
