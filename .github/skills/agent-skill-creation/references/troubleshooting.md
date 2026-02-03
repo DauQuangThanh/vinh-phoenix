@@ -421,7 +421,7 @@ description: "Handles files: all types"
 
 - Always quote strings with colons, newlines, or special characters
 - Use consistent indentation (2 spaces recommended)
-- Validate YAML online: <https://www.yamllint.com/>
+- Validate using the skill's validation script: `python3 scripts/validate-skill.py ./skill-name`
 
 ### Issue 7: Content Quality Issues
 
@@ -560,9 +560,9 @@ chmod +x my-skill/scripts/*.py
 
 ### Getting Help
 
-1. **Check specification:** `/rules/agent-skills-creation-rules.md`
-2. **Review examples:** `https://github.com/anthropics/skills`
-3. **Validate:** Use `scripts/validate.py`
+1. **Check specification:** Review this skill's SKILL.md and references/
+2. **Review examples:** See [assets/examples/](assets/examples/) for complete working examples
+3. **Validate:** Use `scripts/validate-skill.py`
 4. **Test:** Load in target agent platform
 
 ## Platform-Specific Issues

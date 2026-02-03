@@ -477,7 +477,3 @@ Use `assets/checklists/command-validation-checklist.md` for systematic review.
 - [ ] Correct argument syntax
 - [ ] Edge cases documented
 - [ ] Error handling included
-
----
-
-*This skill is self-contained. All references, templates, and scripts are in this directory.*

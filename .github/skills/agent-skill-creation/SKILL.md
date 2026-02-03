@@ -481,10 +481,3 @@ This skill includes comprehensive self-contained resources:
 6. **Stay self-contained**: No external dependencies outside skill directory
 7. **Use templates**: Start with templates/skill-template.md
 8. **Validate often**: Run validation after each major change
-
----
-
-**Version**: 2.0  
-**Last Updated**: 2026-02-01  
-**Author**: Dau Quang Thanh  
-**License**: MIT

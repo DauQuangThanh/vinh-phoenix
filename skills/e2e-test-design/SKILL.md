@@ -3,7 +3,7 @@ name: e2e-test-design
 description: Generates comprehensive end-to-end test plans and specifications covering test strategy, user journeys, test scenarios, test data management, test environments, test automation framework selection, and execution plans. Use when designing E2E tests, creating test specifications, planning test automation, or when user mentions end-to-end testing, E2E test plan, test scenarios, test automation, integration testing, or system testing.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
+  version: "1.1.0"
   last-updated: "2026-01-27"
 license: MIT
 ---
@@ -47,25 +47,18 @@ Activate this skill when:
 
 **Validation:**
 
-Use the prerequisite checking scripts to verify required files exist:
+Use the prerequisite checking script to verify required files exist:
 
-**Bash (macOS/Linux):**
+**Cross-platform (Python 3.8+):**
 
 ```bash
-scripts/check-e2e-prerequisites.sh
-```
-
-**PowerShell (Windows):**
-
-```powershell
-.\scripts\check-e2e-prerequisites.ps1
+python3 scripts/check-e2e-prerequisites.py
 ```
 
 **JSON Output (for parsing):**
 
 ```bash
-scripts/check-e2e-prerequisites.sh --json
-.\scripts\check-e2e-prerequisites.ps1 -Json
+python3 scripts/check-e2e-prerequisites.py --json
 ```
 
 **What the scripts check:**
@@ -82,8 +75,8 @@ scripts/check-e2e-prerequisites.sh --json
 ### Setup Phase
 
 1. **Run prerequisite script** to detect required files:
-   - Execute the appropriate script for your platform
-   - Parse JSON output to get file paths
+   - Execute: `python3 scripts/check-e2e-prerequisites.py`
+   - Parse JSON output with: `python3 scripts/check-e2e-prerequisites.py --json`
    - **STOP AND ASK USER** if any of these are missing:
      - `docs/architecture.md` (required)
      - `docs/ground-rules.md` (required)
