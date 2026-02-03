@@ -3,8 +3,8 @@ name: technical-writing
 description: Creates and improves technical documentation for software projects including API docs, README files, user guides, architecture documents, and tutorials. Use when writing technical documentation, documenting code, creating user guides, or when user mentions technical writing, documentation, API docs, README, or software documentation.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.1"
-  last-updated: "2026-01-29"
+  version: "2.1.0"
+  last-updated: "2026-02-03"
 license: MIT
 ---
 
@@ -29,6 +29,7 @@ Use this skill when:
 - Understanding of the software/system being documented
 - Access to source code (for API documentation)
 - Target audience definition and style guide (if applicable)
+- Python 3.6+ for running documentation scripts
 
 ## Instructions
 
@@ -184,119 +185,41 @@ See [references/complete-examples.md](references/complete-examples.md) for detai
 - Error documentation
 - Configuration documentation
 
-## Edge Cases
+## Quality Checklist
 
-### Case 1: Technical Terminology Varies Across Domains
+- [ ] **Audience Analysis**: Target audience clearly defined with appropriate detail level
+- [ ] **Structure**: Logical organization with clear hierarchy and navigation
+- [ ] **Content Completeness**: All required information covered without gaps
+- [ ] **Accuracy**: Technical details verified and up-to-date
+- [ ] **Clarity**: Simple language, clear explanations, consistent terminology
+- [ ] **Examples**: Working code examples with proper syntax highlighting
+- [ ] **Visual Aids**: Appropriate diagrams, screenshots, and tables
+- [ ] **Accessibility**: Readable fonts, alt text for images, keyboard navigation
+- [ ] **Maintenance**: Version information, update procedures, changelog
+- [ ] **Validation**: Scripts pass without critical errors, links functional
 
-**Handling:** Define terms explicitly on first use and provide a glossary for complex topics.
+## Tips
 
-**Action:** Use tooltips or hover text for inline definitions, or create a dedicated glossary page.
-
-### Case 2: Documentation for Multiple Versions
-
-**Handling:** Maintain version-specific documentation with clear version indicators.
-
-**Action:** Use version selectors in documentation site, include version in URLs, maintain changelog.
-
-### Case 3: Multilingual Documentation
-
-**Handling:** Provide translations with cultural context, not just word-for-word.
-
-**Action:** Use localization tools, engage native speakers for review, maintain translation memory.
-
-### Case 4: Documentation for Private/Internal APIs
-
-**Handling:** Balance security with usability by documenting without exposing sensitive details.
-
-**Action:** Use placeholders for sensitive values, provide sanitized examples, restrict access appropriately.
-
-### Case 5: Rapidly Changing Codebase
-
-**Handling:** Automate documentation generation where possible and implement review processes.
-
-**Action:** Use docstring-based tools (Sphinx, JSDoc), integrate docs into CI/CD, assign documentation owners.
-
-## Error Handling
-
-### Error: Outdated Code Examples
-
-**Issue:** Code examples no longer work with current version.
-
-**Resolution:**
-1. Test all examples against current version
-2. Update examples to use current API
-3. Add version badges to examples
-4. Automate testing of documentation examples
-
-### Error: Missing Context
-
-**Issue:** Documentation assumes too much prior knowledge.
-
-**Resolution:**
-1. Define target audience explicitly
-2. Add prerequisites section
-3. Link to foundational concepts
-4. Provide background information
-
-### Error: Inconsistent Terminology
-
-**Issue:** Same concept called different names throughout docs.
-
-**Resolution:**
-1. Create and maintain terminology glossary
-2. Use search/replace to standardize terms
-3. Document preferred terms in style guide
-4. Use documentation linter to catch variations
-
-### Error: Poor Searchability
-
-**Issue:** Users can't find information in documentation.
-
-**Resolution:**
-1. Improve heading structure and keywords
-2. Add comprehensive table of contents
-3. Implement search functionality
-4. Use consistent naming conventions
-5. Add cross-references and "See also" sections
-
-## Scripts
-
-### Document Structure Validator
-
-Validates documentation structure and completeness.
-
-**Bash (macOS/Linux):**
-```bash
-./scripts/validate-docs.sh --dir ./docs --type readme
-./scripts/validate-docs.sh --dir ./docs --type api
-```
-
-**PowerShell (Windows):**
-
-```powershell
-.\scripts\validate-docs.ps1 -Directory .\docs -Type readme
-.\scripts\validate-docs.ps1 -Directory .\docs -Type api
-```
-
-### Documentation Generator
-
-Generates documentation templates based on type.
-
-**Bash (macOS/Linux):**
-
-```bash
-./scripts/generate-docs.sh --type readme --output ./README.md
-./scripts/generate-docs.sh --type api --output ./docs/api.md
-```
-
-**PowerShell (Windows):**
-
-```powershell
-.\scripts\generate-docs.ps1 -Type readme -Output .\README.md
-.\scripts\generate-docs.ps1 -Type api -Output .\docs\api.md
-```
+- **Know Your Audience**: Write for beginners if targeting new users, technical details for developers
+- **Start with Templates**: Use provided templates as starting points, customize for your needs
+- **Test Everything**: Follow your own instructions, run code examples, click all links
+- **Version Early**: Include version numbers in API docs and release notes from the start
+- **Use Consistent Terminology**: Maintain a glossary and use terms consistently
+- **Include Troubleshooting**: Anticipate common issues and provide solutions
+- **Keep It Current**: Set up processes to update docs with each code change
+- **Get Feedback**: Have others review your docs, especially non-technical users
+- **Use Tools**: Leverage validation scripts and automated checks
+- **Plan for Scale**: Structure docs to accommodate future growth and features
 
 ## Additional Resources
+
+- [Google Technical Writing Course](https://developers.google.com/tech-writing) - Free technical writing training
+- [Write the Docs](https://www.writethedocs.org/) - Community for documentation authors
+- [Documentation Best Practices](https://www.divio.com/blog/documentation/) - Four types of documentation
+- [Markdown Guide](https://www.markdownguide.org/) - Complete Markdown reference
+- [API Documentation Tools](https://tools.openapis.org/) - Tools for API documentation
+
+### References
 
 - [references/documentation-best-practices.md](references/documentation-best-practices.md) - Comprehensive guide to documentation standards and best practices
 - [references/software-doc-types.md](references/software-doc-types.md) - Detailed explanation of different documentation types
