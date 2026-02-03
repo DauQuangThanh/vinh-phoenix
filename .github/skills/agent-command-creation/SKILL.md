@@ -4,8 +4,8 @@ description: Generates and updates agent command files following the Agent Comma
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "2.0"
-  last_updated: "2026-02-01"
+  version: "2.1.0"
+  last_updated: "2026-02-03"
 ---
 
 # Agent Command Creation
@@ -477,3 +477,38 @@ Use `assets/checklists/command-validation-checklist.md` for systematic review.
 - [ ] Correct argument syntax
 - [ ] Edge cases documented
 - [ ] Error handling included
+
+## Quality Checklist
+
+- [ ] **Agent Compatibility**: Command uses correct format and directory for target agent
+- [ ] **Frontmatter Validity**: YAML frontmatter properly formatted with required fields
+- [ ] **Description Quality**: Clear, concise description under 80 characters starting with action verb
+- [ ] **Instruction Clarity**: Step-by-step instructions that are unambiguous and actionable
+- [ ] **Example Coverage**: Multiple examples showing input/output with realistic scenarios
+- [ ] **Argument Handling**: Proper use of $ARGUMENTS or {{args}} placeholders
+- [ ] **Error Scenarios**: Documentation of common errors and edge cases
+- [ ] **Output Specification**: Clear definition of expected output format
+- [ ] **Cross-platform**: Scripts and paths work on Windows, macOS, and Linux
+- [ ] **Validation Passed**: Command passes all automated validation checks
+
+## Tips
+
+- **Start with Templates**: Always begin with the provided templates rather than building from scratch
+- **Validate Early**: Run validation after each major edit to catch issues quickly
+- **Test on Multiple Platforms**: Ensure commands work across Windows, macOS, and Linux
+- **Keep Descriptions Short**: One sentence, 10-80 characters, focus on what the command does
+- **Use Action Verbs**: Start descriptions with verbs like "Create", "Analyze", "Generate", "Validate"
+- **Include Real Examples**: Use actual input/output examples, not placeholders
+- **Handle Edge Cases**: Document what happens with invalid inputs or unusual scenarios
+- **Specify Output Format**: Clearly state what the command should return and in what format
+- **Test Arguments**: Verify that $ARGUMENTS or {{args}} work correctly in your instructions
+- **Review for Clarity**: Have someone else test the command to ensure instructions are clear
+
+## Additional Resources
+
+- [Agent Command Format Standards](references/format-standards.md) - Complete technical specifications
+- [Prompt Engineering Guide](references/prompt-engineering.md) - Advanced instruction writing techniques
+- [Agent Directory Reference](references/agent-directory-reference.md) - All supported AI agents and their requirements
+- [Validation Rules](references/validation-rules.md) - Detailed validation criteria and error codes
+- [Command Validation Checklist](assets/checklists/command-validation-checklist.md) - Systematic review checklist
+- [Complete Examples](references/complete-examples.md) - Real-world command examples for different agents
