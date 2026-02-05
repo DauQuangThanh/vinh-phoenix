@@ -198,9 +198,11 @@ def init(
 
     current_dir = Path.cwd()
 
+    # Backup setup
+    backup_paths = {}
+
     # Upgrade mode validation and setup
     is_upgrade_mode = False
-    backup_paths = {}
     existing_agents = []
 
     if upgrade:
@@ -377,8 +379,8 @@ def init(
     tracker.add("ai-select", "Select AI assistant(s)")
     tracker.complete("ai-select", f"{', '.join(selected_ais)}")
 
-    # Add backup step for upgrade mode
-    if is_upgrade_mode:
+    # Add backup step for upgrade mode or merge mode
+    if is_upgrade_mode or merge_into_existing:
         tracker.add("backup", "Backup existing files")
 
     # Add steps for each AI assistant template download (only if not using local templates)
@@ -414,7 +416,7 @@ def init(
             local_ssl_context = ssl_context if verify else False
             local_client = httpx.Client(verify=local_ssl_context)
 
-            # Perform backup in upgrade mode
+            # Perform backup in upgrade mode or merge mode
             if is_upgrade_mode:
                 tracker.start("backup")
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -442,6 +444,16 @@ def init(
 
                 backup_count = len(backup_paths)
                 tracker.complete("backup", f"{backup_count} folder{'s' if backup_count != 1 else ''} backed up")
+            elif merge_into_existing:
+                tracker.start("backup")
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+                # Backup the entire existing directory
+                backup_folder = project_path.parent / f"{project_path.name}.backup.{timestamp}"
+                shutil.copytree(project_path, backup_folder)
+                backup_paths["."] = backup_folder
+
+                tracker.complete("backup", f"backed up to {backup_folder.name}")
 
             # Download and extract templates for each selected AI agent
             # Only copy shared .phoenix folder for the first agent to avoid redundancy
@@ -505,8 +517,8 @@ def init(
     console.print(tracker.render())
     console.print("\n[bold green]Project ready.[/bold green]")
 
-    # Show backup information for upgrade mode
-    if is_upgrade_mode and backup_paths:
+    # Show backup information
+    if backup_paths:
         console.print()
         backup_lines = ["[cyan]Backups created:[/cyan]"]
         for original, backup in backup_paths.items():
