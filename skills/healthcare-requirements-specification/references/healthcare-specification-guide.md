@@ -5,27 +5,33 @@ This guide provides detailed guidance for writing high-quality healthcare featur
 ## Healthcare Specification Principles
 
 ### 1. Patient-Centered Design
+
 Healthcare specifications must prioritize patient safety, clinical outcomes, and user experience for healthcare stakeholders (patients, clinicians, administrators).
 
 ### 2. Regulatory Compliance First
+
 All healthcare features must comply with HIPAA, FDA regulations, and other applicable healthcare laws. Compliance requirements should be identified early and integrated into all aspects of the specification.
 
 ### 3. Clinical Workflow Focus
+
 Specifications should describe clinical processes and workflows, not just technical features. Understanding how clinicians work is essential for successful healthcare software.
 
 ## Regulatory Considerations
 
 ### HIPAA Privacy Rule
+
 - **Minimum Necessary**: Only access the minimum amount of PHI required for the clinical purpose
 - **Patient Consent**: Obtain proper authorization before sharing PHI
 - **Business Associate Agreements**: Ensure all vendors comply with HIPAA
 
 ### HIPAA Security Rule
+
 - **Technical Safeguards**: Encryption, access controls, audit logging
 - **Physical Safeguards**: Secure storage and disposal of medical records
 - **Administrative Safeguards**: Policies, procedures, and training
 
 ### FDA Classification (if applicable)
+
 - **Class I**: Low risk, general controls
 - **Class II**: Moderate risk, special controls
 - **Class III**: High risk, premarket approval
@@ -33,18 +39,21 @@ Specifications should describe clinical processes and workflows, not just techni
 ## Common Healthcare Specification Patterns
 
 ### Patient Portal Features
+
 - Secure authentication with multi-factor authentication
 - Granular consent management for data sharing
 - Audit logging of all PHI access
 - Emergency access procedures for clinical care
 
 ### Clinical Documentation
+
 - Structured data entry to reduce errors
 - Integration with existing EHR systems
 - Real-time validation of clinical data
 - Automated quality checks and alerts
 
 ### Telemedicine Features
+
 - HIPAA-compliant video platforms
 - Secure messaging with encryption
 - Integration with clinical workflows
@@ -80,6 +89,7 @@ Specifications should describe clinical processes and workflows, not just techni
 ## Validation Criteria
 
 ### Good Healthcare Specifications
+
 - Include specific HIPAA requirements
 - Define clinical workflows clearly
 - Include patient safety considerations
@@ -87,6 +97,7 @@ Specifications should describe clinical processes and workflows, not just techni
 - Consider integration with existing systems
 
 ### Common Issues to Avoid
+
 - Generic "secure" requirements without specifics
 - Missing clinical context or workflows
 - No consideration of patient safety
@@ -96,15 +107,19 @@ Specifications should describe clinical processes and workflows, not just techni
 ### Examples of Good vs Bad Specifications
 
 #### Good: Patient Record Access
+
 "Clinicians can access patient records with role-based permissions. All access is logged with timestamp, user ID, and purpose. Patients can view their own records but cannot modify them."
 
 #### Bad: Generic Security
+
 "The system should be secure and HIPAA compliant."
 
 #### Good: Clinical Alert
+
 "When a patient's vital signs fall outside normal ranges, the system alerts the care team within 30 seconds and logs the alert in the patient's record."
 
 #### Bad: Vague Alert
+
 "The system should alert users when something is wrong."
 
 ## Guidelines
