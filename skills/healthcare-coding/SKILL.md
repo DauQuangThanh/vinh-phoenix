@@ -1,18 +1,18 @@
 ---
 name: healthcare-coding
-description: Generates and implements code for healthcare applications, ensuring compliance with medical standards, security requirements, and regulatory frameworks. Use when developing healthcare software, implementing medical data handling, creating patient management systems, or when user mentions healthcare coding, medical apps, HIPAA, HL7, or FHIR.
+description: Generates and implements code for healthcare applications with emphasis on code simplicity, maintainability, and readability, ensuring compliance with medical standards, security requirements, and regulatory frameworks. Use when developing healthcare software, implementing medical data handling, creating patient management systems, or when user mentions healthcare coding, medical apps, HIPAA, HL7, or FHIR.
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0"
-  last_updated: "2026-02-05"
+  version: "1.1"
+  last_updated: "2026-02-07"
 ---
 
 # Healthcare Coding
 
 ## Overview
 
-This skill provides comprehensive guidance for developing secure, compliant code for healthcare-related applications. It covers medical data handling, regulatory compliance (HIPAA, GDPR), security best practices, and integration with healthcare standards like HL7 and FHIR. The skill ensures that healthcare software meets industry standards for patient safety, data privacy, and interoperability.
+This skill provides comprehensive guidance for developing secure, compliant code for healthcare-related applications with emphasis on simplicity, maintainability, and readability. It covers medical data handling, regulatory compliance (HIPAA, GDPR), security best practices, and integration with healthcare standards like HL7 and FHIR. The skill ensures that healthcare software meets industry standards for patient safety, data privacy, and interoperability while maintaining high code quality.
 
 ## When to Use
 
@@ -43,31 +43,42 @@ This skill provides comprehensive guidance for developing secure, compliant code
 
 ### Step 2: Choose Technology Stack
 
-1. Select programming language based on application needs
-2. Choose appropriate frameworks and libraries
+1. Select programming language based on application needs and team expertise
+2. Choose appropriate frameworks and libraries that promote clean code
 3. Plan for scalability and performance requirements
-4. Consider cloud vs on-premises deployment
+4. Consider maintainability and readability of the chosen technologies
+5. Ensure the stack supports healthcare-specific security and compliance features
 
-### Step 3: Implement Security and Compliance
+### Step 3: Establish Code Quality Standards
+
+1. Define coding conventions for simplicity and readability
+2. Implement consistent naming conventions for healthcare domain objects
+3. Set up code review processes focusing on maintainability
+4. Establish automated testing and code quality checks
+5. Document code quality guidelines specific to healthcare applications
+
+### Step 4: Implement Security and Compliance
 
 1. Implement data encryption for sensitive information
 2. Add access controls and authentication mechanisms
 3. Include audit logging for all data access
 4. Ensure data anonymization where required
 
-### Step 4: Integrate Healthcare Standards
+### Step 5: Integrate Healthcare Standards
 
 1. Implement HL7 messaging for data exchange
 2. Use FHIR APIs for interoperability
 3. Handle DICOM for medical imaging if needed
 4. Validate data formats and standards compliance
 
-### Step 5: Test and Validate
+### Step 6: Test and Validate
 
 1. Perform security testing and penetration testing
 2. Validate compliance with regulations
 3. Test interoperability with other healthcare systems
 4. Conduct user acceptance testing with medical professionals
+5. Review code for simplicity, maintainability, and readability
+6. Run automated code quality checks and linting
 
 ## Examples
 
@@ -82,6 +93,8 @@ This skill provides comprehensive guidance for developing secure, compliant code
 - Add comprehensive audit logging
 - Include role-based access control
 - Ensure data integrity verification
+- Write clear, well-documented code with meaningful variable names
+- Implement error handling that maintains data security
 
 **See [references/code-examples.md](references/code-examples.md) for complete implementation**
 
@@ -96,6 +109,8 @@ This skill provides comprehensive guidance for developing secure, compliant code
 - Handle FHIR-specific error responses
 - Validate FHIR resource structure
 - Support FHIR R4 specification
+- Structure code with clear separation of concerns for maintainability
+- Add comprehensive logging and error messages for debugging
 
 **See [references/code-examples.md](references/code-examples.md) for complete implementation**
 
@@ -110,6 +125,8 @@ This skill provides comprehensive guidance for developing secure, compliant code
 - Validate message structure and required fields
 - Support ADT, ORU, and other message types
 - Implement proper error handling for malformed messages
+- Use descriptive function and variable names for healthcare domain clarity
+- Implement modular parsing functions for better maintainability
 
 **See [references/code-examples.md](references/code-examples.md) for complete implementation**
 

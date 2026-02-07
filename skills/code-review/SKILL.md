@@ -1,10 +1,10 @@
 ---
 name: code-review
-description: Reviews implemented code against specifications, architecture, and standards. Validates test coverage, checks compliance with design patterns, verifies checklist completion, and generates comprehensive review reports. Use when reviewing code, validating implementation quality, checking standards compliance, or when user mentions code review, review implementation, validate code, or check quality.
+description: Reviews implemented code against specifications, architecture, and standards. Validates test coverage, checks compliance with design patterns, verifies checklist completion, and assesses code simplicity, maintainability, and readability. Generates comprehensive review reports with actionable feedback. Use when reviewing code, validating implementation quality, checking standards compliance, or when user mentions code review, review implementation, validate code, or check quality.
 metadata:
   author: Dau Quang Thanh
-  version: "2.0"
-  last_updated: "2026-02-02"
+  version: "2.1"
+  last_updated: "2026-02-07"
 license: MIT
 ---
 
@@ -12,7 +12,7 @@ license: MIT
 
 ## Overview
 
-This skill performs comprehensive code reviews by analyzing implemented code against specifications, design documents, architectural patterns, and coding standards. It validates test coverage, checks quality checklist completion, and generates detailed review reports with actionable feedback.
+This skill performs comprehensive code reviews by analyzing implemented code against specifications, design documents, architectural patterns, and coding standards. It validates test coverage, checks quality checklist completion, assesses code simplicity, maintainability, and readability, and generates detailed review reports with actionable feedback.
 
 ## When to Use
 
@@ -191,11 +191,13 @@ Verify all quality checklists are complete:
 
 Perform detailed code quality assessment. See [references/review-criteria.md](references/review-criteria.md) for complete checklists covering:
 
-- **Code Structure**: Single responsibility, abstraction, coupling, cohesion
-- **Error Handling**: Error catching, messages, propagation, resource cleanup
+- **Code Simplicity**: Clear logic flow, no unnecessary complexity, straightforward solutions
+- **Code Readability**: Clear naming conventions, appropriate comments, consistent formatting
+- **Code Maintainability**: Well-structured code, follows patterns, easy to modify and extend
+- **Code Structure**: Single responsibility, proper abstraction, appropriate coupling and cohesion
+- **Error Handling**: Error catching, meaningful messages, proper propagation, resource cleanup
 - **Security**: Input validation, authentication, authorization, encryption
-- **Performance**: Bottlenecks, queries, caching, algorithms
-- **Maintainability**: Readability, complexity, constants, dependencies
+- **Performance**: Bottlenecks, efficient queries, caching, optimal algorithms
 
 Review severity levels are defined in [references/review-criteria.md](references/review-criteria.md).
 

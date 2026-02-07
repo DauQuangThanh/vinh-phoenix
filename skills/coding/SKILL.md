@@ -1,10 +1,10 @@
 ---
 name: coding
-description: Executes feature implementation by processing tasks.md files, validating checklists, setting up project structure, and implementing code following architectural patterns and coding standards. Handles phase-by-phase execution with TDD approach, dependency management, and progress tracking. Use when implementing features, executing task plans, coding from specifications, or when user mentions implement tasks, execute implementation, code feature, or follow task breakdown.
+description: Executes feature implementation by processing tasks.md files, validating checklists, setting up project structure, and implementing code following architectural patterns and coding standards with emphasis on code simplicity, maintainability, and readability. Handles phase-by-phase execution with TDD approach, dependency management, and progress tracking. Use when implementing features, executing task plans, coding from specifications, or when user mentions implement tasks, execute implementation, code feature, or follow task breakdown.
 metadata:
   author: Dau Quang Thanh
-  version: "1.1.0"
-  last_updated: "2026-02-02"
+  version: "1.2.0"
+  last_updated: "2026-02-07"
 license: MIT
 ---
 
@@ -12,7 +12,7 @@ license: MIT
 
 ## Overview
 
-This skill executes feature implementations by processing structured task lists (tasks.md), validating quality checklists, and systematically implementing code following architectural patterns, coding standards, and test-driven development practices. It manages phase-by-phase execution with proper dependency handling and progress tracking.
+This skill executes feature implementations by processing structured task lists (tasks.md), validating quality checklists, and systematically implementing code following architectural patterns, coding standards, and test-driven development practices. It emphasizes writing simple, maintainable, and readable code while managing phase-by-phase execution with proper dependency handling and progress tracking.
 
 ## When to Use
 
@@ -254,6 +254,12 @@ Follow phase-by-phase execution with proper workflow. See [references/implementa
 - Handle errors appropriately (halt on critical, continue on parallel)
 - Track progress (update tasks.md, report status)
 - Commit frequently (after each logical unit, use proper prefixes)
+- **Code Quality Focus**: Write simple, maintainable, and readable code:
+  - Use clear variable and function names
+  - Keep functions small and focused (single responsibility)
+  - Add comments for complex logic
+  - Follow established patterns and conventions
+  - Avoid over-engineering; prefer straightforward solutions
 
 ### Step 7: Completion Validation
 
@@ -267,6 +273,9 @@ Verify implementation quality and completeness. See [references/implementation-p
 - [ ] Architecture alignment validated (if architecture.md exists)
 - [ ] Standards compliance validated (if standards.md exists)
 - [ ] Checklists all passed (if checklists exist)
+- [ ] Code simplicity: No unnecessary complexity, clear logic flow
+- [ ] Code maintainability: Well-structured, follows patterns, easy to modify
+- [ ] Code readability: Clear naming, appropriate comments, consistent formatting
 
 ### Step 8: Generate Implementation Report
 
