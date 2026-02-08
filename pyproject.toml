@@ -1,6 +1,6 @@
 [project]
 name = "phoenix-cli"
-version = "0.2.2"
+version = "0.2.4"
 description = "Phoenix CLI - Installs 18 agent skills that AI assistants automatically discover and use on demand for structured software development."
 requires-python = ">=3.11"
 dependencies = [
