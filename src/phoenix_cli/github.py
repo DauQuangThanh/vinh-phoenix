@@ -8,17 +8,14 @@ from typing import Optional, Tuple
 
 import httpx
 import truststore
-import typer
-from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from .config import GITHUB_REPO_NAME, GITHUB_REPO_OWNER
+from .ui import console
 
 # Create SSL context and client for GitHub API
 ssl_context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-
-console = Console()
 
 
 def _github_token(cli_token: str | None = None) -> str | None:
@@ -143,7 +140,7 @@ def download_template_from_github(
     except Exception as e:
         console.print(f"[red]Error fetching release information[/red]")
         console.print(Panel(str(e), title="Fetch Error", border_style="red"))
-        raise typer.Exit(1)
+        raise RuntimeError(f"Failed to fetch release information: {e}") from e
 
     assets = release_data.get("assets", [])
     # Look for the unified skills package (phoenix-skills-vX.X.X.zip)
@@ -156,10 +153,10 @@ def download_template_from_github(
     asset = matching_assets[0] if matching_assets else None
 
     if asset is None:
-        console.print(f"[red]No matching release asset found[/red] (expected pattern: [bold]{pattern}[/bold])")
         asset_names = [a.get('name', '?') for a in assets]
+        console.print(f"[red]No matching release asset found[/red] (expected pattern: [bold]{pattern}[/bold])")
         console.print(Panel("\n".join(asset_names) or "(no assets)", title="Available Assets", border_style="yellow"))
-        raise typer.Exit(1)
+        raise RuntimeError(f"No matching release asset found (expected pattern: {pattern})")
 
     download_url = asset["browser_download_url"]
     filename = asset["name"]
@@ -216,7 +213,7 @@ def download_template_from_github(
         if zip_path.exists():
             zip_path.unlink()
         console.print(Panel(detail, title="Download Error", border_style="red"))
-        raise typer.Exit(1)
+        raise RuntimeError(f"Failed to download template: {detail}") from e
     if verbose:
         console.print(f"Downloaded: {filename}")
     metadata = {

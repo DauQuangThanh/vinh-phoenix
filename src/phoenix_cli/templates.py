@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 
 import httpx
 
-from .config import AGENT_CONFIG, ARGS_FORMAT_MAP, EXTENSION_MAP
+from .config import AGENT_CONFIG
 from .github import download_template_from_github
 from .ui import console
 
@@ -120,9 +120,6 @@ def copy_local_template(
     agent_folder = agent_config["agent_folder"]
     skills_folder = agent_config["skills_folder"]
 
-    agent_ext = EXTENSION_MAP.get(ai_assistant, ".md")
-    args_format = ARGS_FORMAT_MAP.get(ai_assistant, "$ARGUMENTS")
-
     # Shared .phoenix folder is no longer used - all functionality is now in skills
 
     # Copy skills to agent-specific skills folder
@@ -232,6 +229,7 @@ def download_and_extract_template(
             if tracker:
                 tracker.start(f"fetch-{ai_assistant}")
                 tracker.complete(f"fetch-{ai_assistant}", "using cached zip")
+                tracker.complete(f"download-{ai_assistant}", "reused from first agent")
         else:
             # If not found, download it (shouldn't happen in normal flow)
             if tracker:

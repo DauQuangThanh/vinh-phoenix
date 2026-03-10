@@ -7,6 +7,7 @@
 #     "platformdirs",
 #     "readchar",
 #     "httpx",
+#     "truststore",
 # ]
 # ///
 """

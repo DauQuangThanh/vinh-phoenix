@@ -372,8 +372,6 @@ def init(
 
     tracker = StepTracker("Upgrade Phoenix Project" if is_upgrade_mode else "Initialize Phoenix Project")
 
-    sys._specify_tracker_active = True
-
     tracker.add("precheck", "Check required tools")
     tracker.complete("precheck", "ok")
     tracker.add("ai-select", "Select AI assistant(s)")
@@ -476,6 +474,9 @@ def init(
                         zip_file.unlink()
                         if tracker:
                             tracker.complete("cleanup", "removed archive")
+            else:
+                if tracker:
+                    tracker.skip("cleanup", "local templates")
 
             ensure_executable_scripts(project_path, tracker=tracker)
 
@@ -508,7 +509,7 @@ def init(
                 _label_width = max(len(k) for k, _ in _env_pairs)
                 env_lines = [f"{k.ljust(_label_width)} → [bright_black]{v}[/bright_black]" for k, v in _env_pairs]
                 console.print(Panel("\n".join(env_lines), title="Debug Environment", border_style="magenta"))
-            if not here and project_path.exists():
+            if not here and not merge_into_existing and project_path.exists():
                 shutil.rmtree(project_path)
             raise typer.Exit(1)
         finally:
@@ -550,12 +551,16 @@ def init(
         console.print(git_error_panel)
 
     # Agent folder security notice
-    agent_config = AGENT_CONFIG.get(selected_ais[-1])  # Use last selected AI for the notice
-    if agent_config:
-        agent_folder = agent_config["agent_folder"]
+    agent_folders = []
+    for ai in selected_ais:
+        cfg = AGENT_CONFIG.get(ai)
+        if cfg:
+            agent_folders.append(cfg["agent_folder"])
+    if agent_folders:
+        folders_text = ", ".join(f"[cyan]{f}[/cyan]" for f in agent_folders)
         security_notice = Panel(
             f"Some agents may store credentials, auth tokens, or other identifying and private artifacts in the agent folder within your project.\n"
-            f"Consider adding [cyan]{agent_folder}[/cyan] (or parts of it) to [cyan].gitignore[/cyan] to prevent accidental credential leakage.",
+            f"Consider adding {folders_text} (or parts of them) to [cyan].gitignore[/cyan] to prevent accidental credential leakage.",
             title="[yellow]Agent Folder Security[/yellow]",
             border_style="yellow",
             padding=(1, 2)

@@ -1,19 +1,15 @@
 """System utilities and command execution for Phoenix CLI."""
 
-import os
 import shutil
 import subprocess
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Tuple
 
-from rich.console import Console
-
 from .config import CLAUDE_LOCAL_PATH
+from .ui import console
 
 if TYPE_CHECKING:
     from .ui import StepTracker
-
-console = Console()
 
 
 def run_command(cmd: list[str], check_return: bool = True, capture: bool = False, shell: bool = False) -> Optional[str]:
@@ -99,13 +95,11 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> Tuple[bool, Option
         Tuple of (success: bool, error_message: Optional[str])
     """
     try:
-        original_cwd = Path.cwd()
-        os.chdir(project_path)
         if not quiet:
             console.print("[cyan]Initializing git repository...[/cyan]")
-        subprocess.run(["git", "init"], check=True, capture_output=True, text=True)
-        subprocess.run(["git", "add", "."], check=True, capture_output=True, text=True)
-        subprocess.run(["git", "commit", "-m", "Initial commit from Phoenix template"], check=True, capture_output=True, text=True)
+        subprocess.run(["git", "init"], check=True, capture_output=True, text=True, cwd=project_path)
+        subprocess.run(["git", "add", "."], check=True, capture_output=True, text=True, cwd=project_path)
+        subprocess.run(["git", "commit", "-m", "Initial commit from Phoenix template"], check=True, capture_output=True, text=True, cwd=project_path)
         if not quiet:
             console.print("[green]✓[/green] Git repository initialized")
         return True, None
@@ -120,11 +114,9 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> Tuple[bool, Option
         if not quiet:
             console.print(f"[red]Error initializing git repository:[/red] {e}")
         return False, error_msg
-    finally:
-        os.chdir(original_cwd)
 
 
 def ensure_executable_scripts(project_path: Path, tracker: "StepTracker | None" = None) -> None:
     """Scripts are now embedded in skills - this function is deprecated."""
-    # No-op: scripts are no longer copied to .phoenix/scripts
-    pass
+    if tracker:
+        tracker.skip("chmod", "embedded in skills")
