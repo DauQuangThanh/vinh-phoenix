@@ -28,7 +28,9 @@ This skill executes feature implementations by processing structured task lists 
 
 - **Before coding**: Use `technical-detailed-design` and `task-management` skills for planning
 - **After coding**: Use `code-review` skill for quality validation
+- **Commits**: Use `git-commit` skill to generate semantic commit messages following conventional commit standards
 - **During coding**: Use `bug-analysis` skill if issues discovered
+- **Post-review refactoring**: Use `code-refactoring` skill if `code-review` identifies structural quality issues
 - **Standards**: Use `coding-standards` skill if standards.md is missing
 
 ## Prerequisites
@@ -143,7 +145,12 @@ Read all available documents to build complete implementation context:
 
 #### Product-Level Documents (If Available)
 
-1. **docs/architecture.md** (Optional):
+1. **docs/ground-rules.md** (Optional — but recommended):
+   - Extract mandatory project constraints (MUST/SHOULD rules)
+   - Note compliance, security, and privacy requirements
+   - These constraints take precedence over architecture.md and standards.md
+
+2. **docs/architecture.md** (Optional):
    - Extract architectural patterns and styles
    - Extract C4 model component organization
    - Extract technology stack decisions
@@ -151,7 +158,7 @@ Read all available documents to build complete implementation context:
    - Extract deployment architecture
    - Extract quality attribute requirements
 
-2. **docs/standards.md** (Optional):
+3. **docs/standards.md** (Optional):
    - Extract UI naming conventions
    - Extract code naming conventions
    - Extract file structure standards
@@ -459,7 +466,7 @@ Both scripts output JSON with:
 1. **Follow TDD**: Tests before implementation when tests are required
 2. **Respect Dependencies**: Never skip dependency order
 3. **Mark Progress**: Update tasks.md after each completed task
-4. **Commit Frequently**: Commit after each logical unit of work
+4. **Commit Frequently**: Commit after each logical unit of work; use `git-commit` skill for semantic commit messages
 5. **Apply Standards**: Follow standards.md conventions consistently
 6. **Align with Architecture**: Respect architectural patterns from architecture.md
 7. **Validate Quality**: Check against checklists before and after implementation

@@ -27,7 +27,7 @@ This skill guides you through a structured implementation planning workflow spec
 
 **Next Steps After Creating Healthcare Technical Design:**
 
-- Use `task-management` skill to create task breakdown (tasks.md)
+- Use `healthcare-task-management` skill to create HIPAA-aware task breakdown (tasks.md)
 - Use `e2e-test-design` skill for end-to-end test planning with healthcare scenarios
 - Use `coding` skill to execute implementation following healthcare coding standards
 - Use `bug-analysis` skill if issues are discovered during development

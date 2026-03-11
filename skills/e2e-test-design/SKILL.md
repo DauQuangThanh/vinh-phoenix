@@ -339,6 +339,7 @@ For detailed examples including e-commerce applications, mobile banking apps, an
 - **User-visible behavior**: Test what users see and interact with, not internal logic
 - **Maintainability**: Balance coverage with maintenance cost - prioritize critical paths
 - **Living document**: Update e2e-test-plan.md as new features are added
+- **Task integration**: When `task-management` skill generates tasks.md, it reads `docs/e2e-test-plan.md` to include E2E test implementation tasks per user story — run `e2e-test-design` before `task-management` for full test task coverage
 - **Complement other testing**: E2E tests complement unit and integration tests, don't replace them
 - **Flakiness management**: Plan for flaky test handling from the start
 - **CI/CD integration**: E2E tests should be automated and run in CI/CD pipeline

@@ -109,6 +109,7 @@ This skill guides you through a structured implementation planning workflow to c
    - Read feature specification/requirements (from JSON output: `feature_spec`)
    - Load `docs/ground-rules.md` if exists (optional - for project standards)
    - Load `docs/architecture.md` if exists (optional - for architectural patterns)
+   - Load `docs/context-assessment.md` if exists (optional - for brownfield codebase health score, existing patterns, and identified risks to carry forward into the design)
    - Identify current git branch from JSON output: `current_branch`
 
 3. **Review design document template**:

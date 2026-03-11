@@ -30,6 +30,7 @@ Use this skill when:
 - Use `coding-standards` skill to establish product-level coding conventions
 - Use `architecture-design` skill for system architecture documentation
 - Use `technical-detailed-design` skill for feature-level implementation planning
+- Use `nextjs-mockup` or `nuxtjs-mockup` skill to prototype the UI before committing to full design (recommended for features with significant UX complexity)
 
 ## Prerequisites
 

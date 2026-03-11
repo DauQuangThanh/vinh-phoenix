@@ -109,9 +109,10 @@ The script will:
 Before starting architecture design, load existing project context:
 
 1. Read `docs/ground-rules.md` - Project principles, constraints, conventions
-2. Read all feature specifications from `FEATURE_SPECS` array
-3. Load the architecture template from `ARCH_DOC` path
-4. Review any existing architecture documentation
+2. Read `docs/context-assessment.md` if exists - Existing codebase analysis, technical health score, identified risks, and current architecture patterns (critical for brownfield projects; informs architectural decisions and risk mitigation strategies)
+3. Read all feature specifications from `FEATURE_SPECS` array
+4. Load the architecture template from `ARCH_DOC` path
+5. Review any existing architecture documentation
 
 ### Step 3: Execute Architecture Design Workflow
 

@@ -91,7 +91,7 @@ python skills/task-management/scripts/check-prerequisites.py --json
 
 ```powershell
 cd C:\path\to\repo
-powershell -ExecutionPolicy Bypass -File skills/project-management/scripts/check-prerequisites.ps1 -Json
+powershell -ExecutionPolicy Bypass -File skills/task-management/scripts/check-prerequisites.ps1 -Json
 ```
 
 Parse the output to extract:
@@ -113,26 +113,36 @@ Read design artifacts from `FEATURE_DIR` in this order:
    - Extract acceptance criteria for each story
    - Note story dependencies
 
-3. **docs/architecture.md** (If exists):
+3. **docs/ground-rules.md** (If exists):
+   - Extract mandatory project constraints (MUST/SHOULD rules)
+   - Note compliance and security requirements that affect task generation
+   - These constraints take precedence over all other documents when planning tasks
+
+4. **docs/architecture.md** (If exists):
    - Extract architectural patterns
    - Extract deployment requirements
    - Extract relevant ADRs for implementation
 
-4. **data-model.md** (If exists):
+5. **data-model.md** (If exists):
    - Extract entities and relationships
    - Map entities to user stories that need them
 
-5. **contracts/** directory (If exists):
+6. **contracts/** directory (If exists):
    - List all contract/endpoint files
    - Map endpoints to user stories
 
-6. **research.md** (If exists):
+7. **research.md** (If exists):
    - Extract technical decisions
    - Extract setup requirements
 
-7. **quickstart.md** (If exists):
+8. **quickstart.md** (If exists):
    - Extract test scenarios
    - Map scenarios to user stories
+
+9. **docs/e2e-test-plan.md** (If exists):
+   - Extract E2E test scenarios relevant to each user story
+   - Include test implementation tasks when generating user story phases
+   - Map test scenarios to user stories for test task generation
 
 ### Step 3: Generate Tasks
 
@@ -442,6 +452,7 @@ Before finalizing tasks.md, validate for AI implementation:
 - Ensure `technical-detailed-design` skill has been used to create implementation design
 - **Recommended:** Use `coding-standards` skill to establish code conventions (if not yet created)
 - Consider `architecture-design` skill for product-level architecture (if not yet created)
+- Consider `e2e-test-design` skill to create the product-level E2E test plan (if not yet created) — its test scenarios will inform test task generation
 
 ## Quality Checklist
 

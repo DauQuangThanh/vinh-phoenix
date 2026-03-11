@@ -33,6 +33,13 @@ This skill performs comprehensive code reviews by analyzing implemented code aga
   - `docs/standards.md`
 - **Python 3.8+** for running the prerequisite check script.
 
+**Related skills (post-review actions):**
+
+- `code-refactoring` — For structural or code quality issues found during review
+- `bug-fixing` — For bugs found during review
+- `requirements-specification` — To update spec.md if review finds requirement flaws
+- `technical-detailed-design` — To update design.md if review finds design flaws
+
 ## Instructions
 
 ### Step 1: Check Prerequisites and Discover Implementation
@@ -84,8 +91,6 @@ Fill in:
 
 Save the report as `review-report.md` in the current directory (or update existing).
 
-- Extract performance strategies
-
 1. **docs/standards.md** (Optional):
    - Extract UI naming conventions
    - Extract code naming conventions
@@ -99,10 +104,11 @@ Save the report as `review-report.md` in the current directory (or update existi
 
 #### Supporting Documents (If Available)
 
-1. **tasks.md** (Optional):
-   - Extract completed tasks list
-   - Verify all tasks marked as [X]
-   - Identify any incomplete tasks
+1. **tasks.md** (Optional — strongly recommended):
+   - Extract the full task list
+   - Verify all tasks are marked as `[X]` (completed)
+   - Identify any tasks still marked `[ ]` (incomplete)
+   - **Task Coverage Check**: For each task, verify the corresponding file/component exists in the implementation — report any task with no traceable code change as a **Major** finding titled "Unimplemented task: [TaskID]"
 
 2. **data-model.md** (Optional):
    - Extract entity definitions
@@ -233,6 +239,33 @@ Provide concise summary including:
 - Checklist status (All passed / Some incomplete)
 - Path to detailed review report
 - Key recommendations (top 3-5)
+
+## If Issues Found: Upstream Fix Loop
+
+When review produces **"Changes Required"** status, follow the appropriate remediation path:
+
+1. **Spec/requirement flaws** (wrong acceptance criteria, missing requirements, scope ambiguity):
+   - Update `spec.md` with corrections
+   - Re-run `requirements-specification-review` skill to revalidate
+   - Re-run `task-management` skill if scope changed enough to affect tasks
+
+2. **Design flaws** (wrong architecture choice, missing components, incorrect data model):
+   - Update `design.md` with corrections
+   - Re-run `technical-detailed-design-review` skill to revalidate
+   - Re-run `task-management` skill to update affected tasks
+
+3. **Code quality issues** (excessive complexity, duplication, poor structure, maintainability):
+   - Use `code-refactoring` skill to restructure the affected code
+   - Re-run code review after refactoring is complete
+
+4. **Missing implementation** (tasks not completed, features missing from code):
+   - Mark incomplete tasks back to `- [ ]` in tasks.md
+   - Use `coding` skill to complete the missing work
+   - Re-run code review after implementation
+
+5. **Bugs found during review**:
+   - Use `bug-analysis` skill for root cause analysis
+   - Use `bug-fixing` skill to implement the fix
 
 ## Additional Resources
 
