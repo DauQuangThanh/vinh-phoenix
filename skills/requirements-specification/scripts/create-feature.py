@@ -105,8 +105,9 @@ class FeatureCreator:
 
     def create_feature(self, number, short_name, description):
         """Create the feature branch and structure."""
-        # Construct paths
-        branch_name = f"{number}-{short_name}"
+        # Format number as zero-padded 3-digit string (e.g. 1 -> "001")
+        formatted_number = f"{number:03d}"
+        branch_name = f"{formatted_number}-{short_name}"
         specs_dir = Path(f"specs/{branch_name}")
         spec_file = specs_dir / "spec.md"
         checklist_dir = specs_dir / "checklists"
@@ -128,11 +129,33 @@ class FeatureCreator:
             self.print_error("Not in a git repository")
             return False
 
-        # Check if branch already exists
-        result = self.run_command(f"git show-ref --verify --quiet refs/heads/{branch_name}", check=False)
+        # Check for any branch/directory with the same numeric value (any padding format)
+        # This prevents both "001-foo" and "1-foo" from coexisting
+        result = self.run_command("git branch", check=False)
         if result.returncode == 0:
-            self.print_error(f"Branch '{branch_name}' already exists")
-            return False
+            for line in result.stdout.splitlines():
+                existing = line.strip().lstrip('* ')
+                m = re.match(r'^(\d+)-(.+)$', existing)
+                if m and int(m.group(1)) == number and m.group(2) == short_name:
+                    self.print_error(f"Branch with number {number} and short name '{short_name}' already exists: '{existing}'")
+                    return False
+
+        result = self.run_command("git ls-remote --heads origin", check=False)
+        if result.returncode == 0:
+            for line in result.stdout.splitlines():
+                m = re.search(r'refs/heads/(\d+)-(.+)$', line)
+                if m and int(m.group(1)) == number and m.group(2) == short_name:
+                    self.print_error(f"Remote branch with number {number} and short name '{short_name}' already exists: '{m.group(1)}-{m.group(2)}'")
+                    return False
+
+        specs_parent = Path("specs")
+        if specs_parent.exists():
+            for d in specs_parent.iterdir():
+                if d.is_dir():
+                    m = re.match(r'^(\d+)-(.+)$', d.name)
+                    if m and int(m.group(1)) == number and m.group(2) == short_name:
+                        self.print_error(f"Specs directory with number {number} and short name '{short_name}' already exists: '{d.name}'")
+                        return False
 
         # Create and checkout new branch
         self.print_info(f"Creating branch: {branch_name}")
@@ -245,7 +268,7 @@ class FeatureCreator:
         return {
             "success": True,
             "branch_name": branch_name,
-            "feature_number": number,
+            "feature_number": formatted_number,
             "short_name": short_name,
             "description": description,
             "spec_file": str(spec_file),

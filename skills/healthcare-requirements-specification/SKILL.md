@@ -120,10 +120,12 @@ ls -d specs/[0-9]*-<short-name> 2>/dev/null || true
 
 **Determine next number:**
 
-- Extract all numbers from all three sources
-- Find the highest number N
+- Extract the numeric prefix from each matching branch/directory name
+- Parse each prefix as an integer (strip leading zeros: `001` → `1`, `010` → `10`)
+- Find the highest integer N across all sources
 - Use N+1 for the new branch number
 - If no existing branches/directories found, start with number 1
+- Format the final number as a zero-padded 3-digit string: `1` → `001`, `10` → `010`
 
 ### Step 3: Run Healthcare Feature Creation Script
 
