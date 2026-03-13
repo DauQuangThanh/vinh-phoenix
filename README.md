@@ -4,7 +4,7 @@
 
 ## *Reusable Agent Skills for Structured Software Development*
 
-**A curated library of 18 production-ready skills that power AI coding assistants to deliver quality software through structured workflows.**
+**A curated library of 29 production-ready agent skills that power AI coding assistants to deliver quality software through structured, composable workflows.**
 
 [![Release](https://github.com/dauquangthanh/vinh-phoenix/actions/workflows/release.yml/badge.svg)](https://github.com/dauquangthanh/vinh-phoenix/actions/workflows/release.yml)
 [![GitHub stars](https://img.shields.io/github/stars/dauquangthanh/vinh-phoenix?style=social)](https://github.com/dauquangthanh/vinh-phoenix/stargazers)
@@ -18,7 +18,8 @@
 ## Table of Contents
 
 - [🎯 What is Vinh Phoenix?](#-what-is-vinh-phoenix)
-- [🧩 The Skills Library](#-the-skills-library)
+- [🧩 How Agent Skills Work](#-how-agent-skills-work)
+- [📚 The Skills Library](#-the-skills-library)
 - [⚡ Quick Start](#-quick-start)
 - [🤖 Supported AI Agents](#-supported-ai-agents)
 - [🔧 Phoenix CLI Reference](#-phoenix-cli-reference)
@@ -34,48 +35,168 @@
 
 **Vinh Phoenix is a skills library that transforms AI coding assistants into structured development partners.**
 
-Instead of ad-hoc prompting, Phoenix provides 18 battle-tested skills that guide AI assistants through:
+Instead of ad-hoc prompting, Phoenix provides 29 battle-tested agent skills that guide AI assistants through:
 
 - ✅ Requirements specification and clarification
 - ✅ Architecture design and review
 - ✅ Technical planning and implementation
-- ✅ Code quality and consistency analysis
+- ✅ Code quality, review, and refactoring
 - ✅ Test design and execution
 - ✅ Project management and tracking
+- ✅ Domain-specific workflows (healthcare)
 
-**The Phoenix CLI** installs these skills into your project, making them instantly available to 20+ AI coding assistants. Skills are automatically discovered and used by AI models when your tasks match their descriptions.
+**The Phoenix CLI** installs these skills into your project, making them instantly available to 20+ AI coding assistants. Skills are automatically discovered and activated by AI agents when your tasks match their descriptions — no manual invocation needed.
 
 > **Think of it like a professional toolkit:** Just as a craftsperson has specialized tools for each task, Phoenix gives your AI assistant specialized skills for each phase of software development. The AI automatically activates relevant skills based on what you're trying to accomplish.
 
-## 🧩 The Skills Library
+## 🧩 How Agent Skills Work
 
-Phoenix includes **18 modular skills**, each containing:
+Phoenix is built on the **Agent Skills format** — an open standard for extending AI agents with structured, reusable capabilities. Understanding this model helps you get the most from Phoenix.
 
-- 📋 **Templates** - Structured formats for specifications, plans, and documentation
-- 🔧 **Scripts** - Automation for git operations, file management, and workflows (bash & PowerShell)
-- 📖 **Documentation** - Clear guidance on when and how to use each skill
+### The Three Principles
 
-### Available Skills
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        AGENT SKILLS MODEL                           │
+│                                                                     │
+│  1. AUTOMATIC DISCOVERY                                             │
+│     Agent reads skill name + description at startup (~2 lines each) │
+│     → Builds internal index of "what can I do?"                     │
+│                                                                     │
+│  2. ON-DEMAND ACTIVATION                                            │
+│     User request matches skill description keywords/intent          │
+│     → Agent loads full SKILL.md instructions (100–500 lines)        │
+│                                                                     │
+│  3. PROGRESSIVE DISCLOSURE                                          │
+│     Full context loaded only when needed                            │
+│     → Keeps token usage efficient; skills stay fast                 │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-| Category | Skills | Purpose |
-|----------|--------|----------|
-| **Requirements** | `requirements-specification`<br/>`requirements-specification-review` | Define and validate what to build |
-| **Architecture** | `architecture-design`<br/>`architecture-design-review`<br/>`context-assessment` | Design systems and understand existing codebases |
-| **Planning** | `technical-detailed-design`<br/>`technical-detailed-design-review`<br/>`task-management` | Create implementation plans and track progress |
-| **Standards** | `coding-standards`<br/>`project-ground-rules-setup`<br/>`project-consistency-analysis` | Establish and maintain quality standards |
-| **Implementation** | `coding`<br/>`code-review` | Write and review code |
-| **Testing** | `e2e-test-design` | Design comprehensive test suites |
-| **Integration** | `tasks-to-github-issues`<br/>`tasks-to-azure-devops` | Sync with project management tools |
-| **Version Control** | `git-commit` | Manage commits with semantic messages |
-| **Prototyping** | `nextjs-mockup`<br/>`nuxtjs-mockup` | Generate framework-specific mockups |
+### Anatomy of an Agent Skill
 
-**Key Benefits:**
+Each skill in Phoenix is a self-contained module:
 
-- 🔄 **Reusable** - Each skill works across projects and frameworks
-- 🤝 **Multi-agent** - Same skills power 20+ AI assistants
-- 🎯 **Focused** - Each skill handles one aspect of development
-- 📦 **Self-contained** - Templates and scripts embedded in each skill
-- 🔧 **Cross-platform** - Both bash and PowerShell scripts included
+```
+skills/<skill-name>/
+├── SKILL.md              # Frontmatter metadata + full step-by-step instructions
+│   ├── name:             #   Trigger keyword (e.g., "coding")
+│   ├── description:      #   Natural language activation trigger
+│   ├── When to Use:      #   Explicit trigger phrases
+│   ├── Prerequisites:    #   What must exist before running
+│   ├── Instructions:     #   Step-by-step execution logic
+│   └── Related Skills:   #   Composability graph (before/after links)
+├── templates/            # Structured output templates (spec.md, tasks.md, etc.)
+├── scripts/              # Cross-platform automation (bash + PowerShell + Python)
+└── references/           # Supporting guidance and patterns
+```
+
+### Why Agent Skills Beat Ad-Hoc Prompting
+
+| Approach | Ad-Hoc Prompting | Agent Skills |
+|----------|-----------------|--------------|
+| **Consistency** | Varies by prompt quality | Deterministic step-by-step instructions |
+| **Reusability** | Per-session, lost after context | Persistent, reused across all projects |
+| **Composability** | Manual chaining | Built-in `Related Skills` graph |
+| **Templates** | You provide or forget | Embedded in each skill |
+| **Cross-Agent** | Prompt-specific | Same skill works on 20+ agents |
+| **Maintenance** | Re-prompt each time | Update once, everywhere |
+
+### Skill Composability Graph
+
+Skills are designed to compose into complete development pipelines:
+
+```
+project-ground-rules-setup
+        ↓
+requirements-specification ──→ requirements-specification-review
+        ↓
+architecture-design ──→ architecture-design-review
+        ↓
+coding-standards
+        ↓
+technical-detailed-design ──→ technical-detailed-design-review
+        ↓                          ↓
+task-management          project-consistency-analysis
+        ↓
+      coding ──→ code-review ──→ code-refactoring
+        ↓              ↓
+  git-commit      bug-analysis ──→ bug-fixing
+        ↓
+  e2e-test-design
+        ↓
+tasks-to-github-issues / tasks-to-azure-devops
+```
+
+> Skills reference their neighbors via **Related Skills** sections, so the AI agent always knows what to run next.
+
+## 📚 The Skills Library
+
+Phoenix includes **29 agent skills** across 9 categories, each self-contained with templates, scripts, and documentation.
+
+### Core Skills (All Projects)
+
+| Category | Skill | Activation Trigger |
+|----------|-------|-------------------|
+| **Governance** | `project-ground-rules-setup` | "create project principles", "set up ground rules" |
+| **Governance** | `coding-standards` | "create coding standards", "document conventions" |
+| **Requirements** | `requirements-specification` | "specify a feature", "create requirements", "write a spec" |
+| **Requirements** | `requirements-specification-review` | "clarify requirements", "review the spec" |
+| **Architecture** | `architecture-design` | "design the system architecture", "create C4 diagrams" |
+| **Architecture** | `architecture-design-review` | "review the architecture", "validate design completeness" |
+| **Architecture** | `context-assessment` | "assess the codebase", "analyze existing patterns" |
+| **Planning** | `technical-detailed-design` | "create a technical design", "specify the tech stack" |
+| **Planning** | `technical-detailed-design-review` | "review the technical design", "validate design coverage" |
+| **Planning** | `task-management` | "break down into tasks", "generate task breakdown" |
+| **Planning** | `project-consistency-analysis` | "check plan consistency", "detect gaps across artifacts" |
+| **Implementation** | `coding` | "implement the tasks", "code the feature", "execute task breakdown" |
+| **Implementation** | `code-refactoring` | "refactor the code", "improve code structure" |
+| **Quality** | `code-review` | "review the code", "validate code quality" |
+| **Quality** | `bug-analysis` | "analyze this bug", "find the root cause" |
+| **Quality** | `bug-fixing` | "fix this bug", "implement the bug fix" |
+| **Testing** | `e2e-test-design` | "design E2E tests", "create test specifications" |
+| **Version Control** | `git-commit` | "commit my changes", "generate commit message" |
+| **Integration** | `tasks-to-github-issues` | "create GitHub issues from tasks", "sync to GitHub" |
+| **Integration** | `tasks-to-azure-devops` | "create Azure DevOps items", "sync to ADO" |
+| **Prototyping** | `nextjs-mockup` | "create a Next.js mockup", "prototype with React" |
+| **Prototyping** | `nuxtjs-mockup` | "create a Nuxt.js mockup", "prototype with Vue" |
+| **Specialized** | `graphql` | "design GraphQL API", "implement GraphQL schema" |
+| **Specialized** | `technical-writing` | "write technical documentation", "create API docs" |
+| **Specialized** | `prompt-engineering` | "optimize this prompt", "improve AI instructions" |
+
+### Healthcare Domain Skills
+
+Purpose-built variants that apply healthcare-specific compliance, terminology, and patterns:
+
+| Skill | Based On | Added Domain Knowledge |
+|-------|----------|----------------------|
+| `healthcare-requirements-specification` | `requirements-specification` | HL7/FHIR standards, HIPAA requirements, clinical workflows |
+| `healthcare-technical-design` | `technical-detailed-design` | Healthcare data models, audit trails, PHI handling |
+| `healthcare-task-management` | `task-management` | Compliance tasks, security checkpoints |
+| `healthcare-coding` | `coding` | HIPAA-compliant patterns, healthcare data handling |
+
+> **Domain skill pattern:** Any skill can be specialized for a domain by extending the base skill's instructions with domain-specific context. Healthcare skills demonstrate this extensibility.
+
+### What Each Skill Contains
+
+| Component | Purpose |
+|-----------|---------|
+| 📋 **Templates** | Structured Markdown formats for specs, designs, tasks, and reports |
+| 🔧 **Scripts** | Automation for git operations, file management, and validation (bash, PowerShell, Python) |
+| 📖 **SKILL.md** | Trigger descriptions, step-by-step instructions, prerequisites, and related skill links |
+| 📚 **References** | Supporting patterns, examples, and extended guidance |
+
+### Auto-Commit Behavior
+
+> **💡 Automatic Commits:** Skills that produce or modify artifacts automatically generate semantic commit messages and commit upon completion, maintaining a clear project history.
+
+| Skill | Commit Prefix |
+|-------|--------------|
+| `project-ground-rules-setup`, `context-assessment`, `requirements-specification`, `architecture-design`, `technical-detailed-design`, `task-management` | `docs:` |
+| `coding` | `feat:`, `fix:`, `test:` (context-dependent) |
+| `e2e-test-design` | `test:` |
+| `tasks-to-github-issues`, `tasks-to-azure-devops` | `chore:` |
+| `code-review`, `code-refactoring`, `bug-analysis`, `bug-fixing` | varies |
 
 ## ⚡ Quick Start
 
@@ -108,7 +229,7 @@ phoenix init <PROJECT_NAME>
 phoenix check
 ```
 
-This installs all 18 skills into agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.), making them discoverable by your AI assistant.
+This installs all 29 skills into agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.), making them discoverable by your AI assistant.
 
 <p align="center">
   <img src="./media/vinh-phoenix.png" alt="Vinh Phoenix Installation" width="100%"/>
@@ -230,63 +351,11 @@ phoenix check
 phoenix version
 ```
 
-### Available Agent Skills
-
-After running `phoenix init`, **18 agent skills** will be discoverable by your AI assistant.
-
-#### How It Works: Skills-Based Architecture
-
-**Phoenix uses the Agent Skills format** - an open standard for giving AI agents new capabilities:
-
-- **Automatic Discovery** - At startup, agents load the name and description of each skill
-- **On-Demand Activation** - When your task matches a skill's description, the AI loads full instructions
-- **Progressive Disclosure** - Skills stay fast by loading context only when needed
-
-**What gets installed:**
-
-- 18 reusable skill modules (in `skills/`), each with its own templates and scripts
-- Skills like `requirements-specification`, `technical-detailed-design`, `coding`, etc.
-- Both bash and PowerShell scripts included automatically
-
-**How agents use skills:**
-
-1. You describe what you want to build
-2. The AI identifies relevant skills based on descriptions
-3. The AI loads skill instructions and follows them
-4. Scripts and templates are used as needed
-
-This modular design enables:
-
-- **Multi-agent support** - 20+ AI assistants use the same skills format
-- **Easy updates** - Upgrade all skills at once with `phoenix init --here --force`
-
-After running `phoenix init`, your AI assistant can leverage these skills:
-
-> **💡 Automatic Commits:** All commands automatically generate semantic commit messages and commit their changes upon completion, maintaining a clear project history without manual intervention.
-
-| Skill | When the AI Uses It | Auto Commit Prefix |
-| ----- | ------------------- | ------------------ |
-| `project-ground-rules-setup` | When you ask to create or update project principles and development guidelines | `docs:` |
-| `context-assessment` | When you need to analyze an existing codebase's architecture and patterns | `docs:` |
-| `requirements-specification` | When you describe what you want to build (requirements and user stories) | `docs:` |
-| `requirements-specification-review` | When you ask to clarify underspecified requirements through structured questioning | `docs:` |
-| `architecture-design` | When you request system architecture documentation with diagrams | `docs:` |
-| `coding-standards` | When you need coding standards and conventions documented | `docs:` |
-| `technical-detailed-design` | When you specify the tech stack and implementation approach | `docs:` |
-| `task-management` | When you ask to break down a design into actionable tasks | `docs:` |
-| `project-consistency-analysis` | When you request analysis of plan consistency and coverage | `docs:` |
-| `coding` | When you ask to implement tasks according to a plan | `feat:`, `fix:`, `test:` (context-dependent) |
-| `e2e-test-design` | When you request end-to-end test specifications for the product | `test:` |
-| `tasks-to-github-issues` | When you ask to convert tasks into GitHub issues with dependency tracking | `chore:` |
-| `tasks-to-azure-devops` | When you ask to convert tasks into Azure DevOps work items with dependencies | `chore:` |
-| `git-commit` | When committing changes with semantic commit messages | varies |
-| `code-review` | When you request code quality review and validation | n/a |
-
 ### Environment Variables
 
 | Variable         | Description                                                                                    |
 | ------------------ | ------------------------------------------------------------------------------------------------ |
-| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to creating technical designs or implementing features. |
+| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to creating technical designs or implementing features.** |
 
 ---
 
@@ -313,7 +382,7 @@ Phoenix supports both **Greenfield** (new projects) and **Brownfield** (existing
 | **First Step** | Set ground rules | Assess context |
 | **Timeline** | 2-4 weeks (MVP) | 1-2 weeks per feature |
 | **Flexibility** | Complete freedom | Must maintain consistency |
-| **Skills Used** | All 18 skills | Focus on 7-9 core skills |
+| **Skills Used** | All 29 skills available | Focus on 7-9 core skills |
 
 ```mermaid
 flowchart TB
@@ -327,7 +396,7 @@ flowchart TB
         GF6 --> GF7[Break into Tasks]
         GF7 --> GF8[Implement]
     end
-    
+
     subgraph Brownfield["🏗️ BROWNFIELD WORKFLOW"]
         direction TB
         BF1[Assess Context] --> BF2[Update Ground Rules]
@@ -337,7 +406,7 @@ flowchart TB
         BF5 --> BF6[Break into Tasks]
         BF6 --> BF7[Implement]
     end
-    
+
     style Greenfield fill:#E8F5E9
     style Brownfield fill:#E3F2FD
 ```
@@ -359,11 +428,11 @@ After running `phoenix init`, your project structure:
 ```
 <project-root>/
 ├── .<agent>/              # Agent-specific folder (.claude/, .github/, .gemini/)
-│   └── skills/            # 18 reusable skill modules
+│   └── skills/            # 29 reusable agent skill modules
 │       ├── requirements-specification/
 │       ├── technical-detailed-design/
 │       ├── coding/
-│       └── ... (15 more)
+│       └── ... (26 more)
 │
 ├── docs/                  # Project documentation
 │   ├── ground-rules.md    # Project principles
@@ -382,24 +451,35 @@ After running `phoenix init`, your project structure:
 
 | Skill Module | Purpose |
 | -------------- | --------- |
+| `project-ground-rules-setup` | Establish project principles and governance |
+| `coding-standards` | Create coding conventions and standards |
 | `requirements-specification` | Create feature specifications from natural language |
 | `requirements-specification-review` | Structured clarification workflow |
+| `architecture-design` | Document system architecture (C4 diagrams + ADRs) |
+| `architecture-design-review` | Review architecture completeness |
+| `context-assessment` | Analyze existing codebases (brownfield) |
 | `technical-detailed-design` | Generate implementation plans with tech stack |
 | `technical-detailed-design-review` | Validate design consistency and coverage |
 | `task-management` | Break down designs into actionable tasks |
-| `coding` | Execute tasks and build features |
-| `architecture-design` | Document system architecture (C4 diagrams) |
-| `architecture-design-review` | Review architecture completeness |
-| `coding-standards` | Create coding conventions and standards |
-| `e2e-test-design` | Design end-to-end test specifications |
-| `project-ground-rules-setup` | Establish project principles |
-| `context-assessment` | Analyze existing codebases (brownfield) |
 | `project-consistency-analysis` | Check cross-artifact consistency |
+| `coding` | Execute tasks and build features (TDD) |
 | `code-review` | Code review automation |
+| `code-refactoring` | Improve code structure and maintainability |
+| `bug-analysis` | Root cause analysis (read-only, no fixes) |
+| `bug-fixing` | Implement fixes for identified bugs |
+| `e2e-test-design` | Design end-to-end test specifications |
 | `git-commit` | Generate semantic commit messages |
 | `tasks-to-github-issues` | Sync tasks to GitHub issues |
 | `tasks-to-azure-devops` | Sync tasks to Azure DevOps |
-| `nextjs-mockup` / `nuxtjs-mockup` | Generate framework-specific mockups |
+| `nextjs-mockup` | Generate Next.js/React UI prototypes |
+| `nuxtjs-mockup` | Generate Nuxt.js/Vue UI prototypes |
+| `graphql` | Design and implement GraphQL APIs |
+| `technical-writing` | Create technical documentation |
+| `prompt-engineering` | Optimize AI prompts and instructions |
+| `healthcare-requirements-specification` | Healthcare-specific requirements (HIPAA/FHIR) |
+| `healthcare-technical-design` | Healthcare-specific technical design |
+| `healthcare-task-management` | Healthcare-specific task breakdown |
+| `healthcare-coding` | Healthcare-compliant implementation |
 
 ---
 
@@ -692,8 +772,8 @@ This analysis will create `docs/context-assessment.md` that documents:
 With the codebase context understood, update or establish project principles that align with the existing architecture. The `project-ground-rules-setup` skill will automatically activate:
 
 ```text
-Review the context assessment and update project principles to align with the existing codebase patterns. 
-Ensure principles cover code quality standards found in the assessment, testing practices currently in use, 
+Review the context assessment and update project principles to align with the existing codebase patterns.
+Ensure principles cover code quality standards found in the assessment, testing practices currently in use,
 and architectural decisions that should guide new feature development.
 ```
 
@@ -712,7 +792,7 @@ This step creates or updates `docs/ground-rules.md` to reflect:
 With both the codebase context and updated principles established, specify the new feature you want to add. The `requirements-specification` skill will automatically activate:
 
 ```text
-Add a user notification system that sends email alerts when tasks are assigned. 
+Add a user notification system that sends email alerts when tasks are assigned.
 Users can configure notification preferences (immediate, daily digest, or disabled) in their profile settings.
 ```
 
@@ -733,7 +813,7 @@ This ensures all edge cases and integration points with the existing system are 
 Create a technical plan that integrates with the existing architecture. The `technical-detailed-design` skill will automatically activate:
 
 ```text
-Create a technical design that follows the existing email service pattern identified in the context assessment. 
+Create a technical design that follows the existing email service pattern identified in the context assessment.
 Use the current user preference storage approach. Integrate with the existing task assignment workflow.
 ```
 
