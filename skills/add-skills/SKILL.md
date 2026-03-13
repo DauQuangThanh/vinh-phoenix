@@ -3,7 +3,7 @@ name: add-skills
 description: Downloads and installs one or more agent skills from the catalog into the local project. Accepts skill names as input, looks them up in docs/agent-skill-list.md, fetches all files for each skill from their source GitHub repository, and saves them into the correct AI-tool-specific folders (.claude/skills/, .github/skills/, .cursor/rules/, etc.) based on which AI tools are detected in the project. Use when installing skills, adding skills to a project, or setting up skill packages for AI tools.
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
+  version: "1.1.0"
   last-updated: "2026-03-13"
 license: MIT
 ---
@@ -105,21 +105,24 @@ The skill detects which AI tools are active in the project by checking for their
 
 ### Step 4: Handle Banned Skills
 
-1. Check the `Banned` column for each found skill.
-2. If any skill has `Banned: yes`, warn the user and ask for explicit confirmation before proceeding:
+1. Check the `Banned` column for each found skill (case-insensitive; treat `yes`, `Yes`, `YES` as banned).
+2. Split found skills into two groups:
+   - **Allowed**: `Banned` value is `no`
+   - **Blocked**: `Banned` value is `yes`
+3. If any skills are blocked, report them clearly:
    ```
-   ⚠️  The following skills are marked as banned in the catalog:
+   🚫 The following skills are banned and cannot be installed:
+     - <name> (Category: <category>)
      - <name> (Category: <category>)
 
-   Banned skills may be restricted for policy, security, or compatibility reasons.
-   Do you want to install them anyway? (yes/no)
+   Banned skills are restricted from installation. To allow a skill,
+   update its Banned column to 'no' in docs/agent-skill-list.md.
    ```
-3. If the user says **no**, remove the banned skills from the install list and continue with the remaining ones.
-4. If the user says **yes**, proceed with all skills including banned ones.
-5. If **all** skills are banned and the user declines, stop with:
+4. If **all** requested skills are banned, stop after the report:
    ```
-   ℹ️  No skills selected for installation.
+   ❌ No installable skills remaining. Update docs/agent-skill-list.md to unban skills.
    ```
+5. If some skills are allowed, continue installation with the allowed subset only.
 
 ### Step 5: Detect AI Tools in the Project
 
@@ -222,7 +225,7 @@ Installed skills:
 | No skill names provided | Ask user for input |
 | All skill names not found in catalog | Stop; suggest referring to `agent-skill-list.md` |
 | Some skill names not found | Warn and skip; continue with found skills |
-| Skill is banned | Warn and ask confirmation |
+| Skill is banned | Inform user; skip the skill; never install banned skills |
 | No AI tool folders detected | Stop; list folders user can create |
 | GitHub API rate limit (403/429) | Stop; advise user to wait or add token |
 | Skill URL not accessible (401/404) | Skip skill; continue with others |
@@ -300,19 +303,34 @@ Continuing with matched skills: git-commit...
 ...
 ```
 
-### Example 5: Banned skill with user confirmation
+### Example 5: All selected skills are banned
 
 **Command:** `add-skills restricted-skill`
 
-**Interaction:**
+**Result:**
 ```
-⚠️  The following skills are marked as banned in the catalog:
+🚫 The following skills are banned and cannot be installed:
   - restricted-skill (Category: development)
 
-Banned skills may be restricted for policy, security, or compatibility reasons.
-Do you want to install them anyway? (yes/no)
+Banned skills are restricted from installation. To allow a skill,
+update its Banned column to 'no' in docs/agent-skill-list.md.
 
-> yes
+❌ No installable skills remaining. Update docs/agent-skill-list.md to unban skills.
+```
+
+### Example 6: Mix of banned and allowed skills
+
+**Command:** `add-skills git-commit restricted-skill coding`
+
+**Result:**
+```
+🚫 The following skills are banned and cannot be installed:
+  - restricted-skill (Category: development)
+
+Banned skills are restricted from installation. To allow a skill,
+update its Banned column to 'no' in docs/agent-skill-list.md.
+
+Continuing with allowed skills: git-commit, coding...
 
 ✅ Skills installation complete
 ...
