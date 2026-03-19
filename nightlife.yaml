@@ -1,0 +1,6 @@
+# DaNang Nightlife - Agent & Skill Repository Configuration
+# These URLs point to GitHub issues containing YAML-formatted lists of
+# agent and skill repositories. Update the issues to add/remove repos.
+urls:
+  - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
+  - https://github.com/DauQuangThanh/vinh-phoenix/issues/3

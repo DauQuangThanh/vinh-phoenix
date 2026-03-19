@@ -1,344 +1,142 @@
 ---
 name: add-skills
-description: Downloads and installs one or more agent skills from the catalog into the local project. Accepts skill names as input, looks them up in docs/agent-skill-list.md, fetches all files for each skill from their source GitHub repository, and saves them into the correct AI-tool-specific folders (.claude/skills/, .github/skills/, .cursor/rules/, etc.) based on which AI tools are detected in the project. Use when installing skills, adding skills to a project, or setting up skill packages for AI tools.
+description: Downloads and installs skills from configured remote repositories into the correct AI IDE skill folders. Use when user wants to install, add, or download skills from the catalog. Recursively downloads the entire skill folder (SKILL.md, scripts, templates, references) for each detected AI IDE.
+license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.1.0"
-  last-updated: "2026-03-13"
-license: MIT
+  version: "1.0.0"
+  last_updated: "2026-03-19"
 ---
 
 # Add Skills
 
 ## Overview
 
-This skill installs one or more agent skills from the catalog into the local project. It looks up requested skill names in `docs/agent-skill-list.md`, fetches all files for each matching skill from their source GitHub repository, and saves them into the correct folder for every AI tool detected in the project.
+This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ + references/) from remote GitHub repositories and installs them into the correct skill folders for all detected AI IDEs in the project.
 
 ## When to Use
 
-- Installing new skills into a project
-- Setting up skills for multiple AI tools at once
-- After running `sync-skills` to populate the catalog
-- User mentions: "add skill", "install skill", "download skill", "add skills to project", "set up skills"
+- User wants to install skills from the catalog
+- User asks to "add skills", "install skills", or "download skills"
+- After using `list-skills` to see what's available
+- User mentions specific skill names to install (e.g., "install git-commit", "add bug-analysis")
 
 ## Prerequisites
 
-- `docs/agent-skill-list.md` must exist and be populated (run `sync-skills` first if missing)
-- Internet access to fetch from GitHub
-- At least one AI tool config folder present in the project (e.g. `.claude/`, `.github/`, `.cursor/`)
+- `nightlife.yaml` exists in the project root with configured `urls`
+- Project has been initialized with at least one AI IDE
+- Internet connection to reach GitHub
+- `curl` and `python3` available (Mac/Linux) or `Invoke-WebRequest` (Windows)
 
-## AI Tool Folder Mapping
+## Skills Folder Mapping
 
-The skill detects which AI tools are active in the project by checking for their characteristic config directories, then installs skills into the correct subfolder:
+Skills are installed into these folders per AI IDE:
 
-| AI Tool | Detection Marker | Skills Folder |
-|---------|-----------------|---------------|
-| Claude Code | `.claude/` | `.claude/skills/` |
-| GitHub Copilot | `.github/` | `.github/skills/` |
-| Cursor | `.cursor/` | `.cursor/rules/` |
-| Windsurf | `.windsurf/` | `.windsurf/skills/` |
-| Amazon Q Developer | `.amazonq/` | `.amazonq/cli-agents/` |
-| Roo Code | `.roo/` | `.roo/skills/` |
-| Kilo Code | `.kilocode/` | `.kilocode/skills/` |
-| Gemini CLI | `.gemini/` | `.gemini/extensions/` |
-| Amp | `.agents/` | `.agents/skills/` |
-| Auggie CLI | `.augment/` | `.augment/rules/` |
-| CodeBuddy CLI | `.codebuddy/` | `.codebuddy/skills/` |
-| Codex CLI | `.codex/` | `.codex/skills/` |
-| IBM Bob | `.bob/` | `.bob/skills/` |
-| opencode | `.opencode/` | `.opencode/skill/` |
-| Qoder CLI | `.qoder/` | `.qoder/skills/` |
-| Qwen Code | `.qwen/` | `.qwen/skills/` |
-| SHAI (OVHcloud) | `.shai/` | `.shai/commands/` |
-| Google Antigravity | `.agent/` | `.agent/skills/` |
-| Jules | `skills/` (root) | `skills/` |
+| AI IDE | Skills Folder |
+|--------|--------------|
+| GitHub Copilot | `.github/skills/` |
+| Claude Code | `.claude/skills/` |
+| Cursor | `.cursor/rules/` |
+| Gemini CLI | `.gemini/extensions/` |
+| Qwen Code | `.qwen/skills/` |
+| Open Code | `.opencode/skill/` |
+| Codex CLI | `.codex/skills/` |
+| Windsurf | `.windsurf/skills/` |
+| Kilo Code | `.kilocode/skills/` |
+| Auggie CLI | `.augment/rules/` |
+| CodeBuddy | `.codebuddy/skills/` |
+| Roo Code | `.roo/skills/` |
+| Amazon Q | `.amazonq/cli-agents/` |
+| Amp | `.agents/skills/` |
+| SHAI | `.shai/commands/` |
+| IBM Bob | `.bob/skills/` |
+| Jules | `skills/` |
+| Qoder CLI | `.qoder/skills/` |
+| Antigravity | `.agent/skills/` |
 
 ## Instructions
 
-### Step 1: Check Catalog Exists
+### Step 1: Identify Requested Skills
 
-1. Check whether `docs/agent-skill-list.md` exists in the project root.
-2. If it does **not** exist, stop and report:
-   ```
-   ❌ docs/agent-skill-list.md not found.
-   Please run the sync-skills skill first to populate the skill catalog.
-   ```
+1. Parse the user's request to determine which skills to install
+2. If no specific names given, run `python3 scripts/list_skills.py` first to show available options and ask the user to choose
 
-### Step 2: Parse Requested Skill Names
+### Step 2: Detect Installed AI IDEs
 
-1. Read the skill names provided by the user as input arguments (space-separated or comma-separated list).
-   Example inputs:
-   - `git-commit coding code-review`
-   - `git-commit, coding, code-review`
-   - A single name: `git-commit`
-2. Normalize each name: trim whitespace, lowercase.
-3. If no names were provided, ask the user:
-   ```
-   Which skills do you want to add? Please provide skill names (e.g. git-commit coding code-review).
-   Refer to docs/agent-skill-list.md for the full list of available skills.
-   ```
+Check which AI IDE folders exist in the project root. An IDE is "detected" if its agent folder or skills folder exists. Only install into detected IDEs.
 
-### Step 3: Look Up Skills in Catalog
+### Step 3: Fetch Skill Source
 
-1. Read `docs/agent-skill-list.md` and parse the table under `## Skills`. Each row has 5 columns: `Skill Name`, `Description`, `Banned`, `Category`, `URL`.
-2. For each requested skill name, find the matching row (case-insensitive match on `Skill Name`).
-3. Separate results into:
-   - **Found**: skill name matched in the catalog
-   - **Not found**: skill name has no match
+1. Read `nightlife.yaml` to get issue URLs
+2. Fetch repo definitions from each issue
+3. Find which repository contains the requested skill
 
-4. If **all** requested names are not found, stop and report:
-   ```
-   ❌ None of the requested skills were found in the catalog:
-     - <name1>
-     - <name2>
+### Step 4: Install Using Shell Script
 
-   Please refer to docs/agent-skill-list.md to select correct skill names.
-   Tip: run sync-skills to refresh the catalog if it is out of date.
-   ```
+For each detected AI IDE, run the installation script:
 
-5. If **some** names are not found (partial match), report the missing ones as warnings and continue with the found skills:
-   ```
-   ⚠️  The following skills were not found in the catalog and will be skipped:
-     - <name>  →  not found
-   Continuing with matched skills: <name1>, <name2>...
-   ```
-
-### Step 4: Handle Banned Skills
-
-1. Check the `Banned` column for each found skill (case-insensitive; treat `yes`, `Yes`, `YES` as banned).
-2. Split found skills into two groups:
-   - **Allowed**: `Banned` value is `no`
-   - **Blocked**: `Banned` value is `yes`
-3. If any skills are blocked, report them clearly:
-   ```
-   🚫 The following skills are banned and cannot be installed:
-     - <name> (Category: <category>)
-     - <name> (Category: <category>)
-
-   Banned skills are restricted from installation. To allow a skill,
-   update its Banned column to 'no' in docs/agent-skill-list.md.
-   ```
-4. If **all** requested skills are banned, stop after the report:
-   ```
-   ❌ No installable skills remaining. Update docs/agent-skill-list.md to unban skills.
-   ```
-5. If some skills are allowed, continue installation with the allowed subset only.
-
-### Step 5: Detect AI Tools in the Project
-
-1. Check the project root for the detection markers listed in the AI Tool Folder Mapping table above.
-2. Build a list of detected tools and their target skills folders.
-3. If **no** AI tool markers are found, stop and report:
-   ```
-   ❌ No AI tool configuration folders detected in this project.
-   To install skills, create one of the following folders first:
-     .claude/        → Claude Code
-     .github/        → GitHub Copilot
-     .cursor/        → Cursor
-     .windsurf/      → Windsurf
-     (see docs for full list)
-   ```
-4. If tools are detected, display them and ask the user to confirm:
-   ```
-   🔍 Detected AI tools in this project:
-     ✓ Claude Code    → .claude/skills/
-     ✓ GitHub Copilot → .github/skills/
-     ✓ Cursor         → .cursor/rules/
-
-   Skills will be installed for all detected tools. Proceed? (yes/no/select)
-   ```
-   - **yes**: install for all detected tools
-   - **no**: cancel installation
-   - **select**: ask the user to pick a subset of the detected tools
-
-### Step 6: Download Each Skill
-
-For each skill to install:
-
-1. **Parse the URL** from the catalog row. The URL format is:
-   ```
-   https://github.com/<owner>/<repo>/blob/<branch>/skills/<skill-name>/SKILL.md
-   ```
-   Extract: `owner`, `repo`, `branch`, `skill_dir` (e.g. `skills/git-commit`).
-
-2. **List all files** in the skill directory using the GitHub API:
-   ```
-   GET https://api.github.com/repos/<owner>/<repo>/git/trees/<branch>?recursive=1
-   ```
-   Filter all `tree` entries whose `path` starts with `<skill_dir>/` and whose `type` is `blob`.
-
-3. **Download each file** using the raw content URL:
-   ```
-   https://raw.githubusercontent.com/<owner>/<repo>/<branch>/<file_path>
-   ```
-
-4. Collect all `(relative_path, content)` pairs, where `relative_path` is the path **relative to** the skill directory (e.g., `SKILL.md`, `references/best-practices.md`, `scripts/check.py`).
-
-**Error handling during download:**
-- If the GitHub API returns 403/429 (rate limit): stop and report the error; advise the user to wait or use a token.
-- If a skill URL returns 404/401: skip the skill and report: "Cannot fetch <skill-name>: repository not accessible."
-- If an individual file fails: skip that file, log a warning, continue with remaining files.
-
-### Step 7: Save Files to AI Tool Folders
-
-For each detected AI tool and each downloaded skill:
-
-1. Determine the destination root: `<tool_skills_folder>/<skill-name>/`
-   - Example for Claude Code: `.claude/skills/git-commit/`
-   - Example for GitHub Copilot: `.github/skills/git-commit/`
-
-2. For each `(relative_path, content)` pair, write the file to:
-   ```
-   <tool_skills_folder>/<skill-name>/<relative_path>
-   ```
-
-3. Create intermediate directories as needed.
-
-4. If a file already exists at the destination:
-   - **Overwrite** it silently (re-running `add-skills` refreshes installed skills).
-
-### Step 8: Report Results
-
-Print a final summary:
-
+**Mac/Linux:**
+```bash
+bash scripts/add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 ```
-✅ Skills installation complete
 
-Skills installed: <N>
-AI tools updated: <N>
-
-Installed skills:
-  ✓ git-commit   → .claude/skills/git-commit/   (12 files)
-  ✓ git-commit   → .github/skills/git-commit/   (12 files)
-  ✓ coding       → .claude/skills/coding/        (8 files)
-  ✓ coding       → .github/skills/coding/        (8 files)
-
-⚠️  Warnings (if any):
-  - Skipped file scripts/check.py in git-commit: download failed
+**Windows:**
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/add-skills.ps1 <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 ```
+
+**Parameters:**
+- `repo_url`: GitHub repository URL (e.g., `https://github.com/owner/repo`)
+- `branch`: Git branch (e.g., `main`)
+- `repo_path`: Path in repo containing skills (e.g., `skills`)
+- `skill_name`: Name of the skill to download (e.g., `git-commit`)
+- `target_dir`: Local target directory (e.g., `.claude/skills/git-commit`)
+
+The script recursively downloads the entire skill directory structure, preserving folders like `scripts/`, `templates/`, and `references/`.
+
+### Step 5: Report Results
+
+For each skill installed, report:
+- Which IDEs it was installed to
+- The directory path created
+- Any failures with error details
+
+## Example
+
+User: "Install the git-commit and pdf skills"
+
+1. Read `nightlife.yaml` -> fetch repos from issues -> find skill repos with their `url`, `branch`, and `path`
+2. Find which repos contain `git-commit` (e.g., repo-a at `https://github.com/owner/repo-a`, path `skills`) and `pdf` (e.g., repo-b at `https://github.com/owner/repo-b`, path `skills`)
+3. Detect Claude Code (`.claude/skills/` exists) and Copilot (`.github/skills/` exists)
+4. Run for Claude + git-commit:
+   ```bash
+   bash scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .claude/skills/git-commit
+   ```
+5. Run for Copilot + git-commit:
+   ```bash
+   bash scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .github/skills/git-commit
+   ```
+6. Run for Claude + pdf:
+   ```bash
+   bash scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .claude/skills/pdf
+   ```
+7. Run for Copilot + pdf:
+   ```bash
+   bash scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .github/skills/pdf
+   ```
+8. Report: "Installed git-commit and pdf to Claude Code and GitHub Copilot"
 
 ## Error Handling
 
-| Error | Action |
-|-------|--------|
-| `docs/agent-skill-list.md` not found | Stop; suggest running `sync-skills` |
-| No skill names provided | Ask user for input |
-| All skill names not found in catalog | Stop; suggest referring to `agent-skill-list.md` |
-| Some skill names not found | Warn and skip; continue with found skills |
-| Skill is banned | Inform user; skip the skill; never install banned skills |
-| No AI tool folders detected | Stop; list folders user can create |
-| GitHub API rate limit (403/429) | Stop; advise user to wait or add token |
-| Skill URL not accessible (401/404) | Skip skill; continue with others |
-| Individual file download fails | Skip file; warn; continue |
-| Destination directory creation fails | Report error for that tool; continue with others |
+| Error | Resolution |
+|-------|------------|
+| Skill not found in any repo | Run `list-skills` to show available names |
+| No AI IDE folders detected | Run `phoenix init` first to set up the project |
+| Download failed (HTTP error) | Check internet connection and repo accessibility |
+| Permission denied | Check write permissions on target directories |
 
-## Examples
+## Related Skills
 
-### Example 1: Install a single skill for one AI tool
-
-**Command:** `add-skills git-commit`
-
-**Project has:** `.claude/` only
-
-**Result:**
-```
-✅ Skills installation complete
-
-Skills installed: 1
-AI tools updated: 1
-
-Installed skills:
-  ✓ git-commit → .claude/skills/git-commit/ (12 files)
-```
-
-### Example 2: Install multiple skills for multiple AI tools
-
-**Command:** `add-skills git-commit coding code-review`
-
-**Project has:** `.claude/`, `.github/`, `.cursor/`
-
-**Result:**
-```
-✅ Skills installation complete
-
-Skills installed: 3
-AI tools updated: 3
-
-Installed skills:
-  ✓ git-commit   → .claude/skills/git-commit/    (12 files)
-  ✓ git-commit   → .github/skills/git-commit/    (12 files)
-  ✓ git-commit   → .cursor/rules/git-commit/     (12 files)
-  ✓ coding       → .claude/skills/coding/         (8 files)
-  ✓ coding       → .github/skills/coding/         (8 files)
-  ✓ coding       → .cursor/rules/coding/          (8 files)
-  ✓ code-review  → .claude/skills/code-review/    (5 files)
-  ✓ code-review  → .github/skills/code-review/    (5 files)
-  ✓ code-review  → .cursor/rules/code-review/     (5 files)
-```
-
-### Example 3: Skill name not found in catalog
-
-**Command:** `add-skills gitt-commit`
-
-**Result:**
-```
-❌ None of the requested skills were found in the catalog:
-  - gitt-commit
-
-Please refer to docs/agent-skill-list.md to select correct skill names.
-Tip: run sync-skills to refresh the catalog if it is out of date.
-```
-
-### Example 4: Mix of found and not-found skills
-
-**Command:** `add-skills git-commit unknown-skill`
-
-**Result:**
-```
-⚠️  The following skills were not found in the catalog and will be skipped:
-  - unknown-skill → not found
-Continuing with matched skills: git-commit...
-
-✅ Skills installation complete
-...
-```
-
-### Example 5: All selected skills are banned
-
-**Command:** `add-skills restricted-skill`
-
-**Result:**
-```
-🚫 The following skills are banned and cannot be installed:
-  - restricted-skill (Category: development)
-
-Banned skills are restricted from installation. To allow a skill,
-update its Banned column to 'no' in docs/agent-skill-list.md.
-
-❌ No installable skills remaining. Update docs/agent-skill-list.md to unban skills.
-```
-
-### Example 6: Mix of banned and allowed skills
-
-**Command:** `add-skills git-commit restricted-skill coding`
-
-**Result:**
-```
-🚫 The following skills are banned and cannot be installed:
-  - restricted-skill (Category: development)
-
-Banned skills are restricted from installation. To allow a skill,
-update its Banned column to 'no' in docs/agent-skill-list.md.
-
-Continuing with allowed skills: git-commit, coding...
-
-✅ Skills installation complete
-...
-```
-
-## Notes
-
-- Re-running `add-skills` with the same skill names will **overwrite** existing files, effectively upgrading the skill to the latest version from the source repository.
-- The skill installs into **all detected AI tool folders** by default. Use the **select** option at the confirmation prompt to target specific tools.
-- Files are downloaded directly from the source GitHub repository referenced in the `URL` column of `docs/agent-skill-list.md`. Ensure the source repo is accessible.
-- Jules is detected by the presence of a `skills/` directory at the project root. Because this conflicts with the local `skills/` folder used by this project itself, Jules installation is **skipped by default** unless the user explicitly selects it.
+- **list-skills**: List available skills before installing
+- **add-agents**: Install agent commands instead of skills
+- **list-agents**: List available agent commands
