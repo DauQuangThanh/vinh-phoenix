@@ -69,13 +69,19 @@ Repository: {repo_name} ({repo_url})
 
 Execute the listing script. The script is located in this skill's `scripts/` subdirectory. Replace `{SKILL_DIR}` with the actual path to the directory containing this SKILL.md file:
 
+**Mac/Linux:**
 ```bash
-python3 {SKILL_DIR}/scripts/list_agents.py
+bash {SKILL_DIR}/scripts/list-agents.sh
+```
+
+**Windows:**
+```powershell
+powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/list-agents.ps1
 ```
 
 For example, if this skill is installed at `.claude/skills/list-agents/`, run:
 ```bash
-python3 .claude/skills/list-agents/scripts/list_agents.py
+bash .claude/skills/list-agents/scripts/list-agents.sh
 ```
 
 The script reads `nightlife.yaml` from the project root, fetches repo definitions from all configured GitHub issues, then lists available agent commands from each repository.

@@ -26,7 +26,7 @@ This skill lists all available skills from remote GitHub repositories configured
 
 - `nightlife.yaml` exists in the project root with configured `urls`
 - Internet connection to reach GitHub API
-- `python3` available on the system
+- `curl` available on the system (Mac/Linux) or `Invoke-RestMethod` (Windows)
 
 ## Instructions
 
@@ -69,13 +69,19 @@ Repository: {repo_name} ({repo_url})
 
 Execute the listing script. The script is located in this skill's `scripts/` subdirectory. Replace `{SKILL_DIR}` with the actual path to the directory containing this SKILL.md file:
 
+**Mac/Linux:**
 ```bash
-python3 {SKILL_DIR}/scripts/list_skills.py
+bash {SKILL_DIR}/scripts/list-skills.sh
+```
+
+**Windows:**
+```powershell
+powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/list-skills.ps1
 ```
 
 For example, if this skill is installed at `.claude/skills/list-skills/`, run:
 ```bash
-python3 .claude/skills/list-skills/scripts/list_skills.py
+bash .claude/skills/list-skills/scripts/list-skills.sh
 ```
 
 The script reads `nightlife.yaml` from the project root, fetches repo definitions from all configured GitHub issues, then lists available skills from each repository.

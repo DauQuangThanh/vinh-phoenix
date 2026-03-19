@@ -65,7 +65,7 @@ For example, if this skill is installed at `.claude/skills/add-agents/`, then `{
 ### Step 1: Identify Requested Agents
 
 1. Parse the user's request to determine which agent commands to install
-2. If no specific names given, run `python3 {SKILL_DIR}/scripts/list_agents.py` first to show available options and ask the user to choose
+2. If no specific names given, run `bash {SKILL_DIR}/scripts/list-agents.sh` (Mac/Linux) or `powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/list-agents.ps1` (Windows) first to show available options and ask the user to choose
 
 ### Step 2: Detect Installed AI IDEs
 

@@ -58,16 +58,15 @@ download_dir() {
         return 1
     }
 
-    # Parse JSON array - extract name, type, and path for each item
-    # Using simple grep/sed parsing to avoid jq dependency
+    # Parse JSON array - extract type, name, and path for each item
+    # Shell-native JSON parsing using grep/sed (no python/jq dependency)
     local items
-    items=$(echo "$listing" | python3 -c "
-import sys, json
-items = json.load(sys.stdin)
-if isinstance(items, list):
-    for item in items:
-        print(f\"{item['type']}|{item['name']}|{item['path']}\")
-" 2>/dev/null) || {
+    items=$(echo "$listing" | grep -oE '"(type|name|path)"\s*:\s*"[^"]*"' | sed 's/.*"type"\s*:\s*"//;s/.*"name"\s*:\s*"//;s/.*"path"\s*:\s*"//' | sed 's/"$//' | \
+    while IFS= read -r val1; do
+        IFS= read -r val2 || break
+        IFS= read -r val3 || break
+        echo "${val1}|${val2}|${val3}"
+    done) || {
         echo "Error: Failed to parse directory listing for ${remote_path}" >&2
         return 1
     }

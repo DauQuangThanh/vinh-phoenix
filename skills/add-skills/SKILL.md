@@ -26,7 +26,7 @@ This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ +
 - `nightlife.yaml` exists in the project root with configured `urls`
 - Project has been initialized with at least one AI IDE
 - Internet connection to reach GitHub
-- `curl` and `python3` available (Mac/Linux) or `Invoke-WebRequest` (Windows)
+- `curl` available (Mac/Linux) or `Invoke-WebRequest` (Windows)
 
 ## Skills Folder Mapping
 
@@ -65,7 +65,7 @@ For example, if this skill is installed at `.claude/skills/add-skills/`, then `{
 ### Step 1: Identify Requested Skills
 
 1. Parse the user's request to determine which skills to install
-2. If no specific names given, run `python3 {SKILL_DIR}/scripts/list_skills.py` first to show available options and ask the user to choose
+2. If no specific names given, run `bash {SKILL_DIR}/scripts/list-skills.sh` (Mac/Linux) or `powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/list-skills.ps1` (Windows) first to show available options and ask the user to choose
 
 ### Step 2: Detect Installed AI IDEs
 
