@@ -67,13 +67,18 @@ Repository: {repo_name} ({repo_url})
 
 ## Running the Script
 
-Execute the listing script:
+Execute the listing script. The script is located in this skill's `scripts/` subdirectory. Replace `{SKILL_DIR}` with the actual path to the directory containing this SKILL.md file:
 
 ```bash
-python3 scripts/list_skills.py
+python3 {SKILL_DIR}/scripts/list_skills.py
 ```
 
-The script reads `nightlife.yaml`, fetches repo definitions from all configured GitHub issues, then lists available skills from each repository.
+For example, if this skill is installed at `.claude/skills/list-skills/`, run:
+```bash
+python3 .claude/skills/list-skills/scripts/list_skills.py
+```
+
+The script reads `nightlife.yaml` from the project root, fetches repo definitions from all configured GitHub issues, then lists available skills from each repository.
 
 ## Error Handling
 

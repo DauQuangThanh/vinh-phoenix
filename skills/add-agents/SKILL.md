@@ -56,10 +56,16 @@ The following AI IDEs are supported. Agent commands are installed into these fol
 
 ## Instructions
 
+### Important: Script Path Resolution
+
+All script paths in this skill are relative to the directory containing this SKILL.md file. Replace `{SKILL_DIR}` with the actual path to this skill's directory.
+
+For example, if this skill is installed at `.claude/skills/add-agents/`, then `{SKILL_DIR}` = `.claude/skills/add-agents`.
+
 ### Step 1: Identify Requested Agents
 
 1. Parse the user's request to determine which agent commands to install
-2. If no specific names given, run `python3 scripts/list_agents.py` first to show available options and ask the user to choose
+2. If no specific names given, run `python3 {SKILL_DIR}/scripts/list_agents.py` first to show available options and ask the user to choose
 
 ### Step 2: Detect Installed AI IDEs
 
@@ -77,12 +83,12 @@ For each detected AI IDE, run the installation script:
 
 **Mac/Linux:**
 ```bash
-bash scripts/add-agents.sh <repo_url> <branch> <repo_path> <agent_name> <target_dir> <extension> <args_format>
+bash {SKILL_DIR}/scripts/add-agents.sh <repo_url> <branch> <repo_path> <agent_name> <target_dir> <extension> <args_format>
 ```
 
 **Windows:**
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/add-agents.ps1 <repo_url> <branch> <repo_path> <agent_name> <target_dir> <extension> <args_format>
+powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/add-agents.ps1 <repo_url> <branch> <repo_path> <agent_name> <target_dir> <extension> <args_format>
 ```
 
 **Parameters:**
@@ -108,13 +114,13 @@ User: "Install the specify and architect agent commands"
 1. Read `nightlife.yaml` -> fetch repos from issues -> find agent repos with their `url`, `branch`, and `path`
 2. Find which repo contains `specify` (e.g., repo `my-agents` at `https://github.com/owner/my-agents`, path `agent-commands`)
 3. Detect Claude Code (`.claude/commands/` exists) and Copilot (`.github/agents/` exists)
-4. Run for Claude:
+4. Run for Claude (assuming skill is at `.claude/skills/add-agents/`):
    ```bash
-   bash scripts/add-agents.sh https://github.com/owner/my-agents main agent-commands specify .claude/commands/ .md '$ARGUMENTS'
+   bash .claude/skills/add-agents/scripts/add-agents.sh https://github.com/owner/my-agents main agent-commands specify .claude/commands/ .md '$ARGUMENTS'
    ```
 5. Run for Copilot:
    ```bash
-   bash scripts/add-agents.sh https://github.com/owner/my-agents main agent-commands specify .github/agents/ .agent.md '$ARGUMENTS'
+   bash .claude/skills/add-agents/scripts/add-agents.sh https://github.com/owner/my-agents main agent-commands specify .github/agents/ .agent.md '$ARGUMENTS'
    ```
 6. Repeat for `architect`
 7. Report: "Installed specify and architect to Claude Code and GitHub Copilot"

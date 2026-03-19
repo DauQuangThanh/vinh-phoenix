@@ -56,10 +56,16 @@ Skills are installed into these folders per AI IDE:
 
 ## Instructions
 
+### Important: Script Path Resolution
+
+All script paths in this skill are relative to the directory containing this SKILL.md file. Replace `{SKILL_DIR}` with the actual path to this skill's directory.
+
+For example, if this skill is installed at `.claude/skills/add-skills/`, then `{SKILL_DIR}` = `.claude/skills/add-skills`.
+
 ### Step 1: Identify Requested Skills
 
 1. Parse the user's request to determine which skills to install
-2. If no specific names given, run `python3 scripts/list_skills.py` first to show available options and ask the user to choose
+2. If no specific names given, run `python3 {SKILL_DIR}/scripts/list_skills.py` first to show available options and ask the user to choose
 
 ### Step 2: Detect Installed AI IDEs
 
@@ -77,12 +83,12 @@ For each detected AI IDE, run the installation script:
 
 **Mac/Linux:**
 ```bash
-bash scripts/add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>
+bash {SKILL_DIR}/scripts/add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 ```
 
 **Windows:**
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/add-skills.ps1 <repo_url> <branch> <repo_path> <skill_name> <target_dir>
+powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/add-skills.ps1 <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 ```
 
 **Parameters:**
@@ -108,21 +114,21 @@ User: "Install the git-commit and pdf skills"
 1. Read `nightlife.yaml` -> fetch repos from issues -> find skill repos with their `url`, `branch`, and `path`
 2. Find which repos contain `git-commit` (e.g., repo-a at `https://github.com/owner/repo-a`, path `skills`) and `pdf` (e.g., repo-b at `https://github.com/owner/repo-b`, path `skills`)
 3. Detect Claude Code (`.claude/skills/` exists) and Copilot (`.github/skills/` exists)
-4. Run for Claude + git-commit:
+4. Run for Claude + git-commit (assuming skill is at `.claude/skills/add-skills/`):
    ```bash
-   bash scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .claude/skills/git-commit
+   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .claude/skills/git-commit
    ```
 5. Run for Copilot + git-commit:
    ```bash
-   bash scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .github/skills/git-commit
+   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .github/skills/git-commit
    ```
 6. Run for Claude + pdf:
    ```bash
-   bash scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .claude/skills/pdf
+   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .claude/skills/pdf
    ```
 7. Run for Copilot + pdf:
    ```bash
-   bash scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .github/skills/pdf
+   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .github/skills/pdf
    ```
 8. Report: "Installed git-commit and pdf to Claude Code and GitHub Copilot"
 
