@@ -138,6 +138,14 @@ def copy_local_template(
         if verbose and not tracker:
             console.print(f"[green]✓[/green] Created {ai_assistant} skills in {skills_folder}")
 
+    # Copy nightlife.yaml to project root (only once, for the first agent)
+    if is_first_agent:
+        nightlife_yaml = source_path / "nightlife.yaml"
+        if nightlife_yaml.exists():
+            shutil.copy2(nightlife_yaml, project_path / "nightlife.yaml")
+            if verbose and not tracker:
+                console.print("[green]✓[/green] Copied nightlife.yaml to project root")
+
     # Agent-specific configurations are now handled within skills
 
     if tracker:
@@ -321,6 +329,15 @@ def download_and_extract_template(
 
                 if verbose and not tracker:
                     console.print(f"[cyan]Skills copied to {skills_folder}[/cyan]")
+
+                # Copy nightlife.yaml to project root (only once, for the first agent)
+                if is_first_agent:
+                    # Look for nightlife.yaml at the same level as skills/
+                    nightlife_yaml = skills_source.parent / "nightlife.yaml"
+                    if nightlife_yaml.exists():
+                        shutil.copy2(nightlife_yaml, project_path / "nightlife.yaml")
+                        if verbose and not tracker:
+                            console.print("[cyan]Copied nightlife.yaml to project root[/cyan]")
 
     except Exception as e:
         if tracker:

@@ -38,8 +38,16 @@ build_skills_package() {
     exit 1
   fi
   
-  # Create the zip file with skills/ at the root
-  ( cd "$base_dir" && zip -r "../phoenix-skills-${NEW_VERSION}.zip" skills )
+  # Copy nightlife.yaml to the package root
+  if [[ -f nightlife.yaml ]]; then
+    cp nightlife.yaml "$base_dir/nightlife.yaml"
+    echo "Copied nightlife.yaml -> $base_dir/nightlife.yaml"
+  else
+    echo "Warning: nightlife.yaml not found"
+  fi
+
+  # Create the zip file with skills/ and nightlife.yaml at the root
+  ( cd "$base_dir" && zip -r "../phoenix-skills-${NEW_VERSION}.zip" skills nightlife.yaml )
   echo "Created $GENRELEASES_DIR/phoenix-skills-${NEW_VERSION}.zip"
 }
 
