@@ -78,13 +78,13 @@ for issue_url in "${urls[@]}"; do
 
     api_url="https://api.github.com/repos/${owner}/${repo}/issues/${number}"
 
-    body=$(curl "${curl_opts[@]}" "$api_url" 2>/dev/null | grep -o '"body":"[^"]*"' | sed 's/"body":"//;s/"$//') || {
+    raw_body=$(curl "${curl_opts[@]}" "$api_url" 2>/dev/null | sed 's/.*"body":"//;s/","[a-z_]*":.*//') || {
         echo "Warning: Failed to fetch $issue_url"
         continue
     }
 
-    # Unescape \r\n to actual newlines
-    body=$(echo "$body" | sed 's/\\r\\n/\n/g' | sed 's/\\n/\n/g')
+    # Unescape \n to actual newlines
+    body=$(printf '%b' "$raw_body")
 
     # Parse agents section from issue body
     in_agents=false
@@ -180,7 +180,7 @@ for i in "${!agent_names[@]}"; do
     fi
 
     owner=$(echo "$repo_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
-    repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/]+?)(.git)?$|\1|')
+    repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/.]+).*|\1|')
 
     api_url="https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}"
 
@@ -204,7 +204,7 @@ for i in "${!agent_names[@]}"; do
         display_name=$(echo "$name" | sed 's/\.md$//')
         echo "  - ${display_name}"
         count=$((count + 1))
-    done < <(echo "$listing" | grep -oE '"name"\s*:\s*"[^"]*"' | sed 's/"name"\s*:\s*"//;s/"$//' | sort)
+    done < <(echo "$listing" | grep -o '"name": *"[^"]*"' | sed 's/"name": *"//;s/"$//' | sort)
 
     echo "  Total: ${count} agent commands available"
     grand_total=$((grand_total + count))

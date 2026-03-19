@@ -60,16 +60,15 @@ download_dir() {
 
     # Parse JSON array - extract type, name, and path for each item
     # Shell-native JSON parsing using grep/sed (no python/jq dependency)
+    # GitHub API returns pretty-printed JSON with name, path, type on separate lines
     local items
-    items=$(echo "$listing" | grep -oE '"(type|name|path)"\s*:\s*"[^"]*"' | sed 's/.*"type"\s*:\s*"//;s/.*"name"\s*:\s*"//;s/.*"path"\s*:\s*"//' | sed 's/"$//' | \
-    while IFS= read -r val1; do
-        IFS= read -r val2 || break
-        IFS= read -r val3 || break
-        echo "${val1}|${val2}|${val3}"
-    done) || {
-        echo "Error: Failed to parse directory listing for ${remote_path}" >&2
-        return 1
-    }
+    items=$(echo "$listing" | grep -o '"name": *"[^"]*"\|"path": *"[^"]*"\|"type": *"[^"]*"' | \
+    sed 's/"name": *"//;s/"path": *"//;s/"type": *"//;s/"$//' | \
+    while IFS= read -r name; do
+        IFS= read -r path || break
+        IFS= read -r type || break
+        echo "${type}|${name}|${path}"
+    done)
 
     while IFS='|' read -r item_type item_name item_path; do
         [ -z "$item_type" ] && continue

@@ -75,13 +75,13 @@ for issue_url in "${urls[@]}"; do
 
     api_url="https://api.github.com/repos/${owner}/${repo}/issues/${number}"
 
-    body=$(curl "${curl_opts[@]}" "$api_url" 2>/dev/null | grep -o '"body":"[^"]*"' | sed 's/"body":"//;s/"$//') || {
+    raw_body=$(curl "${curl_opts[@]}" "$api_url" 2>/dev/null | sed 's/.*"body":"//;s/","[a-z_]*":.*//') || {
         echo "Warning: Failed to fetch $issue_url"
         continue
     }
 
-    # Unescape \r\n to actual newlines
-    body=$(echo "$body" | sed 's/\\r\\n/\n/g' | sed 's/\\n/\n/g')
+    # Unescape \n to actual newlines
+    body=$(printf '%b' "$raw_body")
 
     # Parse skills section from issue body
     in_skills=false
@@ -172,7 +172,7 @@ for i in "${!skill_names[@]}"; do
     fi
 
     owner=$(echo "$repo_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
-    repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/]+?)(.git)?$|\1|')
+    repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/.]+).*|\1|')
 
     api_url="https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}"
 
@@ -186,11 +186,12 @@ for i in "${!skill_names[@]}"; do
 
     # Extract directory names only (skills are folders), skip hidden items
     count=0
-    # Get type|name pairs
-    items=$(echo "$listing" | grep -oE '"(type|name)"\s*:\s*"[^"]*"' | sed 's/.*"type"\s*:\s*"//;s/.*"name"\s*:\s*"//' | sed 's/"$//' | \
-    while IFS= read -r val1; do
-        IFS= read -r val2 || break
-        echo "${val1}|${val2}"
+    # Get name|type pairs from pretty-printed JSON (name appears before type per object)
+    items=$(echo "$listing" | grep -o '"name": *"[^"]*"\|"type": *"[^"]*"' | \
+    sed 's/"name": *"//;s/"type": *"//;s/"$//' | \
+    while IFS= read -r name; do
+        IFS= read -r type || break
+        echo "${type}|${name}"
     done)
 
     while IFS='|' read -r item_type item_name; do

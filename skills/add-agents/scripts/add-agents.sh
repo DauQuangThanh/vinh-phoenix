@@ -55,14 +55,15 @@ mkdir -p "$TARGET_DIR"
 
 # Parse GitHub API JSON array to extract type|name|path tuples
 # Shell-native JSON parsing using grep/sed (no python/jq dependency)
+# GitHub API returns pretty-printed JSON with name, path, type on separate lines
 parse_github_json() {
     local json="$1"
-    # Match each object block and extract type, name, path in order
-    echo "$json" | grep -oE '"(type|name|path)"\s*:\s*"[^"]*"' | sed 's/.*"type"\s*:\s*"//;s/.*"name"\s*:\s*"//;s/.*"path"\s*:\s*"//' | sed 's/"$//' | \
-    while IFS= read -r val1; do
-        IFS= read -r val2 || break
-        IFS= read -r val3 || break
-        echo "${val1}|${val2}|${val3}"
+    echo "$json" | grep -o '"name": *"[^"]*"\|"path": *"[^"]*"\|"type": *"[^"]*"' | \
+    sed 's/"name": *"//;s/"path": *"//;s/"type": *"//;s/"$//' | \
+    while IFS= read -r name; do
+        IFS= read -r path || break
+        IFS= read -r type || break
+        echo "${type}|${name}|${path}"
     done
 }
 
