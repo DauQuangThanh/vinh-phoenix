@@ -1,20 +1,22 @@
 # 📦 Installation Guide
 
-**Install Phoenix skills into your development workflow.**
+**Install Phoenix and bootstrap your project with core meta-skills.**
 
 ---
 
 ## 🎯 What You'll Get
 
-Phoenix provides **18 production-ready skills** for AI coding assistants, covering:
+`phoenix init` installs **5 core meta-skills** into your project:
 
-- Requirements specification and clarification
-- Architecture design and review
-- Technical planning and implementation
-- Code quality and consistency
-- Testing and project management
+| Skill | Purpose |
+|-------|---------|
+| `git-commit` | Generate semantic commit messages |
+| `list-skills` | Browse available skills from configured repositories |
+| `add-skills` | Download and install skills from remote repositories |
+| `list-agents` | Browse available agent commands |
+| `add-agents` | Download and install agent commands |
 
-The **Phoenix CLI** installs these skills into your project, making them discoverable by your AI assistant. Skills are automatically loaded when tasks match their descriptions.
+It also places `nightlife.yaml` in your project root — the configuration file that tells the meta-skills where to find skill and agent catalogs.
 
 ---
 
@@ -23,9 +25,9 @@ The **Phoenix CLI** installs these skills into your project, making them discove
 Before installing, make sure you have:
 
 | Requirement | Description |
-| ------------- | ------------- |
+|-------------|-------------|
 | **Operating System** | Linux, macOS, or Windows (PowerShell supported) |
-| **AI Assistant** | [Claude Code](https://www.anthropic.com/claude-code), [GitHub Copilot](https://code.visualstudio.com/), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or [CodeBuddy CLI](https://www.codebuddy.ai/cli) |
+| **AI Assistant** | Any [supported agent](../README.md#-supported-ai-agents) |
 | **Package Manager** | [uv](https://docs.astral.sh/uv/) |
 | **Python** | [Version 3.11 or higher](https://www.python.org/downloads/) |
 | **Version Control** | [Git](https://git-scm.com/downloads) |
@@ -68,8 +70,8 @@ uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <p
 # GitHub Copilot
 uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai copilot
 
-# CodeBuddy CLI
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai codebuddy
+# Multiple agents at once
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai claude,copilot,gemini
 ```
 
 ---
@@ -88,25 +90,40 @@ uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <p
 
 ## ✅ Verify Installation
 
-After setup, check that everything works:
+After setup, verify the core meta-skills are in place:
 
-### 1. Check for Agent Skills
+```bash
+# For Claude Code
+ls .claude/skills/
 
-Your AI agent should have discovered these core skills:
+# For GitHub Copilot
+ls .github/skills/
 
-**Core Workflow:**
+# For Gemini CLI
+ls .gemini/extensions/
+```
 
-| Skill | When Used |
-| --------- | ---------- |
-| `project-ground-rules-setup` | When you ask to establish project principles |
-| `requirements-specification` | When you describe what to build |
-| `technical-detailed-design` | When you specify tech stack and implementation |
-| `task-management` | When you ask to break down work |
-| `coding` | When you ask to implement |
+You should see 5 skill directories: `git-commit`, `list-skills`, `add-skills`, `list-agents`, `add-agents`.
 
-### 2. Check Installation
+Also check that `nightlife.yaml` exists in your project root:
 
-Verify that agent-specific skills have been installed to your project.
+```bash
+cat nightlife.yaml
+```
+
+---
+
+## ➕ Adding More Skills
+
+Once initialized, use your AI assistant to extend your project:
+
+```text
+"List available skills"
+"Install the requirements-specification and coding skills"
+"Show what agent commands are available"
+```
+
+The `list-skills` and `add-skills` meta-skills handle fetching from the configured repositories in `nightlife.yaml`.
 
 ---
 
@@ -133,6 +150,14 @@ echo "🧹 Cleaning up..."
 rm gcm-linux_amd64.2.6.1.deb
 
 echo "✅ Done! Git Credential Manager is ready."
+```
+
+### GitHub API Rate Limits
+
+When using `list-skills` or `add-skills`, set a token to avoid rate limiting:
+
+```bash
+export GH_TOKEN=ghp_your_token_here
 ```
 
 ### Need More Help?
