@@ -591,31 +591,31 @@ def init(
         steps_lines.append(f"{step_num}. Set [cyan]CODEX_HOME[/cyan] environment variable before running Codex: [cyan]{cmd}[/cyan]")
         step_num += 1
 
-    steps_lines.append(f"{step_num}. Describe your work to your AI assistant - it will automatically use relevant skills:")
+    steps_lines.append(f"{step_num}. Browse and install skills using the core meta-skills:")
     steps_lines.append("")
-    steps_lines.append("   [bold cyan]Core Workflow:[/bold cyan]")
-    steps_lines.append("   • \"Establish project governance and development principles\"")
-    steps_lines.append("   • \"Create specifications for (feature name)\"")
-    steps_lines.append("   • \"Design system architecture\" [dim](product-level)[/dim]")
-    steps_lines.append("   • \"Establish coding conventions and standards\" [dim](product-level)[/dim]")
-    steps_lines.append("   • \"Plan technical implementation with (tech stack)\"")
-    steps_lines.append("   • \"Break this down into actionable tasks\"")
-    steps_lines.append("   • \"Implement all the tasks\"")
+    steps_lines.append("   [bold cyan]Extend your project:[/bold cyan]")
+    steps_lines.append("   • \"List available skills\"              [dim](list-skills)[/dim]")
+    steps_lines.append("   • \"Install <skill-name>\"               [dim](add-skills)[/dim]")
+    steps_lines.append("   • \"List available agent commands\"      [dim](list-agents)[/dim]")
+    steps_lines.append("   • \"Install <agent-name> agent command\" [dim](add-agents)[/dim]")
+    steps_lines.append("   • \"Commit my changes\"                  [dim](git-commit)[/dim]")
 
     steps_panel = Panel("\n".join(steps_lines), title="Next Steps", border_style="cyan", padding=(1,2))
     console.print()
     console.print(steps_panel)
 
     enhancement_lines = [
-        "Skills auto-activate when needed [bright_black](AI determines usage)[/bright_black]",
+        "Core meta-skills installed and ready [bright_black](AI activates them automatically)[/bright_black]",
         "",
-        "○ Clarify requirements - identifies ambiguities before planning",
-        "○ Analyze project consistency - detects gaps after tasks, before coding",
-        "○ Validate technical design - checks completeness and quality after design",
-        "○ Design E2E tests - creates comprehensive test specifications (product-level)",
-        "○ Assess codebase context - analyzes existing patterns (brownfield projects)"
+        "○ list-skills  - browse available skills from configured repositories",
+        "○ add-skills   - download and install skills for all detected AI IDEs",
+        "○ list-agents  - browse available agent commands from configured repositories",
+        "○ add-agents   - download and install agent commands for all detected AI IDEs",
+        "○ git-commit   - generate semantic commit messages following Conventional Commits",
+        "",
+        "[dim]Configure nightlife.yaml to point to your own skill/agent repositories[/dim]"
     ]
-    enhancements_panel = Panel("\n".join(enhancement_lines), title="Skills That Auto-Activate", border_style="cyan", padding=(1,2))
+    enhancements_panel = Panel("\n".join(enhancement_lines), title="Installed Meta-Skills", border_style="cyan", padding=(1,2))
     console.print()
     console.print(enhancements_panel)
 
@@ -730,7 +730,7 @@ def version():
 
     panel = Panel(
         info_table,
-        title="[bold cyan]Phoenix CLI Information[/bold cyan]",
+        title="[bold cyan]Vinh Phoenix CLI Information[/bold cyan]",
         border_style="cyan",
         padding=(1, 2)
     )

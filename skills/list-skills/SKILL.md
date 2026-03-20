@@ -90,7 +90,7 @@ The script reads `nightlife.yaml` from the project root, fetches repo definition
 
 | Error | Resolution |
 |-------|------------|
-| `nightlife.yaml` not found | Tell user to create it with `phoenix config-set-url` or manually |
+| `nightlife.yaml` not found | Tell user to run `phoenix init --here --force` to restore it, or create it manually |
 | GitHub API rate limit (HTTP 403) | Suggest setting `GH_TOKEN` environment variable |
 | Repository not found (HTTP 404) | Check the repo URL and path in the GitHub issue |
 | No skills found | The repository path may not contain skill directories |
