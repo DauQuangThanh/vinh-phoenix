@@ -44,7 +44,6 @@
     - [Meta-skills not finding nightlife.yaml](#meta-skills-not-finding-nightlifeyaml)
     - [GitHub API rate limits when using list-skills / add-skills](#github-api-rate-limits-when-using-list-skills--add-skills)
   - [🎗️ Support](#️-support)
-  - [🙏 Credits](#-credits)
   - [📄 License](#-license)
 
 ## 🎯 What is Vinh Phoenix?
@@ -57,7 +56,7 @@ It bootstraps your project with a small set of **meta-skills** that manage thems
 - ✅ Browse available skills and agents from configured repositories
 - ✅ Add exactly the skills your project needs
 - ✅ Point `nightlife.yaml` to your own repos to build private catalogs
-- ✅ Works with 20+ AI coding assistants
+- ✅ Works with 19 AI coding assistants
 
 > **Think of it like a package manager for AI skills:** Phoenix installs the tooling to discover and install skills. You decide what goes into your project.
 
@@ -239,7 +238,7 @@ And structure the issue body with your repos. This lets teams maintain internal 
 | Command | Description |
 |---------|-------------|
 | `init` | Initialize a new Phoenix project with core meta-skills |
-| `check` | Check for installed tools (`git`, `claude`, `gemini`, `code`/`code-insiders`, `cursor-agent`, `windsurf`, `qwen`, `opencode`, `codex`, `kilocode`, `auggie`, `roo`, `codebuddy`, `amp`, `shai`, `q`, `bob`, `jules`, `qoder`, `antigravity`) |
+| `check` | Check for installed tools (git, VS Code, and all supported AI agent CLIs) |
 | `version` | Display CLI version, template version, and system information |
 
 ### `phoenix init` Arguments & Options
@@ -247,19 +246,22 @@ And structure the issue body with your repos. This lets teams maintain internal 
 | Argument/Option | Type | Description |
 |-----------------|------|-------------|
 | `<project-name>` | Argument | Name for your new project directory (optional if using `--here`, or use `.` for current directory) |
-| `--ai` | Option | AI assistant(s) to use. Can be a single agent or comma-separated list (e.g., `claude,gemini,copilot`). Valid options: `claude`, `gemini`, `copilot`, `cursor-agent`, `qwen`, `opencode`, `codex`, `windsurf`, `kilocode`, `auggie`, `roo`, `codebuddy`, `amp`, `shai`, `q`, `bob`, `jules`, `qoder`, `antigravity`. If not specified, an interactive multi-select menu will appear |
+| `--ai` | Option | AI assistant(s) to use. Single agent or comma-separated list (e.g., `claude,gemini,copilot`). Run `phoenix init --help` for the full list of valid agents. If not specified, an interactive multi-select menu will appear |
 | `--ignore-agent-tools` | Flag | Skip checks for AI agent tools like Claude Code |
 | `--no-git` | Flag | Skip git repository initialization |
 | `--here` | Flag | Initialize project in the current directory instead of creating a new one |
 | `--force` | Flag | Force merge/overwrite when initializing in current directory (skip confirmation) |
+| `--upgrade` | Flag | Upgrade existing Phoenix project by replacing agent folders with latest templates (creates timestamped backups) |
 | `--skip-tls` | Flag | Skip SSL/TLS verification (not recommended) |
 | `--debug` | Flag | Enable detailed debug output for troubleshooting |
-| `--github-token` | Option | GitHub token for API requests (or set GH_TOKEN/GITHUB_TOKEN env variable) |
+| `--github-token` | Option | GitHub token for API requests (or set `GH_TOKEN`/`GITHUB_TOKEN` env variable) |
+| `--local-templates` | Flag | Use local templates from repository instead of downloading from GitHub (for development) |
+| `--template-path` | Option | Path to local template directory (defaults to repo root if `--local-templates` is used) |
 
 ### Examples
 
 ```bash
-# Basic project initialization
+# Basic project initialization (interactive agent selection)
 phoenix init my-project
 
 # Initialize with specific AI assistant
@@ -276,14 +278,23 @@ phoenix init --here --ai copilot
 # Force merge into current (non-empty) directory without confirmation
 phoenix init . --force --ai copilot
 
+# Upgrade existing project (replaces agent folders, creates backups)
+phoenix init --upgrade
+phoenix init --upgrade --ai claude
+phoenix init my-project --upgrade
+
 # Skip git initialization
 phoenix init my-project --ai gemini --no-git
 
-# Enable debug output for troubleshooting
-phoenix init my-project --ai claude --debug
+# Use local templates for development
+phoenix init demo --local-templates --ai claude
+phoenix init demo --local-templates --template-path /path/to/vinh-phoenix
 
 # Use GitHub token for API requests (helpful for corporate environments)
 phoenix init my-project --ai claude --github-token ghp_your_token_here
+
+# Enable debug output for troubleshooting
+phoenix init my-project --ai claude --debug
 
 # Check system requirements
 phoenix check
@@ -296,7 +307,11 @@ phoenix version
 
 | Variable | Description |
 |----------|-------------|
-| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to creating technical designs or implementing features.** |
+| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub personal access token for API requests. Increases rate limits and enables access to private repositories. |
+| `CODEX_HOME` | Path to the `.codex` folder in your project. Required when using the Codex CLI agent so it reads commands from the correct location. |
+| `RAINBOW_USE_LOCAL_TEMPLATES` | Set to `1` to use local templates instead of downloading from GitHub (development use). |
+| `RAINBOW_TEMPLATE_PATH` | Path to local template directory when using local templates (development use). |
+| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches. Used by skills at runtime. |
 
 ---
 
@@ -389,12 +404,6 @@ export GH_TOKEN=ghp_your_token_here
 - ❓ **Questions:** [Start a discussion](https://github.com/dauquangthanh/vinh-phoenix/discussions)
 
 **Maintainer:** Dau Quang Thanh ([@dauquangthanh](https://github.com/dauquangthanh))
-
----
-
-## 🙏 Credits
-
-This project is inspired by and builds upon [Spec-Kit](https://github.com/github/spec-kit).
 
 ---
 

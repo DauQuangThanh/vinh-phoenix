@@ -26,7 +26,7 @@ This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ +
 - `nightlife.yaml` exists in the project root with configured `urls`
 - Project has been initialized with at least one AI IDE
 - Internet connection to reach GitHub
-- `curl` available (Mac/Linux) or `Invoke-WebRequest` (Windows)
+- `git` available on the system (used for sparse-checkout downloads)
 
 ## Skills Folder Mapping
 
@@ -98,7 +98,7 @@ powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/add-skills.ps1 <rep
 - `skill_name`: Name of the skill to download (e.g., `git-commit`)
 - `target_dir`: Local target directory (e.g., `.claude/skills/git-commit`)
 
-The script recursively downloads the entire skill directory structure, preserving folders like `scripts/`, `templates/`, and `references/`.
+The script uses `git sparse-checkout` to efficiently download only the specific skill folder from the repository, preserving the full directory structure (`scripts/`, `templates/`, `references/`). This avoids recursive GitHub API calls and is not affected by API rate limits.
 
 ### Step 5: Report Results
 

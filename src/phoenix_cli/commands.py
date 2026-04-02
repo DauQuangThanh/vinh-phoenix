@@ -31,11 +31,15 @@ from .ui import (
 # Create HTTP client with SSL context
 client = httpx.Client(verify=ssl_context)
 
+# Build valid agent keys from config for help text
+_VALID_AGENTS = sorted(AGENT_CONFIG.keys())
+_VALID_AGENTS_STR = ", ".join(_VALID_AGENTS)
+
 
 @app.command()
 def init(
     project_name: str = typer.Argument(None, help="Name for your new project directory (optional if using --here, or use '.' for current directory)"),
-    ai_assistant: str = typer.Option(None, "--ai", help="AI agent(s) to use. Can be a single agent or comma-separated list (e.g., 'claude,gemini,copilot'). Valid options: claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, codebuddy, roo, amp, shai, q, bob, jules, qoder, antigravity. If not specified, an interactive multi-select menu will appear (default: copilot pre-selected)"),
+    ai_assistant: str = typer.Option(None, "--ai", help=f"AI agent(s) to use. Can be a single agent or comma-separated list (e.g., 'claude,gemini,copilot'). Valid options: {_VALID_AGENTS_STR}. If not specified, an interactive multi-select menu will appear (default: copilot pre-selected)"),
     ignore_agent_tools: bool = typer.Option(False, "--ignore-agent-tools", help="Skip checks for AI agent tools like Claude Code"),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git repository initialization"),
     here: bool = typer.Option(False, "--here", help="Initialize project in the current directory instead of creating a new one"),
@@ -84,11 +88,6 @@ def init(
         # Use local templates for development
         phoenix init demo --local-templates --ai claude
         phoenix init demo --local-templates --template-path /path/to/vinh-phoenix
-
-        # With environment variables
-        export RAINBOW_USE_LOCAL_TEMPLATES=1
-        export RAINBOW_TEMPLATE_PATH=/path/to/vinh-phoenix
-        phoenix init demo --ai copilot
     """
 
     show_banner()

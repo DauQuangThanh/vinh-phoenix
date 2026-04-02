@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# add-skills.sh - Download and install a skill from a GitHub repository
+# add-skills.sh - Download and install a skill from a GitHub repository using git
 #
 # Usage: add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 #
@@ -9,6 +9,9 @@
 #   repo_path   - Path within repo containing skills (e.g., skills)
 #   skill_name  - Name of the skill to download (e.g., git-commit)
 #   target_dir  - Local directory to copy the skill into
+#
+# Uses git sparse-checkout to download only the specific skill folder,
+# avoiding recursive GitHub API calls and rate limits.
 
 set -euo pipefail
 
@@ -18,79 +21,57 @@ REPO_PATH="${3:?Missing repo_path}"
 SKILL_NAME="${4:?Missing skill_name}"
 TARGET_DIR="${5:?Missing target_dir}"
 
-# Parse owner/repo from URL
-OWNER_REPO=$(echo "$REPO_URL" | sed -E 's|https?://github\.com/||' | sed 's|\.git$||')
-OWNER=$(echo "$OWNER_REPO" | cut -d'/' -f1)
-REPO=$(echo "$OWNER_REPO" | cut -d'/' -f2)
-
-# Build auth header if GH_TOKEN is set
-AUTH_HEADER=""
-if [ -n "${GH_TOKEN:-}" ]; then
-    AUTH_HEADER="Authorization: Bearer $GH_TOKEN"
-elif [ -n "${GITHUB_TOKEN:-}" ]; then
-    AUTH_HEADER="Authorization: Bearer $GITHUB_TOKEN"
-fi
-
-curl_opts=(-s -f -L)
-if [ -n "$AUTH_HEADER" ]; then
-    curl_opts+=(-H "$AUTH_HEADER")
-fi
-
-# GitHub API base for contents
-API_BASE="https://api.github.com/repos/${OWNER}/${REPO}/contents"
-RAW_BASE="https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}"
 SKILL_PATH="${REPO_PATH}/${SKILL_NAME}"
 
-echo "Downloading skill: ${SKILL_NAME} from ${OWNER}/${REPO}@${BRANCH}"
+# Ensure git is available
+if ! command -v git >/dev/null 2>&1; then
+    echo "Error: git is required but not found. Install git and try again." >&2
+    exit 1
+fi
 
-# Create target directory
-mkdir -p "$TARGET_DIR"
+# Build authenticated repo URL if GH_TOKEN is set
+AUTH_REPO_URL="$REPO_URL"
+if [ -n "${GH_TOKEN:-}" ]; then
+    AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://github.com|https://x-access-token:${GH_TOKEN}@github.com|")
+elif [ -n "${GITHUB_TOKEN:-}" ]; then
+    AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://github.com|https://x-access-token:${GITHUB_TOKEN}@github.com|")
+fi
 
-# Recursive function to download all files in a directory
-download_dir() {
-    local remote_path="$1"
-    local local_dir="$2"
+echo "Downloading skill: ${SKILL_NAME} from ${REPO_URL}@${BRANCH}"
 
-    local api_url="${API_BASE}/${remote_path}?ref=${BRANCH}"
-    local listing
-    listing=$(curl "${curl_opts[@]}" -H "Accept: application/vnd.github.v3+json" "$api_url") || {
-        echo "Error: Failed to list ${remote_path}" >&2
-        return 1
-    }
+# Create a temporary directory for sparse checkout
+TEMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TEMP_DIR"' EXIT
 
-    # Parse JSON array - extract type, name, and path for each item
-    # Shell-native JSON parsing using grep/sed (no python/jq dependency)
-    # GitHub API returns pretty-printed JSON with name, path, type on separate lines
-    local items
-    items=$(echo "$listing" | grep -o '"name": *"[^"]*"\|"path": *"[^"]*"\|"type": *"[^"]*"' | \
-    sed 's/"name": *"//;s/"path": *"//;s/"type": *"//;s/"$//' | \
-    while IFS= read -r name; do
-        IFS= read -r path || break
-        IFS= read -r type || break
-        echo "${type}|${name}|${path}"
-    done)
-
-    while IFS='|' read -r item_type item_name item_path; do
-        [ -z "$item_type" ] && continue
-
-        if [ "$item_type" = "file" ]; then
-            # Download file
-            local raw_url="${RAW_BASE}/${item_path}"
-            local local_file="${local_dir}/${item_name}"
-            curl "${curl_opts[@]}" -o "$local_file" "$raw_url" || {
-                echo "Warning: Failed to download ${item_path}" >&2
-                continue
-            }
-            echo "  Downloaded: ${item_path}"
-        elif [ "$item_type" = "dir" ]; then
-            # Recursively download subdirectory
-            mkdir -p "${local_dir}/${item_name}"
-            download_dir "$item_path" "${local_dir}/${item_name}"
-        fi
-    done <<< "$items"
+# Use git sparse-checkout to download only the specific skill folder
+# --depth 1: only latest commit (no history)
+# --filter=blob:none: skip downloading blobs until needed
+# --sparse: enable sparse-checkout mode
+git clone --depth 1 --filter=blob:none --sparse --branch "$BRANCH" \
+    "$AUTH_REPO_URL" "$TEMP_DIR" --quiet 2>&1 || {
+    echo "Error: Failed to clone ${REPO_URL} (branch: ${BRANCH})" >&2
+    exit 1
 }
 
-# Download the skill directory recursively
-download_dir "$SKILL_PATH" "$TARGET_DIR"
+# Configure sparse-checkout to fetch only the skill folder
+git -C "$TEMP_DIR" sparse-checkout set "$SKILL_PATH" 2>&1 || {
+    echo "Error: Failed to sparse-checkout ${SKILL_PATH}" >&2
+    exit 1
+}
+
+# Verify the skill directory exists in the checkout
+if [ ! -d "$TEMP_DIR/$SKILL_PATH" ]; then
+    echo "Error: Skill '${SKILL_NAME}' not found at path '${SKILL_PATH}' in ${REPO_URL}" >&2
+    exit 1
+fi
+
+# Create target directory and copy skill files
+mkdir -p "$TARGET_DIR"
+cp -a "$TEMP_DIR/$SKILL_PATH/." "$TARGET_DIR/"
+
+# Make scripts executable
+if [ -d "$TARGET_DIR/scripts" ]; then
+    find "$TARGET_DIR/scripts" -type f \( -name "*.sh" -o -name "*.bash" \) -exec chmod +x {} \;
+fi
 
 echo "Installed skill: ${SKILL_NAME} -> ${TARGET_DIR}"

@@ -84,19 +84,28 @@ for issue_url in "${urls[@]}"; do
     body=$(printf '%b' "$raw_body")
 
     # Parse skills section from issue body
+    # If body has a 'skills:' header, parse items under it.
+    # If body has no 'skills:' header but contains '- name:' items, parse them directly.
     in_skills=false
+    has_skills_header=false
+    if echo "$body" | grep -q '^skills:'; then
+        has_skills_header=true
+    elif echo "$body" | grep -qE '^\s*-\s*name:'; then
+        # No header but has list items — treat entire body as skills section
+        in_skills=true
+    fi
     current_name="" current_url="" current_branch="" current_path=""
 
     while IFS= read -r bline; do
         stripped=$(echo "$bline" | sed 's/#.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
         [ -z "$stripped" ] && continue
 
-        if echo "$stripped" | grep -q '^skills:'; then
+        if [ "$has_skills_header" = true ] && echo "$stripped" | grep -q '^skills:'; then
             in_skills=true
             continue
         fi
 
-        if [ "$in_skills" = true ] && echo "$bline" | grep -qE '^[a-zA-Z]'; then
+        if [ "$in_skills" = true ] && [ "$has_skills_header" = true ] && echo "$bline" | grep -qE '^[a-zA-Z]'; then
             if [ -n "$current_name" ] && ! echo "$seen_names" | grep -q "|${current_name}|"; then
                 seen_names="${seen_names}|${current_name}|"
                 skill_names+=("$current_name")

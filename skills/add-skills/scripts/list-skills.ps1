@@ -77,19 +77,26 @@ foreach ($issueUrl in $urls) {
     }
 
     # Parse skills section from issue body
+    # If body has a 'skills:' header, parse items under it.
+    # If body has no 'skills:' header but contains '- name:' items, parse them directly.
     $inSkills = $false
+    $hasSkillsHeader = ($body -match '(?m)^skills:')
+    if (-not $hasSkillsHeader -and ($body -match '(?m)^\s*-\s*name:')) {
+        # No header but has list items - treat entire body as skills section
+        $inSkills = $true
+    }
     $currentItem = @{}
 
     foreach ($bline in ($body -split "`n")) {
         $bstripped = ($bline -replace '#.*', '').Trim()
         if ([string]::IsNullOrEmpty($bstripped)) { continue }
 
-        if ($bstripped -match '^skills:') {
+        if ($hasSkillsHeader -and $bstripped -match '^skills:') {
             $inSkills = $true
             continue
         }
 
-        if ($inSkills -and $bline -match '^[a-zA-Z]') {
+        if ($inSkills -and $hasSkillsHeader -and $bline -match '^[a-zA-Z]') {
             if ($currentItem.name -and -not $seenNames.ContainsKey($currentItem.name)) {
                 $seenNames[$currentItem.name] = $true
                 $skillRepos += [PSCustomObject]@{
