@@ -170,31 +170,35 @@ phoenix init demo --skip-tls --ai gemini --ignore-agent-tools
 
 ---
 
-## � Repository Structure
+## Repository Structure
 
 Understanding the Phoenix CLI repository layout:
 
 ```
 vinh-phoenix/
-├── skills/               # Reusable skill modules (copied to agent skills folders)
-│   ├── architecture-design/
-│   ├── coding/
-│   ├── context-assessment/
-│   ├── nextjs-mockup/
-│   └── ... (17 skills total)
+├── skills/               # Core meta-skill templates (copied to agent skill folders)
+│   ├── list-skills/      # Browse available skills from repos
+│   └── add-skills/       # Download and install skills
 │
-├── docs/                 # Documentation site
-├── scripts/              # Automation scripts (bash + PowerShell)
+├── docs/                 # Documentation site (DocFX)
 ├── src/phoenix_cli/      # CLI source code
-├── rules/                # Agent-specific rules and guidelines
+│   ├── commands.py       # CLI commands (init, check, version)
+│   ├── config.py         # Agent configuration (19 agents)
+│   ├── templates.py      # Template download/extraction
+│   ├── github.py         # GitHub API utilities
+│   ├── system_utils.py   # System checks & git ops
+│   └── ui.py             # Rich TUI components
+│
+├── rules/                # Agent skill/command creation rules and folder mappings
+├── nightlife.yaml        # Default catalog config (GitHub + Azure DevOps)
 └── .github/workflows/    # CI/CD and release automation
 ```
 
-**Note:** The `skills/` folder contains source templates. When you run `phoenix init`, these are copied into your project's agent-specific skills folders (`.claude/skills/`, `.github/skills/`, etc.).
+**Note:** The `skills/` folder contains the core meta-skill templates. When you run `phoenix init`, these plus the other 3 meta-skills (`git-commit`, `list-agents`, `add-agents`) from the latest release are installed into your project's agent-specific skill folders (`.claude/skills/`, `.github/skills/`, etc.).
 
 ---
 
-## �🔄 Quick Reference
+## 🔄 Quick Reference
 
 | What You Want | Command |
 | --------------- | ---------- |

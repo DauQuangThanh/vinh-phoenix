@@ -152,12 +152,16 @@ rm gcm-linux_amd64.2.6.1.deb
 echo "✅ Done! Git Credential Manager is ready."
 ```
 
-### GitHub API Rate Limits
+### API Rate Limits or Auth Errors
 
-When using `list-skills` or `add-skills`, set a token to avoid rate limiting:
+When using `list-skills` or `add-skills`, set the appropriate token for your repository host:
 
 ```bash
+# GitHub
 export GH_TOKEN=ghp_your_token_here
+
+# Azure DevOps
+export AZURE_DEVOPS_PAT=your_pat_here
 ```
 
 ### Need More Help?

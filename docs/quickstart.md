@@ -49,7 +49,7 @@ Launch your AI assistant and ask it to show what's available:
 "List available skills"
 ```
 
-The `list-skills` meta-skill reads `nightlife.yaml`, fetches the catalog from the configured GitHub issue URLs, and shows you all installable skills.
+The `list-skills` meta-skill reads `nightlife.yaml`, fetches the catalog from the configured URLs (GitHub issues or Azure DevOps files), and shows you all installable skills.
 
 Example output:
 
@@ -93,21 +93,27 @@ Agent commands are slash-command style shortcuts. Browse and install them the sa
 
 ## 📄 Understanding nightlife.yaml
 
-`nightlife.yaml` controls where the meta-skills look for skill and agent catalogs:
+`nightlife.yaml` controls where the meta-skills look for skill and agent catalogs. It supports both **GitHub** and **Azure DevOps** as catalog sources:
 
 ```yaml
 # DaNang Nightlife - Agent & Skill Repository Configuration
 urls:
+  # GitHub issue (issue body contains YAML repo list)
   - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
-  - https://github.com/DauQuangThanh/vinh-phoenix/issues/3
+  # Azure DevOps file (YAML file in a repo)
+  # - https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
 ```
 
-Each URL points to a GitHub issue. The issue body contains YAML listing repositories:
+Each URL points to a catalog source. The content should be YAML listing repositories:
 
 ```yaml
 skills:
   - name: my-skills
-    url: https://github.com/owner/my-skills-repo
+    url: https://github.com/owner/my-skills-repo      # GitHub
+    branch: main
+    path: skills
+  - name: internal-skills
+    url: https://dev.azure.com/org/proj/_git/skills    # Azure DevOps
     branch: main
     path: skills
 ```
@@ -119,9 +125,10 @@ To use a private or custom skill catalog, update `nightlife.yaml`:
 ```yaml
 urls:
   - https://github.com/my-org/my-config/issues/1
+  - https://dev.azure.com/my-org/my-project/_git/config?path=/catalog.yaml&version=GBmain
 ```
 
-Then structure that GitHub issue body with your repos. Your AI assistant's `list-skills` and `add-skills` will automatically use your custom catalog.
+Structure the issue body or file with your repos. Your AI assistant's `list-skills` and `add-skills` will automatically use your custom catalog.
 
 ---
 

@@ -30,7 +30,7 @@
     - [How It Works](#how-it-works)
     - [Workflow](#workflow)
   - [📄 nightlife.yaml Configuration](#-nightlifeyaml-configuration)
-    - [GitHub Issue Format](#github-issue-format)
+    - [Catalog Format](#catalog-format)
     - [Using Your Own Repositories](#using-your-own-repositories)
   - [🤖 Supported AI Agents](#-supported-ai-agents)
   - [🔧 Phoenix CLI Reference](#-phoenix-cli-reference)
@@ -42,8 +42,9 @@
   - [🛠️ Troubleshooting](#️-troubleshooting)
     - [Git Authentication on Linux](#git-authentication-on-linux)
     - [Meta-skills not finding nightlife.yaml](#meta-skills-not-finding-nightlifeyaml)
-    - [GitHub API rate limits when using list-skills / add-skills](#github-api-rate-limits-when-using-list-skills--add-skills)
+    - [API rate limits or auth errors when using list-skills / add-skills](#api-rate-limits-or-auth-errors-when-using-list-skills--add-skills)
   - [🎗️ Support](#️-support)
+  - [🙏 Credits](#-credits)
   - [📄 License](#-license)
 
 ## 🎯 What is Vinh Phoenix?
@@ -130,20 +131,21 @@ The `list-skills`, `add-skills`, `list-agents`, and `add-agents` meta-skills han
 
 ### How It Works
 
-The meta-skills use `nightlife.yaml` as a directory of skill and agent repositories. Each URL in that file points to a GitHub issue whose body contains a YAML-formatted list of repositories:
+The meta-skills use `nightlife.yaml` as a directory of skill and agent repositories. Each URL points to a catalog source (GitHub issue or Azure DevOps file) whose body contains a YAML-formatted list of repositories:
 
 ```
 nightlife.yaml
     └── urls:
-         ├── https://github.com/owner/repo/issues/2  → skills repos
-         └── https://github.com/owner/repo/issues/3  → agent repos
+         ├── https://github.com/owner/repo/issues/2         → GitHub issue catalog
+         ├── https://dev.azure.com/org/proj/_git/repo?path=… → Azure DevOps file catalog
+         └── ...
 ```
 
 When you ask your AI to `list-skills` or `add-skills`, it:
 1. Reads `nightlife.yaml`
-2. Fetches each issue and parses the YAML repo definitions
-3. Queries those repos via the GitHub API to find available skills/agents
-4. Downloads and installs the ones you select
+2. Fetches each catalog source and parses the YAML repo definitions
+3. Queries those repos (GitHub API or Azure DevOps API) to find available skills/agents
+4. Downloads and installs the ones you select using `git sparse-checkout`
 
 ### Workflow
 
@@ -409,12 +411,16 @@ echo "✅ Done! Git Credential Manager is ready."
 
 Ensure `nightlife.yaml` exists in your project root. If missing, re-run `phoenix init --here --force`.
 
-### GitHub API rate limits when using list-skills / add-skills
+### API rate limits or auth errors when using list-skills / add-skills
 
-Set a GitHub token to increase your rate limit:
+Set the appropriate token for your repository host:
 
 ```bash
+# GitHub
 export GH_TOKEN=ghp_your_token_here
+
+# Azure DevOps
+export AZURE_DEVOPS_PAT=your_pat_here
 ```
 
 ---

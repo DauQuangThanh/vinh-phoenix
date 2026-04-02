@@ -9,7 +9,7 @@
 | What to Upgrade | Command | When to Use |
 |-----------------|---------|-------------|
 | **CLI Tool Only** | `uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git` | Get latest CLI features without touching project files |
-| **Project Meta-Skills** | `phoenix init --here --force --ai <your-agent>` | Update the 5 core meta-skills in your project |
+| **Project Meta-Skills** | `phoenix init --upgrade` | Update the 5 core meta-skills in your project (creates timestamped backups) |
 | **Both** | Run CLI upgrade, then project update | Recommended for major version updates |
 
 ---
@@ -46,10 +46,11 @@ When Phoenix releases improvements to the core meta-skills, refresh your project
 
 ### What gets updated?
 
-Running `phoenix init --here --force` will update:
+Running `phoenix init --upgrade` will:
 
-- ✅ **Core meta-skills** — `git-commit`, `list-skills`, `add-skills`, `list-agents`, `add-agents`
-- ✅ **nightlife.yaml** — only if not already present (safe to keep your customizations)
+- ✅ **Create timestamped backups** of existing agent folders (e.g., `.claude.backup.20260402_143000`)
+- ✅ **Replace core meta-skills** — `git-commit`, `list-skills`, `add-skills`, `list-agents`, `add-agents`
+- ✅ **Preserve `nightlife.yaml`** — only created if not already present
 
 ### What stays safe?
 
@@ -58,21 +59,25 @@ These files are **never touched** by the upgrade:
 - ✅ **Your specifications** (`specs/`) — **CONFIRMED SAFE**
 - ✅ **Your source code** — **CONFIRMED SAFE**
 - ✅ **Your git history** — **CONFIRMED SAFE**
-- ✅ **Skills you installed via `add-skills`** — not part of the Phoenix package
+- ✅ **Skills you installed via `add-skills`** — backed up and preserved
+- ✅ **Your `nightlife.yaml` customizations** — never overwritten
 
 ### Update command
 
 Run this inside your project directory:
 
 ```bash
-phoenix init --here --force --ai <your-agent>
+# Upgrade with interactive agent selection
+phoenix init --upgrade
+
+# Upgrade with specific agent
+phoenix init --upgrade --ai copilot
+
+# Upgrade and skip confirmation
+phoenix init --upgrade --force --ai copilot
 ```
 
-**Example:**
-
-```bash
-phoenix init --here --force --ai copilot
-```
+The `--upgrade` flag detects existing Phoenix agent folders, creates backups with timestamps, then replaces them with the latest templates.
 
 ### nightlife.yaml during upgrades
 
@@ -118,8 +123,8 @@ Restart your IDE to refresh the command list.
 # Upgrade CLI
 uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git
 
-# Update project meta-skills
-phoenix init --here --force --ai copilot
+# Update project meta-skills (creates backups automatically)
+phoenix init --upgrade --ai copilot
 ```
 
 ### Scenario 2: "I customized nightlife.yaml"
@@ -147,7 +152,7 @@ rm -rf old-skill-name/
 
 ```bash
 # Run upgrade with --no-git
-phoenix init --here --force --ai copilot --no-git
+phoenix init --upgrade --ai copilot --no-git
 ```
 
 ---

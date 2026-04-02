@@ -13,7 +13,7 @@
 `phoenix init` installs **5 core meta-skills** into your project and drops a `nightlife.yaml` configuration file. From there, your AI assistant uses those meta-skills to browse and install additional skills and agent commands from any configured repository.
 
 - **Meta-skills** - Discover and install more skills/agents on demand
-- **nightlife.yaml** - Points to GitHub issue-based catalogs of skill repositories
+- **nightlife.yaml** - Points to GitHub issues or Azure DevOps files as skill catalogs
 - **Extensible** - Configure your own private repos in `nightlife.yaml`
 
 > **Think of Phoenix as a package manager for AI skills:** It installs the tooling to discover and install skills. You decide what goes into your project.
@@ -60,15 +60,17 @@ Use the meta-skills to add whatever you need:
 
 ## 📄 nightlife.yaml
 
-`nightlife.yaml` (placed in your project root) tells the meta-skills where to find skill and agent catalogs:
+`nightlife.yaml` (placed in your project root) tells the meta-skills where to find skill and agent catalogs. It supports both **GitHub** and **Azure DevOps** as catalog sources:
 
 ```yaml
 urls:
+  # GitHub issue (issue body contains YAML repo list)
   - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
-  - https://github.com/DauQuangThanh/vinh-phoenix/issues/3
+  # Azure DevOps file (YAML file in a repo)
+  # - https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
 ```
 
-Each URL points to a GitHub issue whose body lists repositories. Update these URLs to use your own catalogs.
+Each URL points to a catalog source whose body/content lists skill repositories. Update these URLs to use your own catalogs.
 
 ---
 
@@ -91,8 +93,8 @@ Vinh Phoenix uses the [Agent Skills format](https://agentskills.io) — an open 
 This architecture enables:
 
 - ✅ Progressive disclosure — skills load context only when needed
-- ✅ Multi-agent support — 20+ AI assistants use the same skills format
-- ✅ Easy updates — upgrade with `phoenix init --here --force`
+- ✅ Multi-agent support — 19 AI assistants use the same skills format
+- ✅ Easy updates — upgrade with `phoenix init --upgrade`
 - ✅ Custom catalogs — point `nightlife.yaml` at your own repos
 
 ---
@@ -106,7 +108,7 @@ Phoenix enables **extensible, on-demand skill management**:
 | **Start Minimal** | Only the essentials are installed by default |
 | **Grow On Demand** | Add skills as you need them via `add-skills` |
 | **Stay in Control** | Configure your own repos in `nightlife.yaml` |
-| **Multi-Agent** | Same skills work across 20+ AI assistants |
+| **Multi-Agent** | Same skills work across 19 AI assistants |
 
 ---
 
