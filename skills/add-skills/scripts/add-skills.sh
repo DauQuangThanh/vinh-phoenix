@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
-# add-skills.sh - Download and install a skill from a GitHub repository using git
+# add-skills.sh - Download and install a skill from a git repository
 #
 # Usage: add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 #
 # Arguments:
-#   repo_url    - GitHub repository URL (e.g., https://github.com/owner/repo)
+#   repo_url    - Repository URL (GitHub or Azure DevOps)
+#                 GitHub:    https://github.com/owner/repo
+#                 Azure DevOps: https://dev.azure.com/org/project/_git/repo
 #   branch      - Git branch name (e.g., main)
 #   repo_path   - Path within repo containing skills (e.g., skills)
 #   skill_name  - Name of the skill to download (e.g., git-commit)
 #   target_dir  - Local directory to copy the skill into
 #
 # Uses git sparse-checkout to download only the specific skill folder,
-# avoiding recursive GitHub API calls and rate limits.
+# avoiding recursive API calls and rate limits.
 
 set -euo pipefail
 
@@ -29,12 +31,22 @@ if ! command -v git >/dev/null 2>&1; then
     exit 1
 fi
 
-# Build authenticated repo URL if GH_TOKEN is set
+# Build authenticated repo URL based on provider
 AUTH_REPO_URL="$REPO_URL"
-if [ -n "${GH_TOKEN:-}" ]; then
-    AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://github.com|https://x-access-token:${GH_TOKEN}@github.com|")
-elif [ -n "${GITHUB_TOKEN:-}" ]; then
-    AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://github.com|https://x-access-token:${GITHUB_TOKEN}@github.com|")
+if echo "$REPO_URL" | grep -q 'github\.com'; then
+    # GitHub: use GH_TOKEN as x-access-token
+    if [ -n "${GH_TOKEN:-}" ]; then
+        AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://github.com|https://x-access-token:${GH_TOKEN}@github.com|")
+    elif [ -n "${GITHUB_TOKEN:-}" ]; then
+        AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://github.com|https://x-access-token:${GITHUB_TOKEN}@github.com|")
+    fi
+elif echo "$REPO_URL" | grep -q 'dev\.azure\.com'; then
+    # Azure DevOps: use PAT as password with any username
+    if [ -n "${AZURE_DEVOPS_PAT:-}" ]; then
+        AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://dev\.azure\.com|https://pat:${AZURE_DEVOPS_PAT}@dev.azure.com|")
+    elif [ -n "${ADO_TOKEN:-}" ]; then
+        AUTH_REPO_URL=$(echo "$REPO_URL" | sed "s|https://dev\.azure\.com|https://pat:${ADO_TOKEN}@dev.azure.com|")
+    fi
 fi
 
 echo "Downloading skill: ${SKILL_NAME} from ${REPO_URL}@${BRANCH}"

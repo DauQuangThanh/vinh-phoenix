@@ -165,20 +165,22 @@ Skills downloaded and installed for all detected AI IDEs
 
 ## 📄 nightlife.yaml Configuration
 
-`nightlife.yaml` is placed in your project root by `phoenix init`. It tells the meta-skills where to find skill and agent catalogs:
+`nightlife.yaml` is placed in your project root by `phoenix init`. It tells the meta-skills where to find skill and agent catalogs. It supports both **GitHub** and **Azure DevOps** as catalog sources:
 
 ```yaml
 # DaNang Nightlife - Agent & Skill Repository Configuration
-# These URLs point to GitHub issues containing YAML-formatted lists of
-# agent and skill repositories. Update the issues to add/remove repos.
+# URLs can point to GitHub issues or Azure DevOps repo files
+# containing YAML-formatted lists of skill/agent repositories.
 urls:
+  # GitHub issue (issue body contains YAML repo list)
   - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
-  - https://github.com/DauQuangThanh/vinh-phoenix/issues/3
+  # Azure DevOps file (YAML file in a repo)
+  # - https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
 ```
 
-### GitHub Issue Format
+### Catalog Format
 
-Each issue body should contain YAML like this:
+Each catalog source (GitHub issue body or Azure DevOps file) should contain YAML like this:
 
 ```yaml
 skills:
@@ -194,16 +196,35 @@ agents:
     path: agent-commands
 ```
 
+Skill/agent repo URLs can point to either GitHub or Azure DevOps repositories:
+
+```yaml
+skills:
+  # GitHub repo
+  - name: public-skills
+    url: https://github.com/owner/skills-repo
+    branch: main
+    path: skills
+  # Azure DevOps repo
+  - name: internal-skills
+    url: https://dev.azure.com/myorg/myproject/_git/skills-repo
+    branch: main
+    path: skills
+```
+
 ### Using Your Own Repositories
 
-To maintain a private or custom skill catalog, simply update `nightlife.yaml` to point to your own GitHub issues:
+To maintain a private or custom skill catalog, update `nightlife.yaml` to point to your own sources:
 
 ```yaml
 urls:
+  # GitHub issue
   - https://github.com/my-org/my-config/issues/1
+  # Azure DevOps file
+  - https://dev.azure.com/my-org/my-project/_git/config?path=/skills-catalog.yaml&version=GBmain
 ```
 
-And structure the issue body with your repos. This lets teams maintain internal skill catalogs without forking Phoenix.
+Structure the issue body or file with your repos. This lets teams maintain internal skill catalogs without forking Phoenix — including private Azure DevOps repositories.
 
 ---
 
@@ -308,6 +329,7 @@ phoenix version
 | Variable | Description |
 |----------|-------------|
 | `GH_TOKEN` / `GITHUB_TOKEN` | GitHub personal access token for API requests. Increases rate limits and enables access to private repositories. |
+| `AZURE_DEVOPS_PAT` / `ADO_TOKEN` | Azure DevOps personal access token. Required for accessing private Azure DevOps repositories and catalog files. |
 | `CODEX_HOME` | Path to the `.codex` folder in your project. Required when using the Codex CLI agent so it reads commands from the correct location. |
 | `RAINBOW_USE_LOCAL_TEMPLATES` | Set to `1` to use local templates instead of downloading from GitHub (development use). |
 | `RAINBOW_TEMPLATE_PATH` | Path to local template directory when using local templates (development use). |

@@ -1,9 +1,10 @@
-# add-skills.ps1 - Download and install a skill from a GitHub repository using git
+# add-skills.ps1 - Download and install a skill from a git repository
 #
 # Usage: add-skills.ps1 <repo_url> <branch> <repo_path> <skill_name> <target_dir>
 #
+# Supports GitHub and Azure DevOps repositories.
 # Uses git sparse-checkout to download only the specific skill folder,
-# avoiding recursive GitHub API calls and rate limits.
+# avoiding recursive API calls and rate limits.
 
 param(
     [Parameter(Mandatory=$true, Position=0)]
@@ -32,12 +33,21 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-# Build authenticated repo URL if GH_TOKEN is set
+# Build authenticated repo URL based on provider
 $AuthRepoUrl = $RepoUrl
-if ($env:GH_TOKEN) {
-    $AuthRepoUrl = $RepoUrl -replace 'https://github.com', "https://x-access-token:$($env:GH_TOKEN)@github.com"
-} elseif ($env:GITHUB_TOKEN) {
-    $AuthRepoUrl = $RepoUrl -replace 'https://github.com', "https://x-access-token:$($env:GITHUB_TOKEN)@github.com"
+if ($RepoUrl -match 'github\.com') {
+    # GitHub: use GH_TOKEN as x-access-token
+    if ($env:GH_TOKEN) {
+        $AuthRepoUrl = $RepoUrl -replace 'https://github.com', "https://x-access-token:$($env:GH_TOKEN)@github.com"
+    } elseif ($env:GITHUB_TOKEN) {
+        $AuthRepoUrl = $RepoUrl -replace 'https://github.com', "https://x-access-token:$($env:GITHUB_TOKEN)@github.com"
+    }
+} elseif ($RepoUrl -match 'dev\.azure\.com') {
+    # Azure DevOps: use PAT as password with any username
+    $adoPat = if ($env:AZURE_DEVOPS_PAT) { $env:AZURE_DEVOPS_PAT } elseif ($env:ADO_TOKEN) { $env:ADO_TOKEN } else { $null }
+    if ($adoPat) {
+        $AuthRepoUrl = $RepoUrl -replace 'https://dev\.azure\.com', "https://pat:${adoPat}@dev.azure.com"
+    }
 }
 
 Write-Host "Downloading skill: $SkillName from $RepoUrl@$Branch"

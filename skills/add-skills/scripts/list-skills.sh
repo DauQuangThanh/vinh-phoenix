@@ -1,34 +1,57 @@
 #!/usr/bin/env bash
 # list-skills.sh - List available skills from configured remote repositories
 #
-# Reads nightlife.yaml for GitHub issue URLs, fetches repo definitions,
-# and lists available skills from each repository.
+# Reads nightlife.yaml for catalog URLs (GitHub issues or Azure DevOps repo files),
+# fetches repo definitions, and lists available skills from each repository.
+#
+# Supports:
+#   - GitHub issues:     https://github.com/{owner}/{repo}/issues/{number}
+#   - Azure DevOps files: https://dev.azure.com/{org}/{project}/_git/{repo}?path={path}&version=GB{branch}
 #
 # No arguments required. Must be run from the project root where nightlife.yaml exists.
 
 set -euo pipefail
 
-# Build auth header if GH_TOKEN is set
-AUTH_HEADER=""
+# ── Auth ────────────────────────────────────────────────────────────────────────
+
+# GitHub auth
+GH_AUTH_HEADER=""
 if [ -n "${GH_TOKEN:-}" ]; then
-    AUTH_HEADER="Authorization: Bearer $GH_TOKEN"
+    GH_AUTH_HEADER="Authorization: Bearer $GH_TOKEN"
 elif [ -n "${GITHUB_TOKEN:-}" ]; then
-    AUTH_HEADER="Authorization: Bearer $GITHUB_TOKEN"
+    GH_AUTH_HEADER="Authorization: Bearer $GITHUB_TOKEN"
 fi
 
-curl_opts=(-s -f -L -H "Accept: application/vnd.github.v3+json" -H "User-Agent: phoenix-cli")
-if [ -n "$AUTH_HEADER" ]; then
-    curl_opts+=(-H "$AUTH_HEADER")
+# Azure DevOps auth (Basic auth with PAT)
+ADO_AUTH_HEADER=""
+if [ -n "${AZURE_DEVOPS_PAT:-}" ]; then
+    ADO_AUTH_HEADER="Authorization: Basic $(printf ":%s" "$AZURE_DEVOPS_PAT" | base64 | tr -d '\n')"
+elif [ -n "${ADO_TOKEN:-}" ]; then
+    ADO_AUTH_HEADER="Authorization: Basic $(printf ":%s" "$ADO_TOKEN" | base64 | tr -d '\n')"
 fi
 
-# Check nightlife.yaml exists
+# Curl helper for GitHub API
+gh_curl() {
+    local opts=(-s -f -L -H "Accept: application/vnd.github.v3+json" -H "User-Agent: phoenix-cli")
+    [ -n "$GH_AUTH_HEADER" ] && opts+=(-H "$GH_AUTH_HEADER")
+    curl "${opts[@]}" "$@"
+}
+
+# Curl helper for Azure DevOps API
+ado_curl() {
+    local opts=(-s -f -L -H "Accept: application/json" -H "User-Agent: phoenix-cli")
+    [ -n "$ADO_AUTH_HEADER" ] && opts+=(-H "$ADO_AUTH_HEADER")
+    curl "${opts[@]}" "$@"
+}
+
+# ── Parse nightlife.yaml ────────────────────────────────────────────────────────
+
 if [ ! -f "nightlife.yaml" ]; then
     echo "Error: nightlife.yaml not found in current directory."
     echo "Create one with 'phoenix config-set-url <url1> <url2>' or manually."
     exit 1
 fi
 
-# Parse URLs from nightlife.yaml (extract lines under 'urls:' that start with '- ')
 urls=()
 in_urls=false
 while IFS= read -r line; do
@@ -56,47 +79,24 @@ if [ ${#urls[@]} -eq 0 ]; then
     exit 1
 fi
 
-# Fetch skill repo definitions from GitHub issues
-skill_names=()
-skill_urls=()
-skill_branches=()
-skill_paths=()
-seen_names=""
+# ── Parse YAML body into skill repo entries ─────────────────────────────────────
+# Shared parser: reads a YAML body and appends to skill_names/urls/branches/paths arrays.
+# Works with or without a 'skills:' header.
 
-for issue_url in "${urls[@]}"; do
-    if ! echo "$issue_url" | grep -qE 'github\.com/[^/]+/[^/]+/issues/[0-9]+'; then
-        echo "Warning: Invalid issue URL: $issue_url"
-        continue
-    fi
+parse_skill_repos() {
+    local body="$1"
 
-    owner=$(echo "$issue_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
-    repo=$(echo "$issue_url" | sed -E 's|.*github\.com/[^/]+/([^/]+)/.*|\1|')
-    number=$(echo "$issue_url" | sed -E 's|.*/issues/([0-9]+).*|\1|')
-
-    api_url="https://api.github.com/repos/${owner}/${repo}/issues/${number}"
-
-    raw_body=$(curl "${curl_opts[@]}" "$api_url" 2>/dev/null | sed 's/.*"body":"//;s/","[a-z_]*":.*//') || {
-        echo "Warning: Failed to fetch $issue_url"
-        continue
-    }
-
-    # Unescape \n to actual newlines
-    body=$(printf '%b' "$raw_body")
-
-    # Parse skills section from issue body
-    # If body has a 'skills:' header, parse items under it.
-    # If body has no 'skills:' header but contains '- name:' items, parse them directly.
-    in_skills=false
-    has_skills_header=false
+    local in_skills=false
+    local has_skills_header=false
     if echo "$body" | grep -q '^skills:'; then
         has_skills_header=true
     elif echo "$body" | grep -qE '^\s*-\s*name:'; then
-        # No header but has list items — treat entire body as skills section
         in_skills=true
     fi
-    current_name="" current_url="" current_branch="" current_path=""
+    local current_name="" current_url="" current_branch="" current_path=""
 
     while IFS= read -r bline; do
+        local stripped
         stripped=$(echo "$bline" | sed 's/#.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
         [ -z "$stripped" ] && continue
 
@@ -158,6 +158,66 @@ for issue_url in "${urls[@]}"; do
         skill_branches+=("${current_branch:-main}")
         skill_paths+=("${current_path:-skills}")
     fi
+}
+
+# ── Fetch catalog from each URL ─────────────────────────────────────────────────
+
+skill_names=()
+skill_urls=()
+skill_branches=()
+skill_paths=()
+seen_names=""
+
+for catalog_url in "${urls[@]}"; do
+
+    # ── GitHub issue ──
+    if echo "$catalog_url" | grep -qE 'github\.com/[^/]+/[^/]+/issues/[0-9]+'; then
+        owner=$(echo "$catalog_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
+        repo=$(echo "$catalog_url" | sed -E 's|.*github\.com/[^/]+/([^/]+)/.*|\1|')
+        number=$(echo "$catalog_url" | sed -E 's|.*/issues/([0-9]+).*|\1|')
+
+        api_url="https://api.github.com/repos/${owner}/${repo}/issues/${number}"
+
+        raw_body=$(gh_curl "$api_url" 2>/dev/null | sed 's/.*"body":"//;s/","[a-z_]*":.*//') || {
+            echo "Warning: Failed to fetch GitHub issue $catalog_url"
+            continue
+        }
+
+        body=$(printf '%b' "$raw_body")
+        parse_skill_repos "$body"
+
+    # ── Azure DevOps repo file ──
+    # URL format: https://dev.azure.com/{org}/{project}/_git/{repo}?path={path}&version=GB{branch}
+    elif echo "$catalog_url" | grep -qE 'dev\.azure\.com/[^/]+/[^/]+/_git/'; then
+        ado_org=$(echo "$catalog_url" | sed -E 's|.*dev\.azure\.com/([^/]+)/.*|\1|')
+        ado_project=$(echo "$catalog_url" | sed -E 's|.*dev\.azure\.com/[^/]+/([^/]+)/.*|\1|')
+        ado_repo=$(echo "$catalog_url" | sed -E 's|.*_git/([^?/]+).*|\1|')
+
+        # Extract path and branch from query params (defaults: path=/, branch=main)
+        ado_path="/"
+        ado_branch="main"
+        if echo "$catalog_url" | grep -qE '[?&]path='; then
+            ado_path=$(echo "$catalog_url" | sed -E 's|.*[?&]path=([^&]+).*|\1|' | sed 's/%2F/\//g; s/%20/ /g')
+        fi
+        if echo "$catalog_url" | grep -qE '[?&]version=GB'; then
+            ado_branch=$(echo "$catalog_url" | sed -E 's|.*[?&]version=GB([^&]+).*|\1|')
+        fi
+
+        # Fetch file content via Azure DevOps Items API
+        ado_api="https://dev.azure.com/${ado_org}/${ado_project}/_apis/git/repositories/${ado_repo}/items?path=${ado_path}&versionDescriptor.version=${ado_branch}&\$format=text&api-version=7.0"
+
+        body=$(ado_curl "$ado_api" 2>/dev/null) || {
+            echo "Warning: Failed to fetch Azure DevOps file $catalog_url"
+            continue
+        }
+
+        parse_skill_repos "$body"
+
+    else
+        echo "Warning: Unsupported catalog URL format: $catalog_url"
+        echo "  Supported: GitHub issues (github.com/.../issues/N) or Azure DevOps files (dev.azure.com/.../_git/...?path=...)"
+        continue
+    fi
 done
 
 if [ ${#skill_names[@]} -eq 0 ]; then
@@ -165,7 +225,8 @@ if [ ${#skill_names[@]} -eq 0 ]; then
     exit 0
 fi
 
-# List skills from each repo
+# ── List skills from each repo ──────────────────────────────────────────────────
+
 grand_total=0
 
 for i in "${!skill_names[@]}"; do
@@ -174,47 +235,88 @@ for i in "${!skill_names[@]}"; do
     branch="${skill_branches[$i]}"
     path="${skill_paths[$i]}"
 
-    if ! echo "$repo_url" | grep -qE 'github\.com/[^/]+/[^/]+'; then
-        echo ""
-        echo "${repo_name}: Invalid repo URL"
-        continue
-    fi
-
-    owner=$(echo "$repo_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
-    repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/.]+).*|\1|')
-
-    api_url="https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}"
-
     echo ""
     echo "Repository: ${repo_name} (${repo_url})"
 
-    listing=$(curl "${curl_opts[@]}" "$api_url" 2>/dev/null) || {
-        echo "  Error: ${path} not found or inaccessible"
+    # ── GitHub repo ──
+    if echo "$repo_url" | grep -qE 'github\.com/[^/]+/[^/]+'; then
+        owner=$(echo "$repo_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
+        repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/.]+).*|\1|')
+
+        api_url="https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}"
+
+        listing=$(gh_curl "$api_url" 2>/dev/null) || {
+            echo "  Error: ${path} not found or inaccessible"
+            continue
+        }
+
+        count=0
+        items=$(echo "$listing" | grep -o '"name": *"[^"]*"\|"type": *"[^"]*"' | \
+        sed 's/"name": *"//;s/"type": *"//;s/"$//' | \
+        while IFS= read -r name; do
+            IFS= read -r type || break
+            echo "${type}|${name}"
+        done)
+
+        while IFS='|' read -r item_type item_name; do
+            [ -z "$item_type" ] && continue
+            [ "$item_type" != "dir" ] && continue
+            case "$item_name" in
+                .*|_*) continue ;;
+            esac
+            echo "  - ${item_name}"
+            count=$((count + 1))
+        done <<< "$items"
+
+        echo "  Total: ${count} skills available"
+        grand_total=$((grand_total + count))
+
+    # ── Azure DevOps repo ──
+    elif echo "$repo_url" | grep -qE 'dev\.azure\.com/[^/]+/[^/]+/_git/'; then
+        ado_org=$(echo "$repo_url" | sed -E 's|.*dev\.azure\.com/([^/]+)/.*|\1|')
+        ado_project=$(echo "$repo_url" | sed -E 's|.*dev\.azure\.com/[^/]+/([^/]+)/.*|\1|')
+        ado_repo=$(echo "$repo_url" | sed -E 's|.*_git/([^?/]+).*|\1|')
+
+        # Use Items API with recursionLevel=oneLevel to list immediate children
+        ado_api="https://dev.azure.com/${ado_org}/${ado_project}/_apis/git/repositories/${ado_repo}/items?scopePath=/${path}&recursionLevel=oneLevel&versionDescriptor.version=${branch}&api-version=7.0"
+
+        listing=$(ado_curl "$ado_api" 2>/dev/null) || {
+            echo "  Error: ${path} not found or inaccessible"
+            continue
+        }
+
+        # Azure DevOps Items API returns {"count":N,"value":[...]}
+        # Each item has "path" and "isFolder" fields
+        count=0
+        items=$(echo "$listing" | grep -o '"path": *"[^"]*"\|"isFolder": *[a-z]*' | \
+        sed 's/"path": *"//;s/"isFolder": *//;s/"$//' | \
+        while IFS= read -r item_path; do
+            IFS= read -r is_folder || break
+            echo "${is_folder}|${item_path}"
+        done)
+
+        while IFS='|' read -r is_folder item_path; do
+            [ -z "$is_folder" ] && continue
+            [ "$is_folder" != "true" ] && continue
+            # Extract folder name from path (last component)
+            item_name=$(basename "$item_path")
+            # Skip the root path itself, hidden and internal dirs
+            [ "$item_name" = "$path" ] && continue
+            case "$item_name" in
+                .*|_*) continue ;;
+            esac
+            echo "  - ${item_name}"
+            count=$((count + 1))
+        done <<< "$items"
+
+        echo "  Total: ${count} skills available"
+        grand_total=$((grand_total + count))
+
+    else
+        echo "  Error: Unsupported repo URL format"
+        echo "  Supported: github.com or dev.azure.com URLs"
         continue
-    }
-
-    # Extract directory names only (skills are folders), skip hidden items
-    count=0
-    # Get name|type pairs from pretty-printed JSON (name appears before type per object)
-    items=$(echo "$listing" | grep -o '"name": *"[^"]*"\|"type": *"[^"]*"' | \
-    sed 's/"name": *"//;s/"type": *"//;s/"$//' | \
-    while IFS= read -r name; do
-        IFS= read -r type || break
-        echo "${type}|${name}"
-    done)
-
-    while IFS='|' read -r item_type item_name; do
-        [ -z "$item_type" ] && continue
-        [ "$item_type" != "dir" ] && continue
-        case "$item_name" in
-            .*|_*) continue ;;
-        esac
-        echo "  - ${item_name}"
-        count=$((count + 1))
-    done <<< "$items"
-
-    echo "  Total: ${count} skills available"
-    grand_total=$((grand_total + count))
+    fi
 done
 
 echo ""

@@ -1,18 +1,18 @@
 ---
 name: add-skills
-description: Downloads and installs skills from configured remote repositories into the correct AI IDE skill folders. Use when user wants to install, add, or download skills from the catalog. Recursively downloads the entire skill folder (SKILL.md, scripts, templates, references) for each detected AI IDE.
+description: Downloads and installs skills from configured remote repositories (GitHub and Azure DevOps) into the correct AI IDE skill folders. Use when user wants to install, add, or download skills from the catalog. Uses git sparse-checkout to efficiently download the entire skill folder (SKILL.md, scripts, templates, references) for each detected AI IDE.
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.0.0"
-  last_updated: "2026-03-19"
+  version: "1.1.0"
+  last_updated: "2026-04-02"
 ---
 
 # Add Skills
 
 ## Overview
 
-This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ + references/) from remote GitHub repositories and installs them into the correct skill folders for all detected AI IDEs in the project.
+This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ + references/) from remote repositories and installs them into the correct skill folders for all detected AI IDEs in the project. Supports both GitHub and Azure DevOps repositories.
 
 ## When to Use
 
@@ -25,7 +25,7 @@ This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ +
 
 - `nightlife.yaml` exists in the project root with configured `urls`
 - Project has been initialized with at least one AI IDE
-- Internet connection to reach GitHub
+- Internet connection to reach GitHub and/or Azure DevOps
 - `git` available on the system (used for sparse-checkout downloads)
 
 ## Skills Folder Mapping
@@ -92,13 +92,13 @@ powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/add-skills.ps1 <rep
 ```
 
 **Parameters:**
-- `repo_url`: GitHub repository URL (e.g., `https://github.com/owner/repo`)
+- `repo_url`: Repository URL — GitHub (`https://github.com/owner/repo`) or Azure DevOps (`https://dev.azure.com/org/project/_git/repo`)
 - `branch`: Git branch (e.g., `main`)
 - `repo_path`: Path in repo containing skills (e.g., `skills`)
 - `skill_name`: Name of the skill to download (e.g., `git-commit`)
 - `target_dir`: Local target directory (e.g., `.claude/skills/git-commit`)
 
-The script uses `git sparse-checkout` to efficiently download only the specific skill folder from the repository, preserving the full directory structure (`scripts/`, `templates/`, `references/`). This avoids recursive GitHub API calls and is not affected by API rate limits.
+The script uses `git sparse-checkout` to efficiently download only the specific skill folder from the repository, preserving the full directory structure (`scripts/`, `templates/`, `references/`). This avoids recursive API calls and is not affected by API rate limits. Authentication is handled via `GH_TOKEN`/`GITHUB_TOKEN` for GitHub repos or `AZURE_DEVOPS_PAT`/`ADO_TOKEN` for Azure DevOps repos.
 
 ### Step 5: Report Results
 
@@ -132,14 +132,22 @@ User: "Install the git-commit and pdf skills"
    ```
 8. Report: "Installed git-commit and pdf to Claude Code and GitHub Copilot"
 
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub personal access token (used for git clone auth) |
+| `AZURE_DEVOPS_PAT` / `ADO_TOKEN` | Azure DevOps personal access token (used for git clone auth) |
+
 ## Error Handling
 
 | Error | Resolution |
 |-------|------------|
 | Skill not found in any repo | Run `list-skills` to show available names |
 | No AI IDE folders detected | Run `phoenix init` first to set up the project |
-| Download failed (HTTP error) | Check internet connection and repo accessibility |
+| Git clone failed | Check internet connection, repo URL, and auth tokens |
 | Permission denied | Check write permissions on target directories |
+| Azure DevOps auth error | Set `AZURE_DEVOPS_PAT` environment variable with a valid PAT |
 
 ## Related Skills
 

@@ -1,6 +1,10 @@
 # DaNang Nightlife - Agent & Skill Repository Configuration
-# These URLs point to GitHub issues containing YAML-formatted lists of
-# agent and skill repositories. Update the issues to add/remove repos.
+# URLs can point to GitHub issues or Azure DevOps repo files containing
+# YAML-formatted lists of agent and skill repositories.
+# Supported formats:
+#   GitHub issue:      https://github.com/{owner}/{repo}/issues/{number}
+#   Azure DevOps file: https://dev.azure.com/{org}/{project}/_git/{repo}?path={path}&version=GB{branch}
 urls:
   - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
   #- https://github.com/DauQuangThanh/vinh-phoenix/issues/3
+  #- https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
