@@ -49,12 +49,12 @@ Launch your AI assistant and ask it to show what's available:
 "List available skills"
 ```
 
-The `list-skills` meta-skill reads `nightlife.yaml`, fetches the catalog from the configured URLs (GitHub issues or Azure DevOps files), and shows you all installable skills.
+The `list-skills` meta-skill reads `nightlife.yaml`, queries each configured repository, and shows you all installable skills.
 
 Example output:
 
 ```
-Repository: vinh-phoenix-skills (https://github.com/owner/skills-repo)
+Repository: DaNangNightlifeSkill (https://github.com/owner/repo-a, branch: main, path: skills)
   - requirements-specification
   - requirements-specification-review
   - technical-detailed-design
@@ -64,6 +64,13 @@ Repository: vinh-phoenix-skills (https://github.com/owner/skills-repo)
   - git-commit
   - ... (more)
   Total: N skills available
+
+Repository: VinhPhoenixSkill (https://github.com/owner/repo-b, branch: main, path: skills)
+  - pdf
+  - bug-analysis
+  Total: M skills available
+
+Grand total: X skills across 2 repositories
 ```
 
 ---
@@ -76,7 +83,7 @@ Ask your AI to install specific skills:
 "Install the requirements-specification, technical-detailed-design, task-management, and coding skills"
 ```
 
-The `add-skills` meta-skill downloads and installs each skill into the correct folders for all detected AI IDEs in your project.
+The `add-skills` meta-skill downloads and installs each skill into the correct folders for all detected AI IDEs in your project. If a skill exists in multiple configured repositories, it will ask you to choose which one to install from.
 
 ---
 
@@ -93,42 +100,59 @@ Agent commands are slash-command style shortcuts. Browse and install them the sa
 
 ## 📄 Understanding nightlife.yaml
 
-`nightlife.yaml` controls where the meta-skills look for skill and agent catalogs. It supports both **GitHub** and **Azure DevOps** as catalog sources:
+`nightlife.yaml` controls where the meta-skills look for skill and agent repositories. It has two sections — `agents:` and `skills:` — each listing one or more repositories directly:
 
 ```yaml
 # DaNang Nightlife - Agent & Skill Repository Configuration
-urls:
-  # GitHub issue (issue body contains YAML repo list)
-  - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
-  # Azure DevOps file (YAML file in a repo)
-  # - https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
-```
-
-Each URL points to a catalog source. The content should be YAML listing repositories:
-
-```yaml
+agents:
+  - name: DaNangNightlifeAgent
+    url: https://github.com/DauQuangThanh/danang-nightlife
+    branch: main
+    path: agents
+  - name: VinhPhoenixAgent
+    url: https://github.com/DauQuangThanh/vinh-phoenix
+    branch: main
+    path: agents
 skills:
-  - name: my-skills
-    url: https://github.com/owner/my-skills-repo      # GitHub
+  - name: DaNangNightlifeSkill
+    url: https://github.com/DauQuangThanh/danang-nightlife
     branch: main
     path: skills
-  - name: internal-skills
-    url: https://dev.azure.com/org/proj/_git/skills    # Azure DevOps
+  - name: VinhPhoenixSkill
+    url: https://github.com/DauQuangThanh/vinh-phoenix
     branch: main
     path: skills
 ```
+
+Each entry has:
+- `name` — display name for the repository
+- `url` — repository URL (GitHub or Azure DevOps)
+- `branch` — git branch (default: `main`)
+- `path` — path within repo containing skills/agents
+
+**Public repos work without tokens.** For private repos, set `GH_TOKEN` (GitHub) or `AZURE_DEVOPS_PAT` (Azure DevOps).
+
+### Multi-Repo Support
+
+You can configure multiple repositories. When a skill or agent exists in more than one repo, the AI assistant will list all matches and ask you to choose.
 
 ### Using Your Own Repositories
 
-To use a private or custom skill catalog, update `nightlife.yaml`:
+Edit `nightlife.yaml` directly to point to your own repos:
 
 ```yaml
-urls:
-  - https://github.com/my-org/my-config/issues/1
-  - https://dev.azure.com/my-org/my-project/_git/config?path=/catalog.yaml&version=GBmain
+skills:
+  - name: my-team-skills
+    url: https://github.com/my-org/ai-skills
+    branch: main
+    path: skills
+  - name: internal-skills
+    url: https://dev.azure.com/my-org/my-project/_git/skills-repo
+    branch: main
+    path: skills
 ```
 
-Structure the issue body or file with your repos. Your AI assistant's `list-skills` and `add-skills` will automatically use your custom catalog.
+Your AI assistant's `list-skills` and `add-skills` will automatically use your configured repositories.
 
 ---
 

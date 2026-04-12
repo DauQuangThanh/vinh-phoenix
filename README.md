@@ -30,7 +30,8 @@
     - [How It Works](#how-it-works)
     - [Workflow](#workflow)
   - [📄 nightlife.yaml Configuration](#-nightlifeyaml-configuration)
-    - [Catalog Format](#catalog-format)
+    - [Entry Format](#entry-format)
+    - [Multi-Repo Support](#multi-repo-support)
     - [Using Your Own Repositories](#using-your-own-repositories)
   - [🤖 Supported AI Agents](#-supported-ai-agents)
   - [🔧 Phoenix CLI Reference](#-phoenix-cli-reference)
@@ -57,7 +58,9 @@ It bootstraps your project with a small set of **meta-skills** that manage thems
 - ✅ Browse available skills and agents from configured repositories
 - ✅ Add exactly the skills your project needs
 - ✅ Point `nightlife.yaml` to your own repos to build private catalogs
-- ✅ Works with 19 AI coding assistants
+- ✅ Public repos work out of the box — no tokens needed
+- ✅ Multi-repo support with automatic disambiguation
+- ✅ Works with 25 AI coding assistants
 
 > **Think of it like a package manager for AI skills:** Phoenix installs the tooling to discover and install skills. You decide what goes into your project.
 
@@ -131,21 +134,23 @@ The `list-skills`, `add-skills`, `list-agents`, and `add-agents` meta-skills han
 
 ### How It Works
 
-The meta-skills use `nightlife.yaml` as a directory of skill and agent repositories. Each URL points to a catalog source (GitHub issue or Azure DevOps file) whose body contains a YAML-formatted list of repositories:
+The meta-skills use `nightlife.yaml` as a directory of skill and agent repositories. Each entry directly specifies a repository URL, branch, and path:
 
 ```
 nightlife.yaml
-    └── urls:
-         ├── https://github.com/owner/repo/issues/2         → GitHub issue catalog
-         ├── https://dev.azure.com/org/proj/_git/repo?path=… → Azure DevOps file catalog
-         └── ...
+    ├── agents:
+    │    ├── DaNangNightlifeAgent → https://github.com/owner/repo-a  (path: agents)
+    │    └── VinhPhoenixAgent    → https://github.com/owner/repo-b  (path: agents)
+    └── skills:
+         ├── DaNangNightlifeSkill → https://github.com/owner/repo-a (path: skills)
+         └── VinhPhoenixSkill    → https://github.com/owner/repo-b  (path: skills)
 ```
 
 When you ask your AI to `list-skills` or `add-skills`, it:
-1. Reads `nightlife.yaml`
-2. Fetches each catalog source and parses the YAML repo definitions
-3. Queries those repos (GitHub API or Azure DevOps API) to find available skills/agents
-4. Downloads and installs the ones you select using `git sparse-checkout`
+1. Reads `nightlife.yaml` to get the configured repositories
+2. Queries those repos (GitHub API or Azure DevOps API) to find available skills/agents
+3. If a skill/agent exists in multiple repos, asks you to choose which one
+4. Downloads and installs using `git sparse-checkout` (public repos need no tokens)
 
 ### Workflow
 
@@ -167,66 +172,83 @@ Skills downloaded and installed for all detected AI IDEs
 
 ## 📄 nightlife.yaml Configuration
 
-`nightlife.yaml` is placed in your project root by `phoenix init`. It tells the meta-skills where to find skill and agent catalogs. It supports both **GitHub** and **Azure DevOps** as catalog sources:
+`nightlife.yaml` is placed in your project root by `phoenix init`. It tells the meta-skills where to find skill and agent repositories. It has two sections — `agents:` and `skills:` — each with one or more repository entries:
 
 ```yaml
 # DaNang Nightlife - Agent & Skill Repository Configuration
-# URLs can point to GitHub issues or Azure DevOps repo files
-# containing YAML-formatted lists of skill/agent repositories.
-urls:
-  # GitHub issue (issue body contains YAML repo list)
-  - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
-  # Azure DevOps file (YAML file in a repo)
-  # - https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
-```
-
-### Catalog Format
-
-Each catalog source (GitHub issue body or Azure DevOps file) should contain YAML like this:
-
-```yaml
+agents:
+  - name: DaNangNightlifeAgent
+    url: https://github.com/DauQuangThanh/danang-nightlife
+    branch: main
+    path: agents
+  - name: VinhPhoenixAgent
+    url: https://github.com/DauQuangThanh/vinh-phoenix
+    branch: main
+    path: agents
 skills:
-  - name: vinh-phoenix-skills
-    url: https://github.com/owner/skills-repo
+  - name: DaNangNightlifeSkill
+    url: https://github.com/DauQuangThanh/danang-nightlife
     branch: main
     path: skills
-
-agents:
-  - name: vinh-phoenix-agents
-    url: https://github.com/owner/agents-repo
+  - name: VinhPhoenixSkill
+    url: https://github.com/DauQuangThanh/vinh-phoenix
     branch: main
-    path: agent-commands
+    path: skills
 ```
 
-Skill/agent repo URLs can point to either GitHub or Azure DevOps repositories:
+### Entry Format
+
+Each entry has these fields:
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| `name` | Display name for the repository | (none) |
+| `url` | Repository URL (GitHub or Azure DevOps) | required |
+| `branch` | Git branch name | `main` |
+| `path` | Path within repo containing skills/agents | `skills` or `agents` |
+
+Repository URLs can point to either GitHub or Azure DevOps:
 
 ```yaml
 skills:
-  # GitHub repo
+  # GitHub repo (public — no token needed)
   - name: public-skills
     url: https://github.com/owner/skills-repo
     branch: main
     path: skills
-  # Azure DevOps repo
+  # Azure DevOps repo (private — needs AZURE_DEVOPS_PAT)
   - name: internal-skills
     url: https://dev.azure.com/myorg/myproject/_git/skills-repo
     branch: main
     path: skills
 ```
 
+### Multi-Repo Support
+
+You can configure multiple repositories per section. When a skill or agent name exists in more than one repository, the AI assistant will show all matches and ask you to choose which one to install.
+
 ### Using Your Own Repositories
 
-To maintain a private or custom skill catalog, update `nightlife.yaml` to point to your own sources:
+To maintain a private or custom skill catalog, edit `nightlife.yaml` directly:
 
 ```yaml
-urls:
-  # GitHub issue
-  - https://github.com/my-org/my-config/issues/1
-  # Azure DevOps file
-  - https://dev.azure.com/my-org/my-project/_git/config?path=/skills-catalog.yaml&version=GBmain
+agents:
+  - name: my-team-agents
+    url: https://github.com/my-org/ai-agents
+    branch: main
+    path: agents
+skills:
+  - name: my-team-skills
+    url: https://github.com/my-org/ai-skills
+    branch: main
+    path: skills
+  - name: internal-skills
+    url: https://dev.azure.com/my-org/my-project/_git/skills-repo
+    branch: main
+    path: skills
 ```
 
-Structure the issue body or file with your repos. This lets teams maintain internal skill catalogs without forking Phoenix — including private Azure DevOps repositories.
+This lets teams maintain internal skill catalogs without forking Phoenix — including private Azure DevOps repositories.
 
 ---
 
@@ -413,15 +435,17 @@ Ensure `nightlife.yaml` exists in your project root. If missing, re-run `phoenix
 
 ### API rate limits or auth errors when using list-skills / add-skills
 
-Set the appropriate token for your repository host:
+**Public repos** work without any tokens. For **private repos** or if you hit API rate limits, set the appropriate token:
 
 ```bash
-# GitHub
+# GitHub (increases rate limits + enables private repo access)
 export GH_TOKEN=ghp_your_token_here
 
-# Azure DevOps
+# Azure DevOps (required for private repos)
 export AZURE_DEVOPS_PAT=your_pat_here
 ```
+
+The `add-skills` and `add-agents` scripts automatically try **public access first**, then fall back to authenticated access if a token is available.
 
 ---
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# list-skills.sh - List available skills from configured remote repositories
-# (Bundled copy for add-skills — identical to list-skills/scripts/list-skills.sh)
+# list-agents.sh - List available agents from configured remote repositories
 #
-# Reads nightlife.yaml for skill repository definitions (name, url, branch, path),
-# then lists available skills from each repository.
+# Reads nightlife.yaml for agent repository definitions (url, branch, path),
+# then lists available agents from each repository.
 #
 # Supports:
 #   - GitHub repos:      https://github.com/{owner}/{repo}
@@ -15,6 +14,7 @@ set -euo pipefail
 
 # ── Auth ────────────────────────────────────────────────────────────────────────
 
+# GitHub auth
 GH_AUTH_HEADER=""
 if [ -n "${GH_TOKEN:-}" ]; then
     GH_AUTH_HEADER="Authorization: Bearer $GH_TOKEN"
@@ -22,6 +22,7 @@ elif [ -n "${GITHUB_TOKEN:-}" ]; then
     GH_AUTH_HEADER="Authorization: Bearer $GITHUB_TOKEN"
 fi
 
+# Azure DevOps auth (Basic auth with PAT)
 ADO_AUTH_HEADER=""
 if [ -n "${AZURE_DEVOPS_PAT:-}" ]; then
     ADO_AUTH_HEADER="Authorization: Basic $(printf ":%s" "$AZURE_DEVOPS_PAT" | base64 | tr -d '\n')"
@@ -29,12 +30,14 @@ elif [ -n "${ADO_TOKEN:-}" ]; then
     ADO_AUTH_HEADER="Authorization: Basic $(printf ":%s" "$ADO_TOKEN" | base64 | tr -d '\n')"
 fi
 
+# Curl helper for GitHub API
 gh_curl() {
     local opts=(-s -f -L -H "Accept: application/vnd.github.v3+json" -H "User-Agent: phoenix-cli")
     [ -n "$GH_AUTH_HEADER" ] && opts+=(-H "$GH_AUTH_HEADER")
     curl "${opts[@]}" "$@"
 }
 
+# Curl helper for Azure DevOps API
 ado_curl() {
     local opts=(-s -f -L -H "Accept: application/json" -H "User-Agent: phoenix-cli")
     [ -n "$ADO_AUTH_HEADER" ] && opts+=(-H "$ADO_AUTH_HEADER")
@@ -49,43 +52,49 @@ if [ ! -f "nightlife.yaml" ]; then
     exit 1
 fi
 
-skill_names=()
-skill_urls=()
-skill_branches=()
-skill_paths=()
+# Parse agents section: each entry has name, url, branch, path
+agent_names=()
+agent_urls=()
+agent_branches=()
+agent_paths=()
 
-in_skills=false
+in_agents=false
 current_name="" current_url="" current_branch="" current_path=""
 
 while IFS= read -r line; do
     stripped=$(echo "$line" | sed 's/#.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
     [ -z "$stripped" ] && continue
 
-    if echo "$stripped" | grep -q '^skills:'; then
-        in_skills=true
+    # Detect section headers
+    if echo "$stripped" | grep -q '^agents:'; then
+        in_agents=true
         current_name="" current_url="" current_branch="" current_path=""
         continue
     fi
 
-    if [ "$in_skills" = true ] && echo "$line" | grep -qE '^[a-zA-Z]'; then
+    # Exit agents section on new top-level key
+    if [ "$in_agents" = true ] && echo "$line" | grep -qE '^[a-zA-Z]'; then
+        # Flush last entry
         if [ -n "$current_url" ]; then
-            skill_names+=("${current_name:-}")
-            skill_urls+=("$current_url")
-            skill_branches+=("${current_branch:-main}")
-            skill_paths+=("${current_path:-skills}")
+            agent_names+=("${current_name:-}")
+            agent_urls+=("$current_url")
+            agent_branches+=("${current_branch:-main}")
+            agent_paths+=("${current_path:-agents}")
         fi
-        in_skills=false
+        in_agents=false
         current_name="" current_url="" current_branch="" current_path=""
         continue
     fi
 
-    if [ "$in_skills" = true ]; then
+    if [ "$in_agents" = true ]; then
+        # New list item
         if echo "$stripped" | grep -q '^- '; then
+            # Flush previous entry
             if [ -n "$current_url" ]; then
-                skill_names+=("${current_name:-}")
-                skill_urls+=("$current_url")
-                skill_branches+=("${current_branch:-main}")
-                skill_paths+=("${current_path:-skills}")
+                agent_names+=("${current_name:-}")
+                agent_urls+=("$current_url")
+                agent_branches+=("${current_branch:-main}")
+                agent_paths+=("${current_path:-agents}")
             fi
             current_name="" current_url="" current_branch="" current_path=""
 
@@ -111,27 +120,28 @@ while IFS= read -r line; do
     fi
 done < "nightlife.yaml"
 
-if [ "$in_skills" = true ] && [ -n "$current_url" ]; then
-    skill_names+=("${current_name:-}")
-    skill_urls+=("$current_url")
-    skill_branches+=("${current_branch:-main}")
-    skill_paths+=("${current_path:-skills}")
+# Flush last entry if file ends inside agents section
+if [ "$in_agents" = true ] && [ -n "$current_url" ]; then
+    agent_names+=("${current_name:-}")
+    agent_urls+=("$current_url")
+    agent_branches+=("${current_branch:-main}")
+    agent_paths+=("${current_path:-agents}")
 fi
 
-if [ ${#skill_urls[@]} -eq 0 ]; then
-    echo "No skill repositories configured in nightlife.yaml."
+if [ ${#agent_urls[@]} -eq 0 ]; then
+    echo "No agent repositories configured in nightlife.yaml."
     exit 0
 fi
 
-# ── List skills from each repo ──────────────────────────────────────────────────
+# ── List agents from each repo ──────────────────────────────────────────────────
 
 grand_total=0
 
-for i in "${!skill_urls[@]}"; do
-    repo_name="${skill_names[$i]}"
-    repo_url="${skill_urls[$i]}"
-    branch="${skill_branches[$i]}"
-    path="${skill_paths[$i]}"
+for i in "${!agent_urls[@]}"; do
+    repo_name="${agent_names[$i]}"
+    repo_url="${agent_urls[$i]}"
+    branch="${agent_branches[$i]}"
+    path="${agent_paths[$i]}"
 
     echo ""
     if [ -n "$repo_name" ]; then
@@ -140,6 +150,7 @@ for i in "${!skill_urls[@]}"; do
         echo "Repository: ${repo_url} (branch: ${branch}, path: ${path})"
     fi
 
+    # ── GitHub repo ──
     if echo "$repo_url" | grep -qE 'github\.com/[^/]+/[^/]+'; then
         owner=$(echo "$repo_url" | sed -E 's|.*github\.com/([^/]+)/.*|\1|')
         repo=$(echo "$repo_url" | sed -E 's|.*github\.com/[^/]+/([^/.]+).*|\1|')
@@ -169,9 +180,10 @@ for i in "${!skill_urls[@]}"; do
             count=$((count + 1))
         done <<< "$items"
 
-        echo "  Total: ${count} skills available"
+        echo "  Total: ${count} agents available"
         grand_total=$((grand_total + count))
 
+    # ── Azure DevOps repo ──
     elif echo "$repo_url" | grep -qE 'dev\.azure\.com/[^/]+/[^/]+/_git/'; then
         ado_org=$(echo "$repo_url" | sed -E 's|.*dev\.azure\.com/([^/]+)/.*|\1|')
         ado_project=$(echo "$repo_url" | sed -E 's|.*dev\.azure\.com/[^/]+/([^/]+)/.*|\1|')
@@ -204,7 +216,7 @@ for i in "${!skill_urls[@]}"; do
             count=$((count + 1))
         done <<< "$items"
 
-        echo "  Total: ${count} skills available"
+        echo "  Total: ${count} agents available"
         grand_total=$((grand_total + count))
 
     else
@@ -215,4 +227,4 @@ for i in "${!skill_urls[@]}"; do
 done
 
 echo ""
-echo "Grand total: ${grand_total} skills across ${#skill_urls[@]} repositories"
+echo "Grand total: ${grand_total} agents across ${#agent_urls[@]} repositories"

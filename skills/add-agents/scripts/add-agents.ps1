@@ -1,9 +1,9 @@
-# add-skills.ps1 - Download and install a skill from a git repository
+# add-agents.ps1 - Download and install an agent from a git repository
 #
-# Usage: add-skills.ps1 <repo_url> <branch> <repo_path> <skill_name> <target_dir>
+# Usage: add-agents.ps1 <repo_url> <branch> <repo_path> <agent_name> <target_dir>
 #
 # Supports GitHub and Azure DevOps repositories.
-# Uses git sparse-checkout to download only the specific skill folder,
+# Uses git sparse-checkout to download only the specific agent folder,
 # avoiding recursive API calls and rate limits.
 
 param(
@@ -17,7 +17,7 @@ param(
     [string]$RepoPath,
 
     [Parameter(Mandatory=$true, Position=3)]
-    [string]$SkillName,
+    [string]$AgentName,
 
     [Parameter(Mandatory=$true, Position=4)]
     [string]$TargetDir
@@ -25,7 +25,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$SkillPath = "$RepoPath/$SkillName"
+$AgentPath = "$RepoPath/$AgentName"
 
 # Ensure git is available
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
@@ -48,10 +48,10 @@ if ($RepoUrl -match 'github\.com') {
     }
 }
 
-Write-Host "Downloading skill: $SkillName from $RepoUrl@$Branch"
+Write-Host "Downloading agent: $AgentName from $RepoUrl@$Branch"
 
 # Create a temporary directory for sparse checkout
-$TempDir = Join-Path ([System.IO.Path]::GetTempPath()) ("phoenix-skill-" + [System.Guid]::NewGuid().ToString("N").Substring(0, 8))
+$TempDir = Join-Path ([System.IO.Path]::GetTempPath()) ("phoenix-agent-" + [System.Guid]::NewGuid().ToString("N").Substring(0, 8))
 
 try {
     # Clone strategy: try public (no auth) first, fall back to authenticated if available
@@ -86,27 +86,27 @@ try {
         exit 1
     }
 
-    # Configure sparse-checkout to fetch only the skill folder
-    $sparseOutput = git -C $TempDir sparse-checkout set $SkillPath 2>&1
+    # Configure sparse-checkout to fetch only the agent folder
+    $sparseOutput = git -C $TempDir sparse-checkout set $AgentPath 2>&1
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to sparse-checkout ${SkillPath}: $sparseOutput"
+        Write-Error "Failed to sparse-checkout ${AgentPath}: $sparseOutput"
         exit 1
     }
 
-    # Verify the skill directory exists in the checkout
-    $SkillFullPath = Join-Path $TempDir $SkillPath
-    if (-not (Test-Path $SkillFullPath)) {
-        Write-Error "Skill '$SkillName' not found at path '$SkillPath' in $RepoUrl"
+    # Verify the agent directory exists in the checkout
+    $AgentFullPath = Join-Path $TempDir $AgentPath
+    if (-not (Test-Path $AgentFullPath)) {
+        Write-Error "Agent '$AgentName' not found at path '$AgentPath' in $RepoUrl"
         exit 1
     }
 
-    # Create target directory and copy skill files
+    # Create target directory and copy agent files
     if (-not (Test-Path $TargetDir)) {
         New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
     }
-    Copy-Item -Path "$SkillFullPath\*" -Destination $TargetDir -Recurse -Force
+    Copy-Item -Path "$AgentFullPath\*" -Destination $TargetDir -Recurse -Force
 
-    Write-Host "Installed skill: $SkillName -> $TargetDir"
+    Write-Host "Installed agent: $AgentName -> $TargetDir"
 } finally {
     # Clean up temporary directory
     if (Test-Path $TempDir) {

@@ -1,7 +1,7 @@
-# list-skills.ps1 - List available skills from configured remote repositories
+# list-agents.ps1 - List available agents from configured remote repositories
 #
-# Reads nightlife.yaml for skill repository definitions (url, branch, path),
-# then lists available skills from each repository.
+# Reads nightlife.yaml for agent repository definitions (url, branch, path),
+# then lists available agents from each repository.
 #
 # Supports:
 #   - GitHub repos:      https://github.com/{owner}/{repo}
@@ -44,8 +44,8 @@ if (-not (Test-Path "nightlife.yaml")) {
 }
 
 $content = Get-Content "nightlife.yaml" -Raw
-$skillRepos = @()
-$inSkills = $false
+$agentRepos = @()
+$inAgents = $false
 $currentItem = @{}
 
 foreach ($line in ($content -split "`n")) {
@@ -53,36 +53,36 @@ foreach ($line in ($content -split "`n")) {
     if ([string]::IsNullOrEmpty($stripped)) { continue }
 
     # Detect section headers
-    if ($stripped -match '^skills:') {
-        $inSkills = $true
+    if ($stripped -match '^agents:') {
+        $inAgents = $true
         $currentItem = @{}
         continue
     }
 
-    # Exit skills section on new top-level key
-    if ($inSkills -and $line -match '^[a-zA-Z]') {
+    # Exit agents section on new top-level key
+    if ($inAgents -and $line -match '^[a-zA-Z]') {
         if ($currentItem.url) {
-            $skillRepos += [PSCustomObject]@{
+            $agentRepos += [PSCustomObject]@{
                 name = if ($currentItem.name) { $currentItem.name } else { "" }
                 url = $currentItem.url
                 branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
-                path = if ($currentItem.path) { $currentItem.path } else { "skills" }
+                path = if ($currentItem.path) { $currentItem.path } else { "agents" }
             }
         }
-        $inSkills = $false
+        $inAgents = $false
         $currentItem = @{}
         continue
     }
 
-    if ($inSkills) {
+    if ($inAgents) {
         if ($stripped -match '^- (.+)') {
             # Flush previous entry
             if ($currentItem.url) {
-                $skillRepos += [PSCustomObject]@{
+                $agentRepos += [PSCustomObject]@{
                     name = if ($currentItem.name) { $currentItem.name } else { "" }
                     url = $currentItem.url
                     branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
-                    path = if ($currentItem.path) { $currentItem.path } else { "skills" }
+                    path = if ($currentItem.path) { $currentItem.path } else { "agents" }
                 }
             }
             $currentItem = @{}
@@ -98,25 +98,25 @@ foreach ($line in ($content -split "`n")) {
 }
 
 # Flush last entry
-if ($inSkills -and $currentItem.url) {
-    $skillRepos += [PSCustomObject]@{
+if ($inAgents -and $currentItem.url) {
+    $agentRepos += [PSCustomObject]@{
         name = if ($currentItem.name) { $currentItem.name } else { "" }
         url = $currentItem.url
         branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
-        path = if ($currentItem.path) { $currentItem.path } else { "skills" }
+        path = if ($currentItem.path) { $currentItem.path } else { "agents" }
     }
 }
 
-if ($skillRepos.Count -eq 0) {
-    Write-Host "No skill repositories configured in nightlife.yaml."
+if ($agentRepos.Count -eq 0) {
+    Write-Host "No agent repositories configured in nightlife.yaml."
     exit 0
 }
 
-# ── List skills from each repo ──────────────────────────────────────────────────
+# ── List agents from each repo ──────────────────────────────────────────────────
 
 $grandTotal = 0
 
-foreach ($repoInfo in $skillRepos) {
+foreach ($repoInfo in $agentRepos) {
     $repoName = $repoInfo.name
     $repoUrl = $repoInfo.url
     $branch = $repoInfo.branch
@@ -137,22 +137,22 @@ foreach ($repoInfo in $skillRepos) {
 
         try {
             $contents = Invoke-RestMethod -Uri $apiUrl -Headers $GHHeaders -TimeoutSec 30
-            $skills = @()
+            $agents = @()
 
             foreach ($item in $contents) {
                 $itemName = $item.name
                 if ($itemName.StartsWith(".") -or $itemName.StartsWith("_")) { continue }
                 if ($item.type -eq "dir") {
-                    $skills += $itemName
+                    $agents += $itemName
                 }
             }
 
-            $skills = $skills | Sort-Object
-            foreach ($s in $skills) {
-                Write-Host "  - $s"
+            $agents = $agents | Sort-Object
+            foreach ($a in $agents) {
+                Write-Host "  - $a"
             }
-            Write-Host "  Total: $($skills.Count) skills available"
-            $grandTotal += $skills.Count
+            Write-Host "  Total: $($agents.Count) agents available"
+            $grandTotal += $agents.Count
         } catch {
             if ($_.Exception.Response.StatusCode.value__) {
                 Write-Host "  Error: HTTP $($_.Exception.Response.StatusCode.value__) - $path not found or inaccessible"
@@ -171,22 +171,22 @@ foreach ($repoInfo in $skillRepos) {
 
         try {
             $listing = Invoke-RestMethod -Uri $adoApi -Headers $ADOHeaders -TimeoutSec 30
-            $skills = @()
+            $agents = @()
 
             foreach ($item in $listing.value) {
                 if (-not $item.isFolder) { continue }
                 $itemName = Split-Path $item.path -Leaf
                 if ($itemName -eq $path) { continue }
                 if ($itemName.StartsWith(".") -or $itemName.StartsWith("_")) { continue }
-                $skills += $itemName
+                $agents += $itemName
             }
 
-            $skills = $skills | Sort-Object
-            foreach ($s in $skills) {
-                Write-Host "  - $s"
+            $agents = $agents | Sort-Object
+            foreach ($a in $agents) {
+                Write-Host "  - $a"
             }
-            Write-Host "  Total: $($skills.Count) skills available"
-            $grandTotal += $skills.Count
+            Write-Host "  Total: $($agents.Count) agents available"
+            $grandTotal += $agents.Count
         } catch {
             if ($_.Exception.Response.StatusCode.value__) {
                 Write-Host "  Error: HTTP $($_.Exception.Response.StatusCode.value__) - $path not found or inaccessible"
@@ -202,4 +202,4 @@ foreach ($repoInfo in $skillRepos) {
 }
 
 Write-Host ""
-Write-Host "Grand total: $grandTotal skills across $($skillRepos.Count) repositories"
+Write-Host "Grand total: $grandTotal agents across $($agentRepos.Count) repositories"

@@ -4,8 +4,8 @@ description: Downloads and installs skills from configured remote repositories (
 license: MIT
 metadata:
   author: Dau Quang Thanh
-  version: "1.1.0"
-  last_updated: "2026-04-02"
+  version: "2.0.0"
+  last_updated: "2026-04-12"
 ---
 
 # Add Skills
@@ -23,36 +23,42 @@ This skill downloads complete skill packages (SKILL.md + scripts/ + templates/ +
 
 ## Prerequisites
 
-- `nightlife.yaml` exists in the project root with configured `urls`
+- `nightlife.yaml` exists in the project root with configured `skills` section (supports multiple repositories)
 - Project has been initialized with at least one AI IDE
 - Internet connection to reach GitHub and/or Azure DevOps
 - `git` available on the system (used for sparse-checkout downloads)
 
 ## Skills Folder Mapping
 
-Skills are installed into these folders per AI IDE:
+Skills are installed into these folders per AI IDE (based on AI-Agents-Configs April 2026):
 
 | AI IDE | Skills Folder |
 |--------|--------------|
-| GitHub Copilot | `.github/skills/` |
-| Claude Code | `.claude/skills/` |
-| Cursor | `.cursor/rules/` |
-| Gemini CLI | `.gemini/extensions/` |
-| Qwen Code | `.qwen/skills/` |
-| Open Code | `.opencode/skill/` |
-| Codex CLI | `.codex/skills/` |
-| Windsurf | `.windsurf/skills/` |
-| Kilo Code | `.kilocode/skills/` |
-| Auggie CLI | `.augment/rules/` |
-| CodeBuddy | `.codebuddy/skills/` |
-| Roo Code | `.roo/skills/` |
-| Amazon Q | `.amazonq/cli-agents/` |
-| Amp | `.agents/skills/` |
-| SHAI | `.shai/commands/` |
-| IBM Bob | `.bob/skills/` |
-| Jules | `skills/` |
-| Qoder CLI | `.qoder/skills/` |
+| Amp | `.amp/skills/` |
 | Antigravity | `.agent/skills/` |
+| Augment Code | `.augment/skills/` |
+| Claude Code | `.claude/skills/` |
+| Cline | `.cline/skills/` |
+| CodeBuddy | `.codebuddy/skills/` |
+| Codex CLI | `.codex/skills/` |
+| Cursor | `.cursor/skills/` |
+| Forge | `.forge/skills/` |
+| Gemini CLI | `.gemini/skills/` |
+| GitHub Copilot (IDE) | `.github/skills/` |
+| GitHub Copilot CLI | `.copilot/skills/` |
+| IBM Bob | `.bob/skills/` |
+| Junie | `.junie/skills/` |
+| Kilo Code | `.kilocode/skills/` |
+| Kiro | `.kiro/skills/` |
+| Mistral Vibe | `.vibe/skills/` |
+| opencode | `.opencode/skills/` |
+| Pi Agent | `.omp/skills/` |
+| Qoder | `.qoder/skills/` |
+| Qwen Code | `.qwen/skills/` |
+| Roo Code | `.roo/skills/` |
+| Tabnine | `.tabnine/skills/` |
+| Trae | `.trae/skills/` |
+| Windsurf | `.windsurf/skills/` |
 
 ## Instructions
 
@@ -67,15 +73,31 @@ For example, if this skill is installed at `.claude/skills/add-skills/`, then `{
 1. Parse the user's request to determine which skills to install
 2. If no specific names given, run `bash {SKILL_DIR}/scripts/list-skills.sh` (Mac/Linux) or `powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/list-skills.ps1` (Windows) first to show available options and ask the user to choose
 
+Note: The list-skills script is in the **list-skills** skill directory. If you have list-skills installed, use that path instead.
+
 ### Step 2: Detect Installed AI IDEs
 
-Check which AI IDE folders exist in the project root. An IDE is "detected" if its agent folder or skills folder exists. Only install into detected IDEs.
+Check which AI IDE folders exist in the project root. An IDE is "detected" if its config folder (e.g., `.claude/`, `.github/`, `.cursor/`) exists. Only install into detected IDEs.
 
-### Step 3: Fetch Skill Source
+### Step 3: Find Skill Source
 
-1. Read `nightlife.yaml` to get issue URLs
-2. Fetch repo definitions from each issue
-3. Find which repository contains the requested skill
+1. Read `nightlife.yaml` to get skill repository entries (name, url, branch, path)
+2. Each entry directly provides the repository name, URL, branch, and path where skills are located
+3. **Multiple repositories**: nightlife.yaml can contain multiple skill repos — search all of them for the requested skill
+
+### Step 3.1: Disambiguate When Skill Exists in Multiple Repos
+
+If the requested skill name is found in **more than one** configured repository:
+
+1. **List all matches** — show the user each repo that contains the skill:
+   ```
+   Skill "git-commit" was found in multiple repositories:
+     1. DaNangNightlifeSkill (https://github.com/owner/repo-a, path: skills)
+     2. VinhPhoenixSkill (https://github.com/owner/repo-b, path: skills)
+   ```
+2. **Ask the user to choose** which repository to install from
+3. Only proceed with installation after the user confirms their choice
+4. If the skill exists in only one repo, proceed without asking
 
 ### Step 4: Install Using Shell Script
 
@@ -98,7 +120,7 @@ powershell -ExecutionPolicy Bypass -File {SKILL_DIR}/scripts/add-skills.ps1 <rep
 - `skill_name`: Name of the skill to download (e.g., `git-commit`)
 - `target_dir`: Local target directory (e.g., `.claude/skills/git-commit`)
 
-The script uses `git sparse-checkout` to efficiently download only the specific skill folder from the repository, preserving the full directory structure (`scripts/`, `templates/`, `references/`). This avoids recursive API calls and is not affected by API rate limits. Authentication is handled via `GH_TOKEN`/`GITHUB_TOKEN` for GitHub repos or `AZURE_DEVOPS_PAT`/`ADO_TOKEN` for Azure DevOps repos.
+The script uses `git sparse-checkout` to efficiently download only the specific skill folder from the repository, preserving the full directory structure (`scripts/`, `templates/`, `references/`). Authentication is handled via `GH_TOKEN`/`GITHUB_TOKEN` for GitHub repos or `AZURE_DEVOPS_PAT`/`ADO_TOKEN` for Azure DevOps repos.
 
 ### Step 5: Report Results
 
@@ -109,28 +131,43 @@ For each skill installed, report:
 
 ## Example
 
-User: "Install the git-commit and pdf skills"
+### Example 1: Skill found in one repo
 
-1. Read `nightlife.yaml` -> fetch repos from issues -> find skill repos with their `url`, `branch`, and `path`
-2. Find which repos contain `git-commit` (e.g., repo-a at `https://github.com/owner/repo-a`, path `skills`) and `pdf` (e.g., repo-b at `https://github.com/owner/repo-b`, path `skills`)
-3. Detect Claude Code (`.claude/skills/` exists) and Copilot (`.github/skills/` exists)
-4. Run for Claude + git-commit (assuming skill is at `.claude/skills/add-skills/`):
+User: "Install the pdf skill"
+
+1. Read `nightlife.yaml` → get skill repos (name, url, branch, path)
+2. Search all repos for "pdf" → found only in DaNangNightlifeSkill
+3. Detect Claude Code (`.claude/` exists) and Copilot (`.github/` exists)
+4. Run for Claude:
+   ```bash
+   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-a main skills pdf .claude/skills/pdf
+   ```
+5. Run for Copilot:
+   ```bash
+   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-a main skills pdf .github/skills/pdf
+   ```
+6. Report: "Installed pdf to Claude Code and GitHub Copilot"
+
+### Example 2: Skill found in multiple repos (disambiguation)
+
+User: "Install the git-commit skill"
+
+1. Read `nightlife.yaml` → get skill repos (name, url, branch, path)
+2. Search all repos for "git-commit" → found in both DaNangNightlifeSkill and VinhPhoenixSkill
+3. **Ask user to choose**:
+   ```
+   Skill "git-commit" was found in multiple repositories:
+     1. DaNangNightlifeSkill (https://github.com/owner/repo-a, path: skills)
+     2. VinhPhoenixSkill (https://github.com/owner/repo-b, path: skills)
+   Which repository would you like to install from?
+   ```
+4. User chooses "1" → use repo-a
+5. Detect Claude Code (`.claude/` exists)
+6. Run:
    ```bash
    bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .claude/skills/git-commit
    ```
-5. Run for Copilot + git-commit:
-   ```bash
-   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-a main skills git-commit .github/skills/git-commit
-   ```
-6. Run for Claude + pdf:
-   ```bash
-   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .claude/skills/pdf
-   ```
-7. Run for Copilot + pdf:
-   ```bash
-   bash .claude/skills/add-skills/scripts/add-skills.sh https://github.com/owner/repo-b main skills pdf .github/skills/pdf
-   ```
-8. Report: "Installed git-commit and pdf to Claude Code and GitHub Copilot"
+7. Report: "Installed git-commit from DaNangNightlifeSkill to Claude Code"
 
 ## Environment Variables
 
@@ -152,5 +189,5 @@ User: "Install the git-commit and pdf skills"
 ## Related Skills
 
 - **list-skills**: List available skills before installing
-- **add-agents**: Install agent commands instead of skills
-- **list-agents**: List available agent commands
+- **add-agents**: Install agents instead of skills
+- **list-agents**: List available agents

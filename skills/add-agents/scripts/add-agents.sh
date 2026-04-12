@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
-# add-skills.sh - Download and install a skill from a git repository
+# add-agents.sh - Download and install an agent from a git repository
 #
-# Usage: add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>
+# Usage: add-agents.sh <repo_url> <branch> <repo_path> <agent_name> <target_dir>
 #
 # Arguments:
 #   repo_url    - Repository URL (GitHub or Azure DevOps)
 #                 GitHub:    https://github.com/owner/repo
 #                 Azure DevOps: https://dev.azure.com/org/project/_git/repo
 #   branch      - Git branch name (e.g., main)
-#   repo_path   - Path within repo containing skills (e.g., skills)
-#   skill_name  - Name of the skill to download (e.g., git-commit)
-#   target_dir  - Local directory to copy the skill into
+#   repo_path   - Path within repo containing agents (e.g., agents)
+#   agent_name  - Name of the agent to download (e.g., code-reviewer)
+#   target_dir  - Local directory to copy the agent into
 #
-# Uses git sparse-checkout to download only the specific skill folder,
+# Uses git sparse-checkout to download only the specific agent folder,
 # avoiding recursive API calls and rate limits.
 
 set -euo pipefail
 
-REPO_URL="${1:?Usage: add-skills.sh <repo_url> <branch> <repo_path> <skill_name> <target_dir>}"
+REPO_URL="${1:?Usage: add-agents.sh <repo_url> <branch> <repo_path> <agent_name> <target_dir>}"
 BRANCH="${2:?Missing branch}"
 REPO_PATH="${3:?Missing repo_path}"
-SKILL_NAME="${4:?Missing skill_name}"
+AGENT_NAME="${4:?Missing agent_name}"
 TARGET_DIR="${5:?Missing target_dir}"
 
-SKILL_PATH="${REPO_PATH}/${SKILL_NAME}"
+AGENT_PATH="${REPO_PATH}/${AGENT_NAME}"
 
 # Ensure git is available
 if ! command -v git >/dev/null 2>&1; then
@@ -47,7 +47,7 @@ elif echo "$REPO_URL" | grep -q 'dev\.azure\.com'; then
     fi
 fi
 
-echo "Downloading skill: ${SKILL_NAME} from ${REPO_URL}@${BRANCH}"
+echo "Downloading agent: ${AGENT_NAME} from ${REPO_URL}@${BRANCH}"
 
 # Create a temporary directory for sparse checkout
 TEMP_DIR=$(mktemp -d)
@@ -81,25 +81,25 @@ if [ "$CLONE_OK" = false ]; then
     exit 1
 fi
 
-# Configure sparse-checkout to fetch only the skill folder
-git -C "$TEMP_DIR" sparse-checkout set "$SKILL_PATH" 2>&1 || {
-    echo "Error: Failed to sparse-checkout ${SKILL_PATH}" >&2
+# Configure sparse-checkout to fetch only the agent folder
+git -C "$TEMP_DIR" sparse-checkout set "$AGENT_PATH" 2>&1 || {
+    echo "Error: Failed to sparse-checkout ${AGENT_PATH}" >&2
     exit 1
 }
 
-# Verify the skill directory exists in the checkout
-if [ ! -d "$TEMP_DIR/$SKILL_PATH" ]; then
-    echo "Error: Skill '${SKILL_NAME}' not found at path '${SKILL_PATH}' in ${REPO_URL}" >&2
+# Verify the agent directory exists in the checkout
+if [ ! -d "$TEMP_DIR/$AGENT_PATH" ]; then
+    echo "Error: Agent '${AGENT_NAME}' not found at path '${AGENT_PATH}' in ${REPO_URL}" >&2
     exit 1
 fi
 
-# Create target directory and copy skill files
+# Create target directory and copy agent files
 mkdir -p "$TARGET_DIR"
-cp -a "$TEMP_DIR/$SKILL_PATH/." "$TARGET_DIR/"
+cp -a "$TEMP_DIR/$AGENT_PATH/." "$TARGET_DIR/"
 
 # Make scripts executable
 if [ -d "$TARGET_DIR/scripts" ]; then
     find "$TARGET_DIR/scripts" -type f \( -name "*.sh" -o -name "*.bash" \) -exec chmod +x {} \;
 fi
 
-echo "Installed skill: ${SKILL_NAME} -> ${TARGET_DIR}"
+echo "Installed agent: ${AGENT_NAME} -> ${TARGET_DIR}"

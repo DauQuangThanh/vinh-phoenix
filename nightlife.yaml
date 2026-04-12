@@ -9,16 +9,16 @@ agents:
     url: https://github.com/DauQuangThanh/danang-nightlife
     branch: main
     path: agents
-  - name: VinhPhoenixAgent
-    url: https://github.com/DauQuangThanh/vinh-phoenix
-    branch: main
-    path: agents
+  #- name: VinhPhoenixAgent
+  #  url: https://github.com/DauQuangThanh/vinh-phoenix
+  #  branch: main
+  #  path: agents
 skills:
   - name: DaNangNightlifeSkill
     url: https://github.com/DauQuangThanh/danang-nightlife
     branch: main
     path: skills
-  - name: VinhPhoenixSkill
-    url: https://github.com/DauQuangThanh/vinh-phoenix
-    branch: main
-    path: skills 
+  #- name: VinhPhoenixSkill
+  #  url: https://github.com/DauQuangThanh/vinh-phoenix
+  #  branch: main
+  #  path: skills 

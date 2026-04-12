@@ -1,11 +1,12 @@
 # list-skills.ps1 - List available skills from configured remote repositories
+# (Bundled copy for add-skills — identical to list-skills/scripts/list-skills.ps1)
 #
-# Reads nightlife.yaml for catalog URLs (GitHub issues or Azure DevOps repo files),
-# fetches repo definitions, and lists available skills from each repository.
+# Reads nightlife.yaml for skill repository definitions (name, url, branch, path),
+# then lists available skills from each repository.
 #
 # Supports:
-#   - GitHub issues:      https://github.com/{owner}/{repo}/issues/{number}
-#   - Azure DevOps files: https://dev.azure.com/{org}/{project}/_git/{repo}?path={path}&version=GB{branch}
+#   - GitHub repos:      https://github.com/{owner}/{repo}
+#   - Azure DevOps repos: https://dev.azure.com/{org}/{project}/_git/{repo}
 #
 # No arguments required. Must be run from the project root where nightlife.yaml exists.
 
@@ -13,7 +14,6 @@ $ErrorActionPreference = "Stop"
 
 # ── Auth ────────────────────────────────────────────────────────────────────────
 
-# GitHub headers
 $GHHeaders = @{
     "Accept" = "application/vnd.github.v3+json"
     "User-Agent" = "phoenix-cli"
@@ -24,7 +24,6 @@ if ($env:GH_TOKEN) {
     $GHHeaders["Authorization"] = "Bearer $env:GITHUB_TOKEN"
 }
 
-# Azure DevOps headers (Basic auth with PAT)
 $ADOHeaders = @{
     "Accept" = "application/json"
     "User-Agent" = "phoenix-cli"
@@ -39,178 +38,72 @@ if ($adoPat) {
 
 if (-not (Test-Path "nightlife.yaml")) {
     Write-Host "Error: nightlife.yaml not found in current directory."
-    Write-Host "Create one with 'phoenix config-set-url <url1> <url2>' or manually."
+    Write-Host "Create one with 'phoenix init' or manually."
     exit 1
 }
 
 $content = Get-Content "nightlife.yaml" -Raw
-$urls = @()
-$inUrls = $false
+$skillRepos = @()
+$inSkills = $false
+$currentItem = @{}
+
 foreach ($line in ($content -split "`n")) {
     $stripped = ($line -replace '#.*', '').Trim()
     if ([string]::IsNullOrEmpty($stripped)) { continue }
 
-    if ($stripped -match '^urls:') {
-        $inUrls = $true
-        continue
-    }
-
-    if ($inUrls -and $line -match '^[a-zA-Z]') {
-        $inUrls = $false
-        continue
-    }
-
-    if ($inUrls -and $stripped -match '^- (.+)') {
-        $urls += $Matches[1].Trim()
-    }
-}
-
-if ($urls.Count -eq 0) {
-    Write-Host "Error: No 'urls' configured in nightlife.yaml."
-    exit 1
-}
-
-# ── Parse YAML body into skill repo entries ─────────────────────────────────────
-
-function Parse-SkillRepos {
-    param([string]$Body)
-
-    $results = @()
-    $inSkills = $false
-    $hasSkillsHeader = ($Body -match '(?m)^skills:')
-    if (-not $hasSkillsHeader -and ($Body -match '(?m)^\s*-\s*name:')) {
+    if ($stripped -match '^skills:') {
         $inSkills = $true
+        $currentItem = @{}
+        continue
     }
-    $currentItem = @{}
 
-    foreach ($bline in ($Body -split "`n")) {
-        $bstripped = ($bline -replace '#.*', '').Trim()
-        if ([string]::IsNullOrEmpty($bstripped)) { continue }
-
-        if ($hasSkillsHeader -and $bstripped -match '^skills:') {
-            $inSkills = $true
-            continue
+    if ($inSkills -and $line -match '^[a-zA-Z]') {
+        if ($currentItem.url) {
+            $skillRepos += [PSCustomObject]@{
+                name = if ($currentItem.name) { $currentItem.name } else { "" }
+                url = $currentItem.url
+                branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
+                path = if ($currentItem.path) { $currentItem.path } else { "skills" }
+            }
         }
+        $inSkills = $false
+        $currentItem = @{}
+        continue
+    }
 
-        if ($inSkills -and $hasSkillsHeader -and $bline -match '^[a-zA-Z]') {
-            if ($currentItem.name) {
-                $results += [PSCustomObject]@{
-                    name = $currentItem.name
-                    url = if ($currentItem.url) { $currentItem.url } else { "" }
+    if ($inSkills) {
+        if ($stripped -match '^- (.+)') {
+            if ($currentItem.url) {
+                $skillRepos += [PSCustomObject]@{
+                    name = if ($currentItem.name) { $currentItem.name } else { "" }
+                    url = $currentItem.url
                     branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
                     path = if ($currentItem.path) { $currentItem.path } else { "skills" }
                 }
             }
             $currentItem = @{}
-            $inSkills = $false
-            continue
-        }
 
-        if ($inSkills) {
-            if ($bstripped -match '^- (.+)') {
-                if ($currentItem.name) {
-                    $results += [PSCustomObject]@{
-                        name = $currentItem.name
-                        url = if ($currentItem.url) { $currentItem.url } else { "" }
-                        branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
-                        path = if ($currentItem.path) { $currentItem.path } else { "skills" }
-                    }
-                }
-                $currentItem = @{}
-
-                $kv = $Matches[1]
-                if ($kv -match '^(\w+):\s*(.+)') {
-                    $currentItem[$Matches[1]] = $Matches[2].Trim()
-                }
-            } elseif ($bstripped -match '^(\w+):\s*(.+)') {
+            $kv = $Matches[1]
+            if ($kv -match '^(\w+):\s*(.+)') {
                 $currentItem[$Matches[1]] = $Matches[2].Trim()
             }
+        } elseif ($stripped -match '^(\w+):\s*(.+)') {
+            $currentItem[$Matches[1]] = $Matches[2].Trim()
         }
     }
-
-    if ($currentItem.name) {
-        $results += [PSCustomObject]@{
-            name = $currentItem.name
-            url = if ($currentItem.url) { $currentItem.url } else { "" }
-            branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
-            path = if ($currentItem.path) { $currentItem.path } else { "skills" }
-        }
-    }
-
-    return $results
 }
 
-# ── Fetch catalog from each URL ─────────────────────────────────────────────────
-
-$skillRepos = @()
-$seenNames = @{}
-
-foreach ($catalogUrl in $urls) {
-
-    # ── GitHub issue ──
-    if ($catalogUrl -match 'github\.com/([^/]+)/([^/]+)/issues/(\d+)') {
-        $owner = $Matches[1]
-        $repo = $Matches[2]
-        $number = $Matches[3]
-        $apiUrl = "https://api.github.com/repos/$owner/$repo/issues/$number"
-
-        try {
-            $issueData = Invoke-RestMethod -Uri $apiUrl -Headers $GHHeaders -TimeoutSec 30
-            $body = $issueData.body
-        } catch {
-            Write-Host "Warning: Failed to fetch GitHub issue $catalogUrl : $_"
-            continue
-        }
-
-        $repos = Parse-SkillRepos -Body $body
-        foreach ($r in $repos) {
-            if (-not $seenNames.ContainsKey($r.name)) {
-                $seenNames[$r.name] = $true
-                $skillRepos += $r
-            }
-        }
-
-    # ── Azure DevOps repo file ──
-    } elseif ($catalogUrl -match 'dev\.azure\.com/([^/]+)/([^/]+)/_git/([^?/]+)') {
-        $adoOrg = $Matches[1]
-        $adoProject = $Matches[2]
-        $adoRepo = $Matches[3]
-
-        $adoPath = "/"
-        $adoBranch = "main"
-        if ($catalogUrl -match '[?&]path=([^&]+)') {
-            $adoPath = [System.Uri]::UnescapeDataString($Matches[1])
-        }
-        if ($catalogUrl -match '[?&]version=GB([^&]+)') {
-            $adoBranch = $Matches[1]
-        }
-
-        $adoApi = "https://dev.azure.com/${adoOrg}/${adoProject}/_apis/git/repositories/${adoRepo}/items?path=${adoPath}&versionDescriptor.version=${adoBranch}&`$format=text&api-version=7.0"
-
-        try {
-            $body = Invoke-RestMethod -Uri $adoApi -Headers $ADOHeaders -TimeoutSec 30
-        } catch {
-            Write-Host "Warning: Failed to fetch Azure DevOps file $catalogUrl : $_"
-            continue
-        }
-
-        $repos = Parse-SkillRepos -Body $body
-        foreach ($r in $repos) {
-            if (-not $seenNames.ContainsKey($r.name)) {
-                $seenNames[$r.name] = $true
-                $skillRepos += $r
-            }
-        }
-
-    } else {
-        Write-Host "Warning: Unsupported catalog URL format: $catalogUrl"
-        Write-Host "  Supported: GitHub issues (github.com/.../issues/N) or Azure DevOps files (dev.azure.com/.../_git/...?path=...)"
-        continue
+if ($inSkills -and $currentItem.url) {
+    $skillRepos += [PSCustomObject]@{
+        name = if ($currentItem.name) { $currentItem.name } else { "" }
+        url = $currentItem.url
+        branch = if ($currentItem.branch) { $currentItem.branch } else { "main" }
+        path = if ($currentItem.path) { $currentItem.path } else { "skills" }
     }
 }
 
 if ($skillRepos.Count -eq 0) {
-    Write-Host "No skill repositories configured."
+    Write-Host "No skill repositories configured in nightlife.yaml."
     exit 0
 }
 
@@ -225,9 +118,12 @@ foreach ($repoInfo in $skillRepos) {
     $path = $repoInfo.path
 
     Write-Host ""
-    Write-Host "Repository: $repoName ($repoUrl)"
+    if ($repoName) {
+        Write-Host "Repository: $repoName ($repoUrl, branch: $branch, path: $path)"
+    } else {
+        Write-Host "Repository: $repoUrl (branch: $branch, path: $path)"
+    }
 
-    # ── GitHub repo ──
     if ($repoUrl -match 'github\.com/([^/]+)/([^/]+?)(?:\.git)?$') {
         $owner = $Matches[1]
         $repo = $Matches[2]
@@ -259,7 +155,6 @@ foreach ($repoInfo in $skillRepos) {
             }
         }
 
-    # ── Azure DevOps repo ──
     } elseif ($repoUrl -match 'dev\.azure\.com/([^/]+)/([^/]+)/_git/([^?/]+)') {
         $adoOrg = $Matches[1]
         $adoProject = $Matches[2]
@@ -274,7 +169,6 @@ foreach ($repoInfo in $skillRepos) {
             foreach ($item in $listing.value) {
                 if (-not $item.isFolder) { continue }
                 $itemName = Split-Path $item.path -Leaf
-                # Skip the root path itself, hidden and internal dirs
                 if ($itemName -eq $path) { continue }
                 if ($itemName.StartsWith(".") -or $itemName.StartsWith("_")) { continue }
                 $skills += $itemName
