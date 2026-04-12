@@ -4,7 +4,21 @@
 # Supported formats:
 #   GitHub issue:      https://github.com/{owner}/{repo}/issues/{number}
 #   Azure DevOps file: https://dev.azure.com/{org}/{project}/_git/{repo}?path={path}&version=GB{branch}
-urls:
-  - https://github.com/DauQuangThanh/vinh-phoenix/issues/2
-  #- https://github.com/DauQuangThanh/vinh-phoenix/issues/3
-  #- https://dev.azure.com/myorg/myproject/_git/myrepo?path=/catalog.yaml&version=GBmain
+agents:
+  - name: DaNangNightlifeAgent
+    url: https://github.com/DauQuangThanh/danang-nightlife
+    branch: main
+    path: agents
+  - name: VinhPhoenixAgent
+    url: https://github.com/DauQuangThanh/vinh-phoenix
+    branch: main
+    path: agents
+skills:
+  - name: DaNangNightlifeSkill
+    url: https://github.com/DauQuangThanh/danang-nightlife
+    branch: main
+    path: skills
+  - name: VinhPhoenixSkill
+    url: https://github.com/DauQuangThanh/vinh-phoenix
+    branch: main
+    path: skills 
