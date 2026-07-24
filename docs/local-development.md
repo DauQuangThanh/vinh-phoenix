@@ -58,8 +58,8 @@ source .venv/bin/activate  # Linux/macOS
 # Install in editable mode
 uv pip install -e .
 
-# Now use 'phoenix' command directly
-phoenix --help
+# Now use 'vinh-phoenix' command directly
+vinh-phoenix --help
 ```
 
 **Benefit:** No need to reinstall after code changes—it updates automatically!
@@ -71,7 +71,7 @@ Test how users will actually run Phoenix:
 **From local directory:**
 
 ```bash
-uvx --from . phoenix init demo-uvx --ai copilot --ignore-agent-tools
+uvx --from . vinh-phoenix init demo-uvx --ai copilot --ignore-agent-tools
 ```
 
 **From a specific branch (without merging):**
@@ -81,7 +81,7 @@ uvx --from . phoenix init demo-uvx --ai copilot --ignore-agent-tools
 git push origin your-feature-branch
 
 # Test it
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git@your-feature-branch phoenix init demo-branch-test
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git@your-feature-branch vinh-phoenix init demo-branch-test
 ```
 
 #### Run from Anywhere (Absolute Path)
@@ -89,8 +89,8 @@ uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git@your-feature-br
 Use absolute paths when you're in a different directory:
 
 ```bash
-uvx --from /mnt/c/GitHub/vinh-phoenix phoenix --help
-uvx --from /mnt/c/GitHub/vinh-phoenix phoenix init demo-anywhere --ai copilot
+uvx --from /mnt/c/GitHub/vinh-phoenix vinh-phoenix --help
+uvx --from /mnt/c/GitHub/vinh-phoenix vinh-phoenix init demo-anywhere --ai copilot
 ```
 
 **Make it easier with an environment variable:**
@@ -100,13 +100,13 @@ uvx --from /mnt/c/GitHub/vinh-phoenix phoenix init demo-anywhere --ai copilot
 export RAINBOW_SRC=/mnt/c/GitHub/vinh-phoenix
 
 # Use anywhere
-uvx --from "$RAINBOW_SRC" phoenix init demo-env --ai copilot
+uvx --from "$RAINBOW_SRC" vinh-phoenix init demo-env --ai copilot
 ```
 
 **Or create a shell function:**
 
 ```bash
-phoenix-dev() { uvx --from /mnt/c/GitHub/vinh-phoenix phoenix "$@"; }
+phoenix-dev() { uvx --from /mnt/c/GitHub/vinh-phoenix vinh-phoenix "$@"; }
 
 # Then just use
 phoenix-dev --help
@@ -164,8 +164,8 @@ python -m src.phoenix_cli init --here --ai claude --ignore-agent-tools
 Skip TLS validation during local testing (not for production!):
 
 ```bash
-phoenix check --skip-tls
-phoenix init demo --skip-tls --ai gemini --ignore-agent-tools
+vinh-phoenix check --skip-tls
+vinh-phoenix init demo --skip-tls --ai gemini --ignore-agent-tools
 ```
 
 ---
@@ -194,7 +194,7 @@ vinh-phoenix/
 └── .github/workflows/    # CI/CD and release automation
 ```
 
-**Note:** The `skills/` folder contains the core meta-skill templates. When you run `phoenix init`, these plus the other 3 meta-skills (`git-commit`, `list-agents`, `add-agents`) from the latest release are installed into your project's agent-specific skill folders (`.claude/skills/`, `.github/skills/`, etc.).
+**Note:** The `skills/` folder contains the core meta-skill templates. When you run `vinh-phoenix init`, these plus the other 3 meta-skills (`git-commit`, `list-agents`, `add-agents`) from the latest release are installed into your project's agent-specific skill folders (`.claude/skills/`, `.github/skills/`, etc.).
 
 ---
 
@@ -203,10 +203,10 @@ vinh-phoenix/
 | What You Want | Command |
 | --------------- | ---------- |
 | **Run CLI directly** | `python -m src.phoenix_cli --help` |
-| **Editable install** | `uv pip install -e .` then `phoenix ...` |
-| **Local uvx (repo root)** | `uvx --from . phoenix ...` |
-| **Local uvx (absolute path)** | `uvx --from /path/to/vinh-phoenix phoenix ...` |
-| **Test specific branch** | `uvx --from git+URL@branch phoenix ...` |
+| **Editable install** | `uv pip install -e .` then `vinh-phoenix ...` |
+| **Local uvx (repo root)** | `uvx --from . vinh-phoenix ...` |
+| **Local uvx (absolute path)** | `uvx --from /path/to/vinh-phoenix vinh-phoenix ...` |
+| **Test specific branch** | `uvx --from git+URL@branch vinh-phoenix ...` |
 | **Build package** | `uv build` |
 | **Clean up** | `rm -rf .venv dist build *.egg-info` |
 

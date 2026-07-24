@@ -181,7 +181,7 @@ User: "Install the git-commit skill"
 | Error | Resolution |
 |-------|------------|
 | Skill not found in any repo | Run `list-skills` to show available names |
-| No AI IDE folders detected | Run `phoenix init` first to set up the project |
+| No AI IDE folders detected | Run `vinh-phoenix init` first to set up the project |
 | Git clone failed | Check internet connection, repo URL, and auth tokens |
 | Permission denied | Check write permissions on target directories |
 | Azure DevOps auth error | Set `AZURE_DEVOPS_PAT` environment variable with a valid PAT |

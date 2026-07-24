@@ -48,7 +48,7 @@ ado_curl() {
 
 if [ ! -f "nightlife.yaml" ]; then
     echo "Error: nightlife.yaml not found in current directory."
-    echo "Create one with 'phoenix init' or manually."
+    echo "Create one with 'vinh-phoenix init' or manually."
     exit 1
 fi
 

@@ -304,7 +304,7 @@ def show_banner():
 
 # Create Typer app with custom banner group
 app = typer.Typer(
-    name="phoenix",
+    name="vinh-phoenix",
     help="Setup tool for Phoenix spec-driven development projects",
     add_completion=False,
     invoke_without_command=True,
@@ -317,5 +317,5 @@ def callback(ctx: typer.Context):
     """Show banner when no subcommand is provided."""
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'phoenix --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]Run 'vinh-phoenix --help' for usage information[/dim]"))
         console.print()

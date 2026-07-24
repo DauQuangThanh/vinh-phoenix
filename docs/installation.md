@@ -6,7 +6,7 @@
 
 ## 🎯 What You'll Get
 
-`phoenix init` installs **5 core meta-skills** into your project:
+`vinh-phoenix init` installs **5 core meta-skills** into your project:
 
 | Skill | Purpose |
 |-------|---------|
@@ -41,7 +41,7 @@ Before installing, make sure you have:
 The easiest way to start:
 
 ```bash
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <PROJECT_NAME>
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <PROJECT_NAME>
 ```
 
 ### Option 2: Initialize in Current Directory
@@ -50,10 +50,10 @@ Already have a project folder?
 
 ```bash
 # Method 1: Using dot notation
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init .
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init .
 
 # Method 2: Using --here flag
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init --here
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init --here
 ```
 
 ### 🤖 Choose Your AI Agent
@@ -62,16 +62,16 @@ Specify which AI assistant to use:
 
 ```bash
 # Claude Code
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai claude
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <project_name> --ai claude
 
 # Gemini CLI
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai gemini
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <project_name> --ai gemini
 
 # GitHub Copilot
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai copilot
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <project_name> --ai copilot
 
 # Multiple agents at once
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai claude,copilot,gemini
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <project_name> --ai claude,copilot,gemini
 ```
 
 ---
@@ -81,7 +81,7 @@ uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <p
 Want to set up without checking if AI tools are installed?
 
 ```bash
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <project_name> --ai claude --ignore-agent-tools
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <project_name> --ai claude --ignore-agent-tools
 ```
 
 > **Use this when:** You're setting up on a different machine or want to configure tools later.

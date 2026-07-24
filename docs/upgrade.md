@@ -9,14 +9,14 @@
 | What to Upgrade | Command | When to Use |
 |-----------------|---------|-------------|
 | **CLI Tool Only** | `uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git` | Get latest CLI features without touching project files |
-| **Project Meta-Skills** | `phoenix init --upgrade` | Update the 5 core meta-skills in your project (creates timestamped backups) |
+| **Project Meta-Skills** | `vinh-phoenix init --upgrade` | Update the 5 core meta-skills in your project (creates timestamped backups) |
 | **Both** | Run CLI upgrade, then project update | Recommended for major version updates |
 
 ---
 
 ## Part 1: Upgrade the CLI Tool
 
-The CLI tool (`phoenix`) installs meta-skills into projects. Upgrade it to get the latest distribution features.
+The CLI tool (`vinh-phoenix`) installs meta-skills into projects. Upgrade it to get the latest distribution features.
 
 ### If you installed with `uv tool install`
 
@@ -29,13 +29,13 @@ uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/
 No upgrade needed — `uvx` always fetches the latest version:
 
 ```bash
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init --here --ai copilot
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init --here --ai copilot
 ```
 
 ### Verify the upgrade
 
 ```bash
-phoenix check
+vinh-phoenix check
 ```
 
 ---
@@ -46,7 +46,7 @@ When Phoenix releases improvements to the core meta-skills, refresh your project
 
 ### What gets updated?
 
-Running `phoenix init --upgrade` will:
+Running `vinh-phoenix init --upgrade` will:
 
 - ✅ **Create timestamped backups** of existing agent folders (e.g., `.claude.backup.20260402_143000`)
 - ✅ **Replace core meta-skills** — `git-commit`, `list-skills`, `add-skills`, `list-agents`, `add-agents`
@@ -68,20 +68,20 @@ Run this inside your project directory:
 
 ```bash
 # Upgrade with interactive agent selection
-phoenix init --upgrade
+vinh-phoenix init --upgrade
 
 # Upgrade with specific agent
-phoenix init --upgrade --ai copilot
+vinh-phoenix init --upgrade --ai copilot
 
 # Upgrade and skip confirmation
-phoenix init --upgrade --force --ai copilot
+vinh-phoenix init --upgrade --force --ai copilot
 ```
 
 The `--upgrade` flag detects existing Phoenix agent folders, creates backups with timestamps, then replaces them with the latest templates.
 
 ### nightlife.yaml during upgrades
 
-`phoenix init` will **not overwrite** an existing `nightlife.yaml` — your custom URL configuration is preserved.
+`vinh-phoenix init` will **not overwrite** an existing `nightlife.yaml` — your custom URL configuration is preserved.
 
 If you want to reset it to the defaults:
 
@@ -90,7 +90,7 @@ If you want to reset it to the defaults:
 cp nightlife.yaml nightlife.yaml.backup
 
 # Re-run init (will skip nightlife.yaml since it already exists)
-phoenix init --here --force --ai copilot
+vinh-phoenix init --here --force --ai copilot
 ```
 
 ---
@@ -124,12 +124,12 @@ Restart your IDE to refresh the command list.
 uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/vinh-phoenix.git
 
 # Update project meta-skills (creates backups automatically)
-phoenix init --upgrade --ai copilot
+vinh-phoenix init --upgrade --ai copilot
 ```
 
 ### Scenario 2: "I customized nightlife.yaml"
 
-Your customizations are safe — `phoenix init` does not overwrite an existing `nightlife.yaml`.
+Your customizations are safe — `vinh-phoenix init` does not overwrite an existing `nightlife.yaml`.
 
 ### Scenario 3: "I see duplicate skills in my IDE"
 
@@ -152,7 +152,7 @@ rm -rf old-skill-name/
 
 ```bash
 # Run upgrade with --no-git
-phoenix init --upgrade --ai copilot --no-git
+vinh-phoenix init --upgrade --ai copilot --no-git
 ```
 
 ---
@@ -190,7 +190,7 @@ Verify the installation:
 
 ```bash
 uv tool list  # Should show phoenix-cli
-which phoenix
+which vinh-phoenix
 ```
 
 If not found, reinstall:
@@ -200,9 +200,9 @@ uv tool uninstall phoenix-cli
 uv tool install phoenix-cli --from git+https://github.com/dauquangthanh/vinh-phoenix.git
 ```
 
-### "Do I need to run phoenix every time I open my project?"
+### "Do I need to run vinh-phoenix every time I open my project?"
 
-**Short answer:** No. Run `phoenix init` once per project (or when upgrading).
+**Short answer:** No. Run `vinh-phoenix init` once per project (or when upgrading).
 
 Once meta-skills are installed, your AI assistant automatically discovers and uses them. The meta-skills then handle all further skill management via `nightlife.yaml`.
 

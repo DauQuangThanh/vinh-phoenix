@@ -20,9 +20,9 @@ Usage:
 
 Or install globally:
     uv tool install --from phoenix-cli.py phoenix-cli
-    phoenix init <project-name>
-    phoenix init .
-    phoenix init --here
+    vinh-phoenix init <project-name>
+    vinh-phoenix init .
+    vinh-phoenix init --here
 """
 
 # Import UI app which has all the CLI configuration

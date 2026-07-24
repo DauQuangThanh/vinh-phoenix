@@ -36,7 +36,7 @@
   - [🤖 Supported AI Agents](#-supported-ai-agents)
   - [🔧 Phoenix CLI Reference](#-phoenix-cli-reference)
     - [Commands](#commands)
-    - [`phoenix init` Arguments \& Options](#phoenix-init-arguments--options)
+    - [`vinh-phoenix init` Arguments \& Options](#vinh-phoenix-init-arguments--options)
     - [Examples](#examples)
     - [Environment Variables](#environment-variables)
   - [🏗️ Project Structure](#️-project-structure)
@@ -66,7 +66,7 @@ It bootstraps your project with a small set of **meta-skills** that manage thems
 
 ## 📦 Core Skills (Installed by Default)
 
-`phoenix init` installs **5 core meta-skills** into every project:
+`vinh-phoenix init` installs **5 core meta-skills** into every project:
 
 | Skill | Activation Trigger | Purpose |
 |-------|--------------------|---------|
@@ -97,7 +97,7 @@ uv tool install phoenix-cli --force --from git+https://github.com/dauquangthanh/
 <summary><strong>Alternative: Run without installing</strong></summary>
 
 ```bash
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <PROJECT_NAME>
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <PROJECT_NAME>
 ```
 
 </details>
@@ -105,8 +105,8 @@ uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <P
 ### 2. Initialize Your Project
 
 ```bash
-phoenix init <PROJECT_NAME>
-phoenix check
+vinh-phoenix init <PROJECT_NAME>
+vinh-phoenix check
 ```
 
 This installs the 5 core meta-skills into agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.) and places `nightlife.yaml` in your project root.
@@ -155,7 +155,7 @@ When you ask your AI to `list-skills` or `add-skills`, it:
 ### Workflow
 
 ```
-phoenix init my-project --ai claude
+vinh-phoenix init my-project --ai claude
         ↓
 5 core meta-skills installed
         ↓
@@ -172,7 +172,7 @@ Skills downloaded and installed for all detected AI IDEs
 
 ## 📄 nightlife.yaml Configuration
 
-`nightlife.yaml` is placed in your project root by `phoenix init`. It tells the meta-skills where to find skill and agent repositories. It has two sections — `agents:` and `skills:` — each with one or more repository entries:
+`nightlife.yaml` is placed in your project root by `vinh-phoenix init`. It tells the meta-skills where to find skill and agent repositories. It has two sections — `agents:` and `skills:` — each with one or more repository entries:
 
 ```yaml
 # DaNang Nightlife - Agent & Skill Repository Configuration
@@ -286,12 +286,12 @@ This lets teams maintain internal skill catalogs without forking Phoenix — inc
 | `check` | Check for installed tools (git, VS Code, and all supported AI agent CLIs) |
 | `version` | Display CLI version, template version, and system information |
 
-### `phoenix init` Arguments & Options
+### `vinh-phoenix init` Arguments & Options
 
 | Argument/Option | Type | Description |
 |-----------------|------|-------------|
 | `<project-name>` | Argument | Name for your new project directory (optional if using `--here`, or use `.` for current directory) |
-| `--ai` | Option | AI assistant(s) to use. Single agent or comma-separated list (e.g., `claude,gemini,copilot`). Run `phoenix init --help` for the full list of valid agents. If not specified, an interactive multi-select menu will appear |
+| `--ai` | Option | AI assistant(s) to use. Single agent or comma-separated list (e.g., `claude,gemini,copilot`). Run `vinh-phoenix init --help` for the full list of valid agents. If not specified, an interactive multi-select menu will appear |
 | `--ignore-agent-tools` | Flag | Skip checks for AI agent tools like Claude Code |
 | `--no-git` | Flag | Skip git repository initialization |
 | `--here` | Flag | Initialize project in the current directory instead of creating a new one |
@@ -307,45 +307,45 @@ This lets teams maintain internal skill catalogs without forking Phoenix — inc
 
 ```bash
 # Basic project initialization (interactive agent selection)
-phoenix init my-project
+vinh-phoenix init my-project
 
 # Initialize with specific AI assistant
-phoenix init my-project --ai claude
+vinh-phoenix init my-project --ai claude
 
 # Initialize with multiple AI assistants (comma-separated)
-phoenix init my-project --ai claude,gemini,copilot
+vinh-phoenix init my-project --ai claude,gemini,copilot
 
 # Initialize in current directory
-phoenix init . --ai copilot
+vinh-phoenix init . --ai copilot
 # or use the --here flag
-phoenix init --here --ai copilot
+vinh-phoenix init --here --ai copilot
 
 # Force merge into current (non-empty) directory without confirmation
-phoenix init . --force --ai copilot
+vinh-phoenix init . --force --ai copilot
 
 # Upgrade existing project (replaces agent folders, creates backups)
-phoenix init --upgrade
-phoenix init --upgrade --ai claude
-phoenix init my-project --upgrade
+vinh-phoenix init --upgrade
+vinh-phoenix init --upgrade --ai claude
+vinh-phoenix init my-project --upgrade
 
 # Skip git initialization
-phoenix init my-project --ai gemini --no-git
+vinh-phoenix init my-project --ai gemini --no-git
 
 # Use local templates for development
-phoenix init demo --local-templates --ai claude
-phoenix init demo --local-templates --template-path /path/to/vinh-phoenix
+vinh-phoenix init demo --local-templates --ai claude
+vinh-phoenix init demo --local-templates --template-path /path/to/vinh-phoenix
 
 # Use GitHub token for API requests (helpful for corporate environments)
-phoenix init my-project --ai claude --github-token ghp_your_token_here
+vinh-phoenix init my-project --ai claude --github-token ghp_your_token_here
 
 # Enable debug output for troubleshooting
-phoenix init my-project --ai claude --debug
+vinh-phoenix init my-project --ai claude --debug
 
 # Check system requirements
-phoenix check
+vinh-phoenix check
 
 # Display version and system information
-phoenix version
+vinh-phoenix version
 ```
 
 ### Environment Variables
@@ -363,7 +363,7 @@ phoenix version
 
 ## 🏗️ Project Structure
 
-After running `phoenix init`, your project structure:
+After running `vinh-phoenix init`, your project structure:
 
 ```
 <project-root>/
@@ -431,7 +431,7 @@ echo "✅ Done! Git Credential Manager is ready."
 
 ### Meta-skills not finding nightlife.yaml
 
-Ensure `nightlife.yaml` exists in your project root. If missing, re-run `phoenix init --here --force`.
+Ensure `nightlife.yaml` exists in your project root. If missing, re-run `vinh-phoenix init --here --force`.
 
 ### API rate limits or auth errors when using list-skills / add-skills
 

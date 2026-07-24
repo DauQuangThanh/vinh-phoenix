@@ -18,10 +18,10 @@ This guide shows you how to:
 
 ```bash
 # Create a new project
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init <PROJECT_NAME> --ai claude
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init <PROJECT_NAME> --ai claude
 
 # OR initialize in current directory
-uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git phoenix init --here --ai claude
+uvx --from git+https://github.com/dauquangthanh/vinh-phoenix.git vinh-phoenix init --here --ai claude
 ```
 
 This installs **5 core meta-skills** into the agent-specific folder and places `nightlife.yaml` in your project root.

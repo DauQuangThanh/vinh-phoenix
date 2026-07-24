@@ -64,30 +64,30 @@ def init(
 
     Examples:
         # Basic project initialization (interactive multi-agent selection)
-        phoenix init my-project
+        vinh-phoenix init my-project
 
         # Initialize with specific AI assistant
-        phoenix init my-project --ai claude
+        vinh-phoenix init my-project --ai claude
 
         # Initialize with multiple AI assistants (comma-separated)
-        phoenix init my-project --ai claude,gemini,copilot
+        vinh-phoenix init my-project --ai claude,gemini,copilot
 
         # Initialize in current directory (interactive selection)
-        phoenix init .
-        phoenix init --here
+        vinh-phoenix init .
+        vinh-phoenix init --here
 
         # Force merge into current (non-empty) directory
-        phoenix init . --force
-        phoenix init --here --force
+        vinh-phoenix init . --force
+        vinh-phoenix init --here --force
 
         # Upgrade existing project (prompts for AI selection)
-        phoenix init --upgrade
-        phoenix init --upgrade --ai claude
-        phoenix init --here --upgrade
+        vinh-phoenix init --upgrade
+        vinh-phoenix init --upgrade --ai claude
+        vinh-phoenix init --here --upgrade
 
         # Use local templates for development
-        phoenix init demo --local-templates --ai claude
-        phoenix init demo --local-templates --template-path /path/to/vinh-phoenix
+        vinh-phoenix init demo --local-templates --ai claude
+        vinh-phoenix init demo --local-templates --template-path /path/to/vinh-phoenix
     """
 
     show_banner()
@@ -154,7 +154,7 @@ def init(
                 error_panel = Panel(
                     f"Directory '[cyan]{project_name}[/cyan]' already exists with Phoenix installed\n\n"
                     "To upgrade the existing Phoenix installation, use:\n"
-                    f"  [cyan]phoenix init {project_name} --upgrade[/cyan]\n\n"
+                    f"  [cyan]vinh-phoenix init {project_name} --upgrade[/cyan]\n\n"
                     "Or choose a different project name.",
                     title="[yellow]Phoenix Already Installed[/yellow]",
                     border_style="yellow",
@@ -169,7 +169,7 @@ def init(
                     f"Directory '[cyan]{project_name}[/cyan]' already exists\n\n"
                     "Phoenix is not installed in this directory. You can:\n"
                     "  • Use [cyan]--force[/cyan] to merge Phoenix files into the existing directory\n"
-                    f"  • Use [cyan]phoenix init . --force[/cyan] from within the directory\n"
+                    f"  • Use [cyan]vinh-phoenix init . --force[/cyan] from within the directory\n"
                     "  • Choose a different project name",
                     title="[yellow]Directory Already Exists[/yellow]",
                     border_style="yellow",
@@ -215,7 +215,7 @@ def init(
             error_panel = Panel(
                 f"No Phoenix project found in '[cyan]{project_path}[/cyan]'\n"
                 "No Phoenix agent folders found. Cannot upgrade.\n\n"
-                "Use 'phoenix init' without --upgrade to initialize a new project.",
+                "Use 'vinh-phoenix init' without --upgrade to initialize a new project.",
                 title="[red]Upgrade Failed[/red]",
                 border_style="red",
                 padding=(1, 2)

@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-phoenix = "phoenix_cli:main"
+vinh-phoenix = "phoenix_cli:main"
 
 [build-system]
 requires = ["hatchling"]

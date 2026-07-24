@@ -10,7 +10,7 @@
 
 **Vinh Phoenix is a core installer framework** — not a fixed skills library.
 
-`phoenix init` installs **5 core meta-skills** into your project and drops a `nightlife.yaml` configuration file. From there, your AI assistant uses those meta-skills to browse and install additional skills and agent commands from any configured repository.
+`vinh-phoenix init` installs **5 core meta-skills** into your project and drops a `nightlife.yaml` configuration file. From there, your AI assistant uses those meta-skills to browse and install additional skills and agent commands from any configured repository.
 
 - **Meta-skills** - Discover and install more skills/agents on demand
 - **nightlife.yaml** - Points to GitHub issues or Azure DevOps files as skill catalogs
@@ -33,7 +33,7 @@
 
 ## 📦 Core Meta-Skills (Installed by Default)
 
-After `phoenix init`, your AI assistant automatically discovers these 5 skills:
+After `vinh-phoenix init`, your AI assistant automatically discovers these 5 skills:
 
 | Skill | When the AI Uses It |
 |-------|---------------------|
@@ -84,7 +84,7 @@ Vinh Phoenix uses the [Agent Skills format](https://agentskills.io) — an open 
 2. **Activation** - When your task matches a skill's description, the AI loads full instructions
 3. **Execution** - The AI follows instructions, using templates and scripts as needed
 
-**What Gets Installed by `phoenix init`:**
+**What Gets Installed by `vinh-phoenix init`:**
 
 - 5 core meta-skills in agent-specific folders (`.github/skills/`, `.claude/skills/`, etc.)
 - `nightlife.yaml` in project root for catalog configuration
@@ -94,7 +94,7 @@ This architecture enables:
 
 - ✅ Progressive disclosure — skills load context only when needed
 - ✅ Multi-agent support — 19 AI assistants use the same skills format
-- ✅ Easy updates — upgrade with `phoenix init --upgrade`
+- ✅ Easy updates — upgrade with `vinh-phoenix init --upgrade`
 - ✅ Custom catalogs — point `nightlife.yaml` at your own repos
 
 ---

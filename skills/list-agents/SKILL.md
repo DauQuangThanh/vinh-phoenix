@@ -113,7 +113,7 @@ The script reads `nightlife.yaml` from the project root and lists available agen
 
 | Error | Resolution |
 |-------|------------|
-| `nightlife.yaml` not found | Tell user to run `phoenix init --here --force` to restore it, or create it manually |
+| `nightlife.yaml` not found | Tell user to run `vinh-phoenix init --here --force` to restore it, or create it manually |
 | GitHub API rate limit (HTTP 403) | Suggest setting `GH_TOKEN` environment variable |
 | Azure DevOps auth error (HTTP 401/403) | Suggest setting `AZURE_DEVOPS_PAT` environment variable |
 | Repository not found (HTTP 404) | Check the repo URL, branch, and path in nightlife.yaml |
